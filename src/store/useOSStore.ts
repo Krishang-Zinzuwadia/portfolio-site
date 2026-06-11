@@ -49,7 +49,38 @@ export const useOSStore = create<OSStore>((set, get) => ({
     }),
   minimizeWindow: (id) => {},
   maximizeWindow: (id) => {},
-  focusWindow: (id) => {},
+  focusWindow: (id) =>
+    set((state) => {
+      if (state.focusedWindowId === id) return {};
+      const targetWindow = state.windows.find((w) => w.id === id);
+      if (!targetWindow) return {};
+
+      // Filter out target, then sort others by current depth (z-index)
+      const otherWindows = state.windows
+        .filter((w) => w.id !== id)
+        .sort((a, b) => a.zIndex - b.zIndex);
+
+      // Re-index others starting at base 10 to keep stack clean and low
+      const reindexedOthers = otherWindows.map((w, idx) => ({
+        ...w,
+        zIndex: 10 + idx,
+      }));
+
+      // Set target window to top z-index and ensure it is un-minimized
+      const updatedFocusedWindow = {
+        ...targetWindow,
+        isMinimized: false,
+        zIndex: 10 + reindexedOthers.length,
+      };
+
+      const windows = state.windows.map((w) => {
+        if (w.id === id) return updatedFocusedWindow;
+        const matchingOther = reindexedOthers.find((o) => o.id === w.id);
+        return matchingOther ? matchingOther : w;
+      });
+
+      return { windows, focusedWindowId: id };
+    }),
   updateWindowCoords: (id, coords) => {},
 
   // --- Layout Actions (Skeletons) ---
