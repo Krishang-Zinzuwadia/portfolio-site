@@ -130,7 +130,7 @@ export default function Window({ windowItem, children, tiledCoords }: WindowProp
     <motion.div
       onMouseDown={handleMouseDown}
       style={windowStyle}
-      drag={tilingMode === "floating" && !isMaximized ? "both" : false}
+      drag={tilingMode === "floating" && !isMaximized}
       dragHandleClassName="window-titlebar"
       dragElastic={0.05}
       dragMomentum={false}
