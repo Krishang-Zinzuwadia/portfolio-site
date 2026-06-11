@@ -47,8 +47,27 @@ export const useOSStore = create<OSStore>((set, get) => ({
       const nextFocusedId = remaining.length > 0 ? remaining[0].id : null;
       return { windows, focusedWindowId: nextFocusedId };
     }),
-  minimizeWindow: (id) => {},
-  maximizeWindow: (id) => {},
+  minimizeWindow: (id) =>
+    set((state) => {
+      const windows = state.windows.map((w) =>
+        w.id === id ? { ...w, isMinimized: true } : w
+      );
+      // If the minimized window was focused, transfer focus to next highest window
+      let nextFocusedId = state.focusedWindowId;
+      if (state.focusedWindowId === id) {
+        const remaining = windows
+          .filter((w) => w.isOpen && !w.isMinimized)
+          .sort((a, b) => b.zIndex - a.zIndex);
+        nextFocusedId = remaining.length > 0 ? remaining[0].id : null;
+      }
+      return { windows, focusedWindowId: nextFocusedId };
+    }),
+  maximizeWindow: (id) =>
+    set((state) => ({
+      windows: state.windows.map((w) =>
+        w.id === id ? { ...w, isMaximized: !w.isMaximized } : w
+      ),
+    })),
   focusWindow: (id) =>
     set((state) => {
       if (state.focusedWindowId === id) return {};
