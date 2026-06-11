@@ -6,6 +6,7 @@ import { TilingLayout, TilingMode } from "@/store/types";
 import { useAudio } from "@/hooks/useAudio";
 
 export default function MenuBar() {
+  const [mounted, setMounted] = useState(false);
   const [currentTime, setCurrentTime] = useState("");
   const { playSound } = useAudio();
 
@@ -21,6 +22,7 @@ export default function MenuBar() {
 
   // Clock ticks every 10 seconds
   useEffect(() => {
+    setMounted(true);
     const tick = () => {
       const now = new Date();
       setCurrentTime(
@@ -148,7 +150,7 @@ export default function MenuBar() {
 
       {/* Right side (System Clock) */}
       <div className="flex items-center space-x-2 font-bold pr-1">
-        <span>{currentTime}</span>
+        <span>{mounted ? currentTime : "--:--"}</span>
       </div>
     </div>
   );
