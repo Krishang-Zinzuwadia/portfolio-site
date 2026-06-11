@@ -107,11 +107,11 @@ export const useOSStore = create<OSStore>((set, get) => ({
       ),
     })),
 
-  // --- Layout Actions (Skeletons) ---
-  setTilingMode: (mode) => {},
-  setTilingLayout: (layout) => {},
-  setSplitRatio: (ratio) => {},
-  setGaps: (gaps) => {},
+  // --- Layout Actions ---
+  setTilingMode: (mode) => set({ tilingMode: mode }),
+  setTilingLayout: (layout) => set({ tilingLayout: layout }),
+  setSplitRatio: (ratio) => set({ splitRatio: Math.max(0.1, Math.min(0.9, ratio)) }),
+  setGaps: (gaps) => set({ gaps: Math.max(0, Math.min(64, gaps)) }),
 
   // --- Configuration Actions (Skeletons) ---
   toggleSound: () => {},
