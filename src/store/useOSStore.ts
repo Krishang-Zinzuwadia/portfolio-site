@@ -113,8 +113,8 @@ export const useOSStore = create<OSStore>((set, get) => ({
   setSplitRatio: (ratio) => set({ splitRatio: Math.max(0.1, Math.min(0.9, ratio)) }),
   setGaps: (gaps) => set({ gaps: Math.max(0, Math.min(64, gaps)) }),
 
-  // --- Configuration Actions (Skeletons) ---
-  toggleSound: () => {},
-  setCrtIntensity: (intensity) => {},
-  changeTheme: (theme) => {},
+  // --- Configuration Actions ---
+  toggleSound: () => set((state) => ({ soundEnabled: !state.soundEnabled })),
+  setCrtIntensity: (intensity) => set({ crtShaderIntensity: Math.max(0, Math.min(1, intensity)) }),
+  changeTheme: (theme) => set({ activeTheme: theme }),
 }));
