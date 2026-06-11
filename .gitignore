@@ -66,3 +66,4 @@ logs/
 # Stage tracker: floating window shell component
 # Stage tracker: mount windows to Desktop in page.tsx
 # Stage tracker: fix drag prop type error in Window.tsx
+# Stage tracker: introduce dragControls for Window header dragging

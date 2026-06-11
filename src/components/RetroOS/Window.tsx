@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useRef, useState, useEffect } from "react";
-import { motion, useMotionValue } from "framer-motion";
+import { motion, useMotionValue, useDragControls } from "framer-motion";
 import { useOSStore } from "@/store/useOSStore";
 import { useAudio } from "@/hooks/useAudio";
 import { WindowItem } from "@/store/types";
@@ -27,16 +27,22 @@ export default function Window({ windowItem, children, tiledCoords }: WindowProp
   } = useOSStore();
 
   const [isCollapsed, setIsCollapsed] = useState(false); // Windowshade state
+  const dragControls = useDragControls();
+
+  // Determine coordinate changes based on tiling mode and maximize state
+  const isTiled = tilingMode === "tiling" && tiledCoords;
+  const currentX = isTiled ? tiledCoords.x : isMaximized ? 0 : fx;
+  const currentY = isTiled ? tiledCoords.y : isMaximized ? 0 : fy;
 
   // Framer Motion motionValues to track coordinate dragging in floating mode
-  const mx = useMotionValue(fx);
-  const my = useMotionValue(fy);
+  const mx = useMotionValue(currentX);
+  const my = useMotionValue(currentY);
 
   // Sync state coordinates when they change externally (e.g. from state actions)
   useEffect(() => {
-    mx.set(fx);
-    my.set(fy);
-  }, [fx, fy, mx, my]);
+    mx.set(currentX);
+    my.set(currentY);
+  }, [currentX, currentY, mx, my]);
 
   if (!isOpen || isMinimized) return null;
 
@@ -100,45 +106,46 @@ export default function Window({ windowItem, children, tiledCoords }: WindowProp
     document.addEventListener("mouseup", onMouseUp);
   };
 
-  // Determine the display positioning style based on active window manager layout
-  const isTiled = tilingMode === "tiling" && tiledCoords;
-  const currentCoords = isTiled 
-    ? tiledCoords 
-    : isMaximized 
-      ? { x: 0, y: 0, w: 1024, h: 744 } // Maximize covers desktop dimensions
-      : { x: fx, y: fy, w: fw, h: fh };
+  // Determine width and height depending on state
+  const windowWidth = isTiled
+    ? tiledCoords.w
+    : isMaximized
+      ? "100%"
+      : fw;
 
-  const windowStyle = isTiled
-    ? {
-        position: "absolute" as const,
-        left: currentCoords.x,
-        top: currentCoords.y,
-        width: currentCoords.w,
-        height: isCollapsed ? 22 : currentCoords.h,
-        zIndex: zIndex,
-      }
-    : {
-        position: "absolute" as const,
-        left: isMaximized ? 0 : fx,
-        top: isMaximized ? 0 : fy,
-        width: isMaximized ? "100%" : fw,
-        height: isCollapsed ? 22 : isMaximized ? "100%" : fh,
-        zIndex: zIndex,
-      };
+  const windowHeight = isCollapsed
+    ? 22
+    : isTiled
+      ? tiledCoords.h
+      : isMaximized
+        ? "100%"
+        : fh;
+
+  const windowStyle = {
+    position: "absolute" as const,
+    left: 0,
+    top: 0,
+    x: mx,
+    y: my,
+    width: windowWidth,
+    height: windowHeight,
+    zIndex: zIndex,
+  };
 
   return (
     <motion.div
       onMouseDown={handleMouseDown}
       style={windowStyle}
       drag={tilingMode === "floating" && !isMaximized}
-      dragHandleClassName="window-titlebar"
+      dragListener={false}
+      dragControls={dragControls}
       dragElastic={0.05}
       dragMomentum={false}
-      onDragEnd={(e, info) => {
-        // Commit drag coordinates to store upon release
+      onDragEnd={() => {
+        // Commit drag coordinates to store upon release directly from motion values
         updateWindowCoords(id, {
-          x: Math.max(0, fx + info.offset.x),
-          y: Math.max(0, fy + info.offset.y),
+          x: Math.max(0, Math.round(mx.get())),
+          y: Math.max(0, Math.round(my.get())),
         });
       }}
       className={`
@@ -149,6 +156,11 @@ export default function Window({ windowItem, children, tiledCoords }: WindowProp
       {/* Title Bar Header */}
       <div
         onDoubleClick={handleTitleBarDoubleClick}
+        onPointerDown={(e) => {
+          if (tilingMode === "floating" && !isMaximized) {
+            dragControls.start(e);
+          }
+        }}
         className="window-titlebar h-5 border-b border-black flex items-center justify-between px-1 bg-retro-bg cursor-move relative"
       >
         {/* Left Side: Close square box */}
