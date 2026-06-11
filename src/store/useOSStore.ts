@@ -25,9 +25,28 @@ export const useOSStore = create<OSStore>((set, get) => ({
   bypass3D: (bypass) => set({ isBypassed3D: bypass }),
   bootSystem: () => set({ isBooted: true }),
 
-  // --- Window Management (Skeletons) ---
-  openWindow: (id) => {},
-  closeWindow: (id) => {},
+  // --- Window Management ---
+  openWindow: (id) => {
+    set((state) => {
+      const windows = state.windows.map((w) =>
+        w.id === id ? { ...w, isOpen: true, isMinimized: false } : w
+      );
+      return { windows };
+    });
+    get().focusWindow(id);
+  },
+  closeWindow: (id) =>
+    set((state) => {
+      const windows = state.windows.map((w) =>
+        w.id === id ? { ...w, isOpen: false } : w
+      );
+      // Determine the next highest window in the z-index stack to auto-focus
+      const remaining = windows
+        .filter((w) => w.isOpen && !w.isMinimized)
+        .sort((a, b) => b.zIndex - a.zIndex);
+      const nextFocusedId = remaining.length > 0 ? remaining[0].id : null;
+      return { windows, focusedWindowId: nextFocusedId };
+    }),
   minimizeWindow: (id) => {},
   maximizeWindow: (id) => {},
   focusWindow: (id) => {},
