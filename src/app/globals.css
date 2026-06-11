@@ -98,3 +98,57 @@
     @apply bg-background text-foreground;
   }
 }
+
+/* CRT Screen Scanlines & Shading Effects */
+.crt-overlay-vignette {
+  position: absolute;
+  inset: 0;
+  z-index: 9999;
+  pointer-events: none;
+  background: radial-gradient(circle, rgba(0, 0, 0, 0) 65%, rgba(0, 0, 0, 0.35) 100%);
+}
+
+.crt-scanlines-lines {
+  position: absolute;
+  inset: 0;
+  z-index: 9998;
+  pointer-events: none;
+  background: linear-gradient(
+    rgba(18, 16, 16, 0) 50%,
+    rgba(0, 0, 0, 0.12) 50%
+  );
+  background-size: 100% 4px;
+}
+
+@keyframes crt-flicker-anim {
+  0% { opacity: 0.985; }
+  50% { opacity: 1.0; }
+  100% { opacity: 0.985; }
+}
+
+.crt-flicker-effect {
+  animation: crt-flicker-anim 0.2s infinite;
+}
+
+/* Screen flare turn-on animation for the boot loader */
+@keyframes screen-flare-on {
+  0% {
+    transform: scaleY(0.005) scaleX(0);
+    filter: brightness(5);
+    opacity: 0.8;
+  }
+  50% {
+    transform: scaleY(0.005) scaleX(1);
+    filter: brightness(5);
+    opacity: 1;
+  }
+  100% {
+    transform: scaleY(1) scaleX(1);
+    filter: brightness(1);
+    opacity: 1;
+  }
+}
+
+.animate-screen-flare {
+  animation: screen-flare-on 0.6s cubic-bezier(0.23, 1, 0.32, 1) forwards;
+}
