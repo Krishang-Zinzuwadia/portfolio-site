@@ -52,3 +52,8 @@ next-env.d.ts
 # logs
 *.log
 logs/
+
+# archives
+*.zip
+*.tar
+*.gz
