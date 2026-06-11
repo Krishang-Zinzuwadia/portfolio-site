@@ -81,7 +81,12 @@ export const useOSStore = create<OSStore>((set, get) => ({
 
       return { windows, focusedWindowId: id };
     }),
-  updateWindowCoords: (id, coords) => {},
+  updateWindowCoords: (id, coords) =>
+    set((state) => ({
+      windows: state.windows.map((w) =>
+        w.id === id ? { ...w, ...coords } : w
+      ),
+    })),
 
   // --- Layout Actions (Skeletons) ---
   setTilingMode: (mode) => {},
