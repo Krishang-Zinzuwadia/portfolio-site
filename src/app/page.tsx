@@ -6,12 +6,14 @@ import { useAudio } from "@/hooks/useAudio";
 import MenuBar from "@/components/RetroOS/MenuBar";
 import Desktop from "@/components/RetroOS/Desktop";
 import CRTOverlay from "@/components/RetroOS/CRTOverlay";
+import Window from "@/components/RetroOS/Window";
 
 export default function Home() {
   const isBooted = useOSStore((state) => state.isBooted);
   const bootSystem = useOSStore((state) => state.bootSystem);
   const isBypassed3D = useOSStore((state) => state.isBypassed3D);
   const isViewportZoomed = useOSStore((state) => state.isViewportZoomed);
+  const windows = useOSStore((state) => state.windows);
   
   const { playSound } = useAudio();
 
@@ -142,7 +144,20 @@ export default function Home() {
       >
         <MenuBar />
         
-        <Desktop />
+        <Desktop>
+          {windows.map((w) => (
+            <Window key={w.id} windowItem={w}>
+              <div className="p-2 font-geneva text-[12px] text-black">
+                <h3 className="font-chicago font-bold border-b border-black pb-1 mb-2 text-[10px] tracking-wide uppercase">
+                  {w.title}
+                </h3>
+                <p className="mt-1 leading-relaxed">
+                  This is a placeholder for the {w.id} application. Full retro functionality will be added in Phase 7.
+                </p>
+              </div>
+            </Window>
+          ))}
+        </Desktop>
 
         <CRTOverlay />
       </div>

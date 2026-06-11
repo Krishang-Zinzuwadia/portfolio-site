@@ -64,3 +64,4 @@ logs/
 *.gz
 
 # Stage tracker: floating window shell component
+# Stage tracker: mount windows to Desktop in page.tsx
