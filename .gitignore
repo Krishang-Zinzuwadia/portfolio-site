@@ -78,3 +78,4 @@ logs/
 # Stage tracker: implement master-stack layout algorithm in useTilingLayout
 # Stage tracker: implement grid layout algorithm in useTilingLayout
 # Stage tracker: implement monocle layout algorithm in useTilingLayout
+# Stage tracker: wire useTilingLayout hook and pass tiledCoords to Windows in page.tsx

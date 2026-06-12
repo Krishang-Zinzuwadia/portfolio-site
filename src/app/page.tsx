@@ -7,6 +7,7 @@ import MenuBar from "@/components/RetroOS/MenuBar";
 import Desktop from "@/components/RetroOS/Desktop";
 import CRTOverlay from "@/components/RetroOS/CRTOverlay";
 import Window from "@/components/RetroOS/Window";
+import { useTilingLayout } from "@/hooks/useTilingLayout";
 
 export default function Home() {
   const isBooted = useOSStore((state) => state.isBooted);
@@ -17,6 +18,7 @@ export default function Home() {
   
   const { playSound } = useAudio();
   const desktopRef = useRef<HTMLDivElement>(null);
+  const { tiledCoords } = useTilingLayout(desktopRef);
 
   // Boot sequence stages: 'insert-disk' | 'happy-mac' | 'welcome' | 'ready'
   const [bootStage, setBootStage] = useState<"insert-disk" | "happy-mac" | "welcome" | "ready">("insert-disk");
@@ -147,7 +149,12 @@ export default function Home() {
         
         <Desktop ref={desktopRef}>
           {windows.map((w) => (
-            <Window key={w.id} windowItem={w} dragConstraints={desktopRef}>
+            <Window 
+              key={w.id} 
+              windowItem={w} 
+              dragConstraints={desktopRef}
+              tiledCoords={tiledCoords[w.id]}
+            >
               <div className="p-2 font-geneva text-[12px] text-black">
                 <h3 className="font-chicago font-bold border-b border-black pb-1 mb-2 text-[10px] tracking-wide uppercase">
                   {w.title}
