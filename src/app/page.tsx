@@ -9,6 +9,12 @@ import CRTOverlay from "@/components/RetroOS/CRTOverlay";
 import Window from "@/components/RetroOS/Window";
 import { useTilingLayout } from "@/hooks/useTilingLayout";
 import { useKeyboardShortcuts } from "@/hooks/useKeyboardShortcuts";
+import SimpleText from "@/components/Apps/SimpleText";
+import Terminal from "@/components/Apps/Terminal";
+import Projects from "@/components/Apps/Projects";
+import ControlPanel from "@/components/Apps/ControlPanel";
+import Mail from "@/components/Apps/Mail";
+
 
 export default function Home() {
   const isBooted = useOSStore((state) => state.isBooted);
@@ -157,14 +163,11 @@ export default function Home() {
               dragConstraints={desktopRef}
               tiledCoords={tiledCoords[w.id]}
             >
-              <div className="p-2 font-geneva text-[12px] text-black">
-                <h3 className="font-chicago font-bold border-b border-black pb-1 mb-2 text-[10px] tracking-wide uppercase">
-                  {w.title}
-                </h3>
-                <p className="mt-1 leading-relaxed">
-                  This is a placeholder for the {w.id} application. Full retro functionality will be added in Phase 7.
-                </p>
-              </div>
+              {w.id === "about" && <SimpleText />}
+              {w.id === "projects" && <Projects />}
+              {w.id === "terminal" && <Terminal />}
+              {w.id === "settings" && <ControlPanel />}
+              {w.id === "contact" && <Mail />}
             </Window>
           ))}
         </Desktop>

@@ -1,36 +1,46 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Retro 90s Desktop Portfolio Simulator (System 7)
 
-## Getting Started
+An immersive, high-fidelity portfolio website simulating a classic 90s Macintosh desktop environment (System 7.0.1). Built with Next.js, Tailwind CSS, Zustand, and Framer Motion.
 
-First, run the development server:
+## 🚀 Key Features
+
+* **Authentic 90s Macintosh UI**: Features a classic pixel layout, Chicago/Geneva typography, horizontal title-bar stripes, Windowshade double-click rollup, dynamic drop-down MenuBar, and a CRT scanner shader overlay.
+* **Hybrid Draggable & Tiling Window Manager**:
+  * *Floating Mode*: Fully draggable and resizable windows constrained to the desktop bounds.
+  * *Tiling Mode*: Edge-snapping overlays. Automatic arranging in **Master-Stack**, **Grid**, and **Monocle** mathematical tiling configurations.
+* **Global Keyboard Nav (Alt Hotkeys)**: Focus cycling (`Alt+J/K`), swap order stack (`Alt+Shift+J/K`), layout toggle (`Alt+Space`), split ratio resizing (`Alt+H/L`), maximize (`Alt+Enter`), and close active window (`Alt+W`).
+* **Interactive Desktop Applications**:
+  * 📝 **SimpleText**: Vintage plain-text document viewer to read the About Me and Resume files.
+  * 📟 **MacTerminal**: Monaco green-screen command shell supporting file reads (`cat`), skill lists (`skills`), hardware info (`sysinfo`), audio tests (`beep`), theme switching, and command history log.
+  * 📁 **Finder HD (Projects)**: Project catalog folder browser showing custom detail inspector sheets ("Get Info") and source links.
+  * 🎛️ **Control Panel**: Desktop settings adjusting CRT scanner intensities, theme layers (System 7, Vaporwave, Dark Mode), sound effects, and fullscreen zooms.
+  * 📬 **Mail Box**: SMTP mail sender simulator mimicking dial-up handshake loaders and custom popup prompts.
+
+---
+
+## 🛠️ Tech Stack
+
+* **Framework**: Next.js 16 (App Router & Turbopack)
+* **Styling**: Tailwind CSS + Custom retro shadow tokens
+* **Animations**: Framer Motion
+* **State Manager**: Zustand
+* **Icons & Typography**: SVG pixel-art vectors, Chicago, Geneva, and Monaco TTF font bundles
+
+---
+
+## 💻 Getting Started
+
+First, install dependencies:
+
+```bash
+npm install
+```
+
+Start the development server:
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000) in your web browser. Follow the floppy disk boot screen animation to enter the desktop shell!
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
-
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
