@@ -83,3 +83,4 @@ logs/
 # Stage tracker: add activeDropZone state and action to types.ts
 # Stage tracker: implement activeDropZone and setActiveDropZone in useOSStore.ts
 # Stage tracker: add edge drag snapping to Window.tsx
+# Stage tracker: render dropzone overlay guides in Desktop.tsx

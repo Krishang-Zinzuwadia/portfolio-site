@@ -102,6 +102,7 @@ const Desktop = forwardRef<HTMLDivElement, { children?: React.ReactNode }>(
   ({ children }, ref) => {
     const openWindow = useOSStore((state) => state.openWindow);
     const activeTheme = useOSStore((state) => state.activeTheme);
+    const activeDropZone = useOSStore((state) => state.activeDropZone);
     const { playSound } = useAudio();
 
     const handleLaunch = (id: string) => {
@@ -166,6 +167,22 @@ const Desktop = forwardRef<HTMLDivElement, { children?: React.ReactNode }>(
             onDoubleClick={() => handleLaunch("settings")}
           />
         </div>
+
+        {/* Visual Drop Zone Guides */}
+        {activeDropZone && (
+          <div
+            className={`
+              absolute z-30 pointer-events-none border-4 border-dashed border-black bg-white/20 mix-blend-difference transition-all duration-200
+              ${activeDropZone === "left" ? "left-1 top-1 w-[calc(50%-2px)] h-[calc(100%-8px)]" : ""}
+              ${activeDropZone === "right" ? "left-1/2 top-1 w-[calc(50%-4px)] h-[calc(100%-8px)]" : ""}
+              ${activeDropZone === "top" ? "left-1 top-1 w-[calc(100%-8px)] h-[calc(100%-8px)]" : ""}
+              ${activeDropZone === "bottom" ? "left-1 top-1/2 w-[calc(100%-8px)] h-[calc(50%-4px)]" : ""}
+            `}
+            style={{
+              backgroundImage: "repeating-linear-gradient(45deg, rgba(0, 0, 0, 0.05), rgba(0, 0, 0, 0.05) 10px, transparent 10px, transparent 20px)"
+            }}
+          />
+        )}
 
         {/* Render layered Windows inside this boundaries */}
         <div className="absolute inset-0 z-10 pointer-events-none">
