@@ -1,6 +1,6 @@
 import { useOSStore } from "@/store/useOSStore";
 
-type SoundName = "click" | "beep" | "chime" | "trash" | "disk";
+type SoundName = "click" | "beep" | "chime" | "trash" | "disk" | "keystroke";
 
 const SOUND_PATHS: Record<SoundName, string> = {
   click: "/assets/audio/click.mp3",
@@ -8,6 +8,7 @@ const SOUND_PATHS: Record<SoundName, string> = {
   chime: "/assets/audio/chime.mp3",
   trash: "/assets/audio/trash.mp3",
   disk: "/assets/audio/disk.mp3",
+  keystroke: "/assets/audio/keystroke.mp3",
 };
 
 export function useAudio() {
