@@ -6,6 +6,8 @@ export function useKeyboardShortcuts() {
   const { playSound } = useAudio();
   const windows = useOSStore((state) => state.windows);
   const focusedWindowId = useOSStore((state) => state.focusedWindowId);
+  const focusWindow = useOSStore((state) => state.focusWindow);
+  const maximizeWindow = useOSStore((state) => state.maximizeWindow);
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -22,10 +24,35 @@ export function useKeyboardShortcuts() {
 
       const key = e.key.toLowerCase();
 
-      // Placeholder handlers to be extended incrementally in subsequent commits
-      if (key === "j") {
+      // Focus Next Window (Alt+J)
+      if (key === "j" && !e.shiftKey) {
         e.preventDefault();
-        console.log("Alt+J triggered");
+        const open = windows.filter((w) => w.isOpen && !w.isMinimized);
+        if (open.length <= 1) return;
+        const currentIdx = open.findIndex((w) => w.id === focusedWindowId);
+        const nextIdx = (currentIdx + 1) % open.length;
+        playSound("click");
+        focusWindow(open[nextIdx].id);
+      }
+
+      // Focus Previous Window (Alt+K)
+      if (key === "k" && !e.shiftKey) {
+        e.preventDefault();
+        const open = windows.filter((w) => w.isOpen && !w.isMinimized);
+        if (open.length <= 1) return;
+        const currentIdx = open.findIndex((w) => w.id === focusedWindowId);
+        const prevIdx = (currentIdx - 1 + open.length) % open.length;
+        playSound("click");
+        focusWindow(open[prevIdx].id);
+      }
+
+      // Maximize / Zoom Window (Alt+Enter)
+      if (e.key === "Enter") {
+        e.preventDefault();
+        if (focusedWindowId) {
+          playSound("click");
+          maximizeWindow(focusedWindowId);
+        }
       }
     };
 
@@ -33,5 +60,5 @@ export function useKeyboardShortcuts() {
     return () => {
       window.removeEventListener("keydown", handleKeyDown);
     };
-  }, [windows, focusedWindowId, playSound]);
+  }, [windows, focusedWindowId, playSound, focusWindow, maximizeWindow]);
 }
