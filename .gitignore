@@ -105,6 +105,23 @@ logs/
 # Stage tracker: add retro audio assets
 # Stage tracker: add handoff notes for phase 7
 # Stage tracker: update project README
+# Stage tracker: add 3D monitor bezel canvas
+__MACOSX/
+# Stage tracker: add extracted computer model source files
+# Stage tracker: add keystroke audio and register in useAudio
+# Stage tracker: add mechanical typing sounds to Terminal and Mail
+# Stage tracker: add audio preloaders in page.tsx
+# Stage tracker: add Test Click button to ControlPanel
+# Stage tracker: implement empty trash alert and sound trigger in Desktop
+# Stage tracker: optimize useAudio to play preloaded elements
+# Stage tracker: update project plan roadmap milestones for Phase 8
+# Stage tracker: write handoff notes for phase 8
+
+
+
+
+
+
 
 
 

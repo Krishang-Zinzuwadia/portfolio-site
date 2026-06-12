@@ -1,6 +1,6 @@
 import { useOSStore } from "@/store/useOSStore";
 
-type SoundName = "click" | "beep" | "chime" | "trash" | "disk";
+type SoundName = "click" | "beep" | "chime" | "trash" | "disk" | "keystroke";
 
 const SOUND_PATHS: Record<SoundName, string> = {
   click: "/assets/audio/click.mp3",
@@ -8,6 +8,7 @@ const SOUND_PATHS: Record<SoundName, string> = {
   chime: "/assets/audio/chime.mp3",
   trash: "/assets/audio/trash.mp3",
   disk: "/assets/audio/disk.mp3",
+  keystroke: "/assets/audio/keystroke.mp3",
 };
 
 export function useAudio() {
@@ -17,14 +18,26 @@ export function useAudio() {
     if (!soundEnabled) return;
 
     try {
-      const audio = new Audio(SOUND_PATHS[name]);
-      audio.volume = 0.5;
-      audio.play().catch((err) => {
-        // Suppress browser autoplay policy errors silently
-        console.warn("Audio autoplay blocked by browser policy:", err);
-      });
+      // Look for preloaded DOM element for zero-latency playback
+      const domAudio = typeof document !== "undefined" 
+        ? (document.getElementById(`audio-${name}`) as HTMLAudioElement | null)
+        : null;
+
+      if (domAudio) {
+        domAudio.volume = name === "keystroke" ? 0.35 : 0.5; // lower volume for typing clicks
+        domAudio.currentTime = 0;
+        domAudio.play().catch((err) => {
+          console.warn(`Audio '${name}' play blocked:`, err);
+        });
+      } else {
+        const audio = new Audio(SOUND_PATHS[name]);
+        audio.volume = name === "keystroke" ? 0.35 : 0.5;
+        audio.play().catch((err) => {
+          console.warn(`Dynamic audio '${name}' play blocked:`, err);
+        });
+      }
     } catch (error) {
-      console.error("Failed to play sound effect:", error);
+      console.error(`Failed to play sound effect '${name}':`, error);
     }
   };
 

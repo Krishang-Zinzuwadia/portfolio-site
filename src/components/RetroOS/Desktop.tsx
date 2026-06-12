@@ -1,4 +1,4 @@
-import React, { forwardRef } from "react";
+import React, { forwardRef, useState } from "react";
 import { useOSStore } from "@/store/useOSStore";
 import { useAudio } from "@/hooks/useAudio";
 
@@ -100,6 +100,7 @@ function DesktopIcon({ id, title, iconType, onDoubleClick }: DesktopIconProps) {
 
 const Desktop = forwardRef<HTMLDivElement, { children?: React.ReactNode }>(
   ({ children }, ref) => {
+    const [showTrashAlert, setShowTrashAlert] = useState(false);
     const openWindow = useOSStore((state) => state.openWindow);
     const activeTheme = useOSStore((state) => state.activeTheme);
     const activeDropZone = useOSStore((state) => state.activeDropZone);
@@ -164,7 +165,10 @@ const Desktop = forwardRef<HTMLDivElement, { children?: React.ReactNode }>(
             id="trash"
             title="Trash"
             iconType="trash"
-            onDoubleClick={() => handleLaunch("settings")}
+            onDoubleClick={() => {
+              playSound("trash");
+              setShowTrashAlert(true);
+            }}
           />
         </div>
 
@@ -188,6 +192,42 @@ const Desktop = forwardRef<HTMLDivElement, { children?: React.ReactNode }>(
         <div className="absolute inset-0 z-10 pointer-events-none">
           {children}
         </div>
+
+        {/* Trash Can Empty Warning Overlay */}
+        {showTrashAlert && (
+          <div className="absolute inset-0 bg-black/25 z-50 flex items-center justify-center pointer-events-auto">
+            <div className="w-[280px] bg-[#c0c0c0] border-2 border-black p-4 shadow-[2px_2px_0px_#000] flex flex-col space-y-4 select-none">
+              <div className="flex items-start space-x-3">
+                {/* Info Sign */}
+                <div className="w-10 h-10 border-2 border-black rounded-full bg-white flex items-center justify-center flex-shrink-0 text-xl font-bold font-chicago">
+                  i
+                </div>
+                <div className="space-y-1.5 text-[11px]">
+                  <span className="font-chicago font-bold block text-[11px] leading-tight tracking-wide text-retro-activeHeader uppercase">
+                    Trash Empty
+                  </span>
+                  <p className="text-[10px] leading-normal font-geneva">
+                    There are no files or applications in the Trash. Everything is clean!
+                  </p>
+                </div>
+              </div>
+              
+              {/* Double Bordered OK button */}
+              <div className="flex justify-end pt-1">
+                <button
+                  type="button"
+                  onClick={() => {
+                    playSound("click");
+                    setShowTrashAlert(false);
+                  }}
+                  className="px-6 py-0.5 border-2 border-black rounded bg-white shadow-retro hover:bg-black/5 active:shadow-none font-chicago font-bold text-[10px] tracking-wide outline-none focus:ring-1 focus:ring-black"
+                >
+                  OK
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
     );
   }

@@ -243,7 +243,10 @@ export default function Terminal() {
           ref={inputRef}
           type="text"
           value={inputVal}
-          onChange={(e) => setInputVal(e.target.value)}
+          onChange={(e) => {
+            setInputVal(e.target.value);
+            playSound("keystroke");
+          }}
           onKeyDown={handleKeyDown}
           className="flex-grow bg-transparent border-none outline-none font-monaco text-[11px] focus:ring-0 text-[#ffffff] caret-[#00ff00] p-0"
           autoFocus

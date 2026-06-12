@@ -200,6 +200,13 @@ export default function ControlPanel() {
                 >
                   Test Chime
                 </button>
+                <button
+                  onClick={() => playSound("keystroke")}
+                  disabled={!soundEnabled}
+                  className="px-2 py-0.5 border border-black rounded bg-[#c0c0c0] shadow-retro hover:bg-black/5 disabled:opacity-50 active:shadow-none font-bold"
+                >
+                  Test Click
+                </button>
               </div>
             </div>
           </div>

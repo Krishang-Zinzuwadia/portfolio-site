@@ -135,23 +135,11 @@ The core functional highlight of the desktop. It supports two distinct layouts, 
 
 ## 6. Project Roadmap & Phases
 
-```mermaid
-gantt
-    title Portfolio Project Phases
-    dateFormat  YYYY-MM-DD
-    section Phase 1: Foundations
-    Create Design System & Plan          :active, 2026-06-12, 1d
-    Init Repo & Setup React/Vite        :2026-06-13, 2d
-    section Phase 2: OS Engine
-    State Management & Floating Windows :2026-06-15, 3d
-    Tiling Window Manager Engine        :2026-06-18, 4d
-    section Phase 3: 3D Workspace
-    Integrate R3F & glTF Model          :2026-06-22, 3d
-    CRT Shader & CSS3D Screen Projection :2026-06-25, 3d
-    section Phase 4: Apps & Content
-    Implement Portfolio Apps            :2026-06-28, 4d
-    Sensory Polish (Sounds, Themes)    :2026-07-02, 3d
-    section Phase 5: Testing
-    Performance Optimization & Mobile   :2026-07-05, 3d
-    Deployment & Handover               :2026-07-08, 1d
-```
+- [x] **Phase 1: Environment & Project Setup** - Setup Next.js, Tailwind CSS, Zustand, and shadcn.
+- [x] **Phase 2: Zustand State & Core Hooks** - Structure global stores for windows, layouts, settings.
+- [x] **Phase 3: Core Desktop OS Layout** - CHICAGO and GENEVA retro fonts, MenuBar, and Desktop grid.
+- [x] **Phase 4: Floating Window Manager (FWM)** - Drag constraints, z-index focus, and windowshade.
+- [x] **Phase 5: Tiling Window Manager Layouts (TWM)** - Dynamic layout math (Grid, Master-Stack, Monocle).
+- [x] **Phase 6: Keyboard Shortcuts & Focus Navigation** - Focus cycling, size ratios, and hotkeys.
+- [x] **Phase 7: Built-in Desktop Applications** - SimpleText (About, Resume), Projects, Terminal, ControlPanel, Mail.
+- [x] **Phase 8: Polish, 3D Bezel Illusion, and Launch** - 3D beige monitor R3F workspace, audio preloader cache, Empty Trash popup, and deployment compilation.

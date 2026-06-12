@@ -14,6 +14,8 @@ import Terminal from "@/components/Apps/Terminal";
 import Projects from "@/components/Apps/Projects";
 import ControlPanel from "@/components/Apps/ControlPanel";
 import Mail from "@/components/Apps/Mail";
+import WorkspaceCanvas from "@/components/ThreeWorkspace/WorkspaceCanvas";
+
 
 
 export default function Home() {
@@ -130,18 +132,8 @@ export default function Home() {
   return (
     <div className="relative w-screen h-screen overflow-hidden bg-[#1a1a1a] flex justify-center items-center font-geneva">
       
-      {/* 3D Monitor Frame Canvas Placeholder Layer (to be filled in Phase 8) */}
-      {!isBypassed3D && (
-        <div className="absolute inset-0 z-[1] flex items-center justify-center pointer-events-none">
-          {/* Simulated beige monitor bezel wrapper */}
-          <div className="w-[min(90vw,780px)] aspect-[4/3.2] bg-[#d2c2ad] border-[12px] border-[#c4b39e] rounded-[36px] shadow-[0_20px_50px_rgba(0,0,0,0.8)] relative flex justify-center items-center">
-            {/* Dark inner bezel shadow */}
-            <div className="absolute inset-2 border-[4px] border-[#9c8b77] rounded-[24px]"></div>
-            {/* Screen static screen texture */}
-            <div className="w-[88%] h-[78%] bg-black rounded-[12px]"></div>
-          </div>
-        </div>
-      )}
+      {/* 3D Monitor Frame Canvas Layer */}
+      {!isBypassed3D && <WorkspaceCanvas />}
 
       {/* Flat OS Canvas positioned exactly inside the screen bounds */}
       <div 
@@ -149,7 +141,7 @@ export default function Home() {
           absolute overflow-hidden bg-retro-bg transition-all duration-300 animate-screen-flare
           ${isBypassed3D || isViewportZoomed 
             ? 'z-20 inset-0 w-full h-full' 
-            : 'z-10 aspect-[4/3] w-[min(78vw,660px)] h-auto shadow-[inset_0_0_16px_rgba(0,0,0,0.95)] border-4 border-[#121212] rounded-[8px]'
+            : 'z-10 aspect-[4/3] w-[min(82vw,109.3vh)] h-auto shadow-[inset_0_0_24px_rgba(0,0,0,0.95)] border-4 border-[#121212] rounded-[16px]'
           }
         `}
       >
@@ -174,6 +166,14 @@ export default function Home() {
 
         <CRTOverlay />
       </div>
+
+      {/* Invisible HTML5 Audio Preloaders for zero-latency triggers */}
+      <audio id="audio-click" src="/assets/audio/click.mp3" preload="auto" className="hidden" />
+      <audio id="audio-beep" src="/assets/audio/beep.mp3" preload="auto" className="hidden" />
+      <audio id="audio-chime" src="/assets/audio/chime.mp3" preload="auto" className="hidden" />
+      <audio id="audio-trash" src="/assets/audio/trash.mp3" preload="auto" className="hidden" />
+      <audio id="audio-disk" src="/assets/audio/disk.mp3" preload="auto" className="hidden" />
+      <audio id="audio-keystroke" src="/assets/audio/keystroke.mp3" preload="auto" className="hidden" />
     </div>
   );
 }
