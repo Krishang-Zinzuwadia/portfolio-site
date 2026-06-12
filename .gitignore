@@ -92,3 +92,4 @@ logs/
 # Stage tracker: implement window swapping and layout toggling hotkeys
 # Stage tracker: implement split ratio and window closing shortcuts
 # Stage tracker: wire useKeyboardShortcuts hook in page.tsx
+# Stage tracker: add help dialog state and UI in MenuBar.tsx
