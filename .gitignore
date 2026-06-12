@@ -105,6 +105,9 @@ logs/
 # Stage tracker: add retro audio assets
 # Stage tracker: add handoff notes for phase 7
 # Stage tracker: update project README
+# Stage tracker: add 3D monitor bezel canvas
+__MACOSX/
+
 
 
 
