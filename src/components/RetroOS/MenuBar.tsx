@@ -195,6 +195,33 @@ export default function MenuBar() {
             </button>
           </div>
         </div>
+
+        {/* Help Menu */}
+        <div className="group relative">
+          <button className="hover:bg-black hover:text-white px-2 py-0.5 rounded cursor-pointer">
+            Help
+          </button>
+          <div className="absolute left-0 mt-0.5 w-40 bg-retro-bg border-2 border-retro-borderDarkest shadow-[2px_2px_0px_rgba(0,0,0,0.5)] hidden group-hover:block z-[9999]">
+            <button
+              onClick={() => {
+                playSound("click");
+                setShowHelpDialog(true);
+              }}
+              className="w-full text-left px-3 py-1 hover:bg-black hover:text-white"
+            >
+              Shortcuts Guide
+            </button>
+            <button
+              onClick={() => {
+                playSound("click");
+                openWindow("about");
+              }}
+              className="w-full text-left px-3 py-1 hover:bg-black hover:text-white"
+            >
+              About RetroOS
+            </button>
+          </div>
+        </div>
       </div>
 
       {/* Right side (System Clock) */}

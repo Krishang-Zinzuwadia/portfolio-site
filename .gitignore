@@ -93,3 +93,4 @@ logs/
 # Stage tracker: implement split ratio and window closing shortcuts
 # Stage tracker: wire useKeyboardShortcuts hook in page.tsx
 # Stage tracker: add help dialog state and UI in MenuBar.tsx
+# Stage tracker: add Help menu items in MenuBar.tsx
