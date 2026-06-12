@@ -7,12 +7,15 @@ export function useKeyboardShortcuts() {
   const windows = useOSStore((state) => state.windows);
   const focusedWindowId = useOSStore((state) => state.focusedWindowId);
   const focusWindow = useOSStore((state) => state.focusWindow);
+  const closeWindow = useOSStore((state) => state.closeWindow);
   const maximizeWindow = useOSStore((state) => state.maximizeWindow);
   const tilingMode = useOSStore((state) => state.tilingMode);
   const tilingLayout = useOSStore((state) => state.tilingLayout);
   const setTilingMode = useOSStore((state) => state.setTilingMode);
   const setTilingLayout = useOSStore((state) => state.setTilingLayout);
   const cycleWindowOrder = useOSStore((state) => state.cycleWindowOrder);
+  const splitRatio = useOSStore((state) => state.splitRatio);
+  const setSplitRatio = useOSStore((state) => state.setSplitRatio);
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -93,6 +96,27 @@ export function useKeyboardShortcuts() {
           setTilingMode(tilingMode === "floating" ? "tiling" : "floating");
         }
       }
+
+      // Adjust split ratio in tiling layouts (Alt+H/L)
+      if (key === "h") {
+        e.preventDefault();
+        playSound("click");
+        setSplitRatio(splitRatio - 0.05);
+      }
+      if (key === "l") {
+        e.preventDefault();
+        playSound("click");
+        setSplitRatio(splitRatio + 0.05);
+      }
+
+      // Close Active Window (Alt+W)
+      if (key === "w") {
+        e.preventDefault();
+        if (focusedWindowId) {
+          playSound("click");
+          closeWindow(focusedWindowId);
+        }
+      }
     };
 
     window.addEventListener("keydown", handleKeyDown);
@@ -104,11 +128,13 @@ export function useKeyboardShortcuts() {
     focusedWindowId,
     playSound,
     focusWindow,
+    closeWindow,
     maximizeWindow,
     tilingMode,
     tilingLayout,
     setTilingMode,
     setTilingLayout,
     cycleWindowOrder,
-  ]);
-}
+    splitRatio,
+    setSplitRatio,
+  ]);}
