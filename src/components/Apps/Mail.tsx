@@ -143,7 +143,10 @@ export default function Mail() {
             type="email"
             required
             value={from}
-            onChange={(e) => setFrom(e.target.value)}
+            onChange={(e) => {
+              setFrom(e.target.value);
+              playSound("keystroke");
+            }}
             placeholder="your.email@address.com"
             className="flex-grow bg-white border border-black px-2 py-0.5 focus:outline-none focus:ring-1 focus:ring-black font-monaco"
           />
@@ -156,7 +159,10 @@ export default function Mail() {
             type="text"
             required
             value={subject}
-            onChange={(e) => setSubject(e.target.value)}
+            onChange={(e) => {
+              setSubject(e.target.value);
+              playSound("keystroke");
+            }}
             placeholder="Collaboration Inquiry"
             className="flex-grow bg-white border border-black px-2 py-0.5 focus:outline-none focus:ring-1 focus:ring-black"
           />
@@ -168,7 +174,10 @@ export default function Mail() {
           <textarea
             required
             value={message}
-            onChange={(e) => setMessage(e.target.value)}
+            onChange={(e) => {
+              setMessage(e.target.value);
+              playSound("keystroke");
+            }}
             placeholder="Hi Krishang, I love your portfolio! Let's work together..."
             className="flex-grow bg-white border border-black p-2 font-monaco text-[11px] leading-relaxed resize-none focus:outline-none focus:ring-1 focus:ring-black select-text"
           />
