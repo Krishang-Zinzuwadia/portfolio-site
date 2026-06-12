@@ -72,3 +72,4 @@ logs/
 # Stage tracker: wire drag constraints to Desktop and Windows in page.tsx
 # Stage tracker: define closeAllWindows and minimizeAllWindows in types.ts
 # Stage tracker: implement close, minimize all, and cleanup actions in useOSStore.ts
+# Stage tracker: wire Special menu in MenuBar.tsx

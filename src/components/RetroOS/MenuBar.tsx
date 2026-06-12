@@ -18,6 +18,9 @@ export default function MenuBar() {
     setTilingLayout,
     openWindow,
     changeTheme,
+    cleanUpDesktop,
+    minimizeAllWindows,
+    closeAllWindows,
   } = useOSStore();
 
   // Clock ticks every 10 seconds
@@ -143,6 +146,51 @@ export default function MenuBar() {
               }`}
             >
               Dark Mode
+            </button>
+          </div>
+        </div>
+
+        {/* Special Menu */}
+        <div className="group relative">
+          <button className="hover:bg-black hover:text-white px-2 py-0.5 rounded cursor-pointer">
+            Special
+          </button>
+          <div className="absolute left-0 mt-0.5 w-40 bg-retro-bg border-2 border-retro-borderDarkest shadow-[2px_2px_0px_rgba(0,0,0,0.5)] hidden group-hover:block z-[9999]">
+            <button
+              onClick={() => {
+                playSound("click");
+                cleanUpDesktop();
+              }}
+              className="w-full text-left px-3 py-1 hover:bg-black hover:text-white"
+            >
+              Clean Up Desktop
+            </button>
+            <button
+              onClick={() => {
+                playSound("click");
+                minimizeAllWindows();
+              }}
+              className="w-full text-left px-3 py-1 hover:bg-black hover:text-white"
+            >
+              Minimize All
+            </button>
+            <button
+              onClick={() => {
+                playSound("click");
+                closeAllWindows();
+              }}
+              className="w-full text-left px-3 py-1 hover:bg-black hover:text-white"
+            >
+              Close All Windows
+            </button>
+            <hr className="border-t border-retro-borderDark border-dashed" />
+            <button
+              onClick={() => {
+                playSound("beep");
+              }}
+              className="w-full text-left px-3 py-1 hover:bg-black hover:text-white"
+            >
+              Beep Sound
             </button>
           </div>
         </div>
