@@ -135,6 +135,7 @@ export default function Window({ windowItem, children, tiledCoords, dragConstrai
 
   return (
     <motion.div
+      layout
       onMouseDown={handleMouseDown}
       style={windowStyle}
       drag={tilingMode === "floating" && !isMaximized}
