@@ -81,3 +81,4 @@ logs/
 # Stage tracker: wire useTilingLayout hook and pass tiledCoords to Windows in page.tsx
 # Stage tracker: enable Framer Motion layout transitions in Window.tsx
 # Stage tracker: add activeDropZone state and action to types.ts
+# Stage tracker: implement activeDropZone and setActiveDropZone in useOSStore.ts

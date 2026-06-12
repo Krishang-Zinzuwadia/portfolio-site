@@ -19,6 +19,7 @@ export const useOSStore = create<OSStore>((set, get) => ({
 
   windows: initialWindows,
   focusedWindowId: null,
+  activeDropZone: null,
 
   // --- View Actions ---
   zoomViewport: (zoom) => set({ isViewportZoomed: zoom }),
@@ -140,6 +141,7 @@ export const useOSStore = create<OSStore>((set, get) => ({
   setTilingLayout: (layout) => set({ tilingLayout: layout }),
   setSplitRatio: (ratio) => set({ splitRatio: Math.max(0.1, Math.min(0.9, ratio)) }),
   setGaps: (gaps) => set({ gaps: Math.max(0, Math.min(64, gaps)) }),
+  setActiveDropZone: (zone) => set({ activeDropZone: zone }),
 
   // --- Configuration Actions ---
   toggleSound: () => set((state) => ({ soundEnabled: !state.soundEnabled })),
