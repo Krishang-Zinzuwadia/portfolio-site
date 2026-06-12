@@ -74,3 +74,4 @@ logs/
 # Stage tracker: implement close, minimize all, and cleanup actions in useOSStore.ts
 # Stage tracker: wire Special menu in MenuBar.tsx
 # Stage tracker: add handoff notes for phase 4
+# Stage tracker: create useTilingLayout hook skeleton
