@@ -10,9 +10,10 @@ interface WindowProps {
   windowItem: WindowItem;
   children: React.ReactNode;
   tiledCoords?: { x: number; y: number; w: number; h: number };
+  dragConstraints?: React.RefObject<HTMLDivElement | null>;
 }
 
-export default function Window({ windowItem, children, tiledCoords }: WindowProps) {
+export default function Window({ windowItem, children, tiledCoords, dragConstraints }: WindowProps) {
   const { id, title, isOpen, isMinimized, isMaximized, x: fx, y: fy, w: fw, h: fh, zIndex } = windowItem;
   const { playSound } = useAudio();
 
@@ -141,6 +142,7 @@ export default function Window({ windowItem, children, tiledCoords }: WindowProp
       dragControls={dragControls}
       dragElastic={0.05}
       dragMomentum={false}
+      dragConstraints={dragConstraints}
       onDragEnd={() => {
         // Commit drag coordinates to store upon release directly from motion values
         updateWindowCoords(id, {
