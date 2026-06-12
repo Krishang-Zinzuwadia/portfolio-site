@@ -107,6 +107,8 @@ logs/
 # Stage tracker: update project README
 # Stage tracker: add 3D monitor bezel canvas
 __MACOSX/
+# Stage tracker: add extracted computer model source files
+
 
 
 
