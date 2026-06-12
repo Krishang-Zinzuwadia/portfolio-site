@@ -52,6 +52,9 @@ export interface OSActions {
   minimizeWindow: (id: string) => void;
   maximizeWindow: (id: string) => void;
   focusWindow: (id: string) => void;
+  closeAllWindows: () => void;
+  minimizeAllWindows: () => void;
+  cleanUpDesktop: () => void;
   updateWindowCoords: (
     id: string,
     coords: Partial<Pick<WindowItem, "x" | "y" | "w" | "h">>

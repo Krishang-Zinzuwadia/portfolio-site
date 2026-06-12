@@ -100,6 +100,34 @@ export const useOSStore = create<OSStore>((set, get) => ({
 
       return { windows, focusedWindowId: id };
     }),
+  closeAllWindows: () =>
+    set((state) => ({
+      windows: state.windows.map((w) => ({ ...w, isOpen: false })),
+      focusedWindowId: null,
+    })),
+  minimizeAllWindows: () =>
+    set((state) => ({
+      windows: state.windows.map((w) => ({ ...w, isMinimized: true })),
+      focusedWindowId: null,
+    })),
+  cleanUpDesktop: () =>
+    set((state) => {
+      const cleaned = state.windows.map((w) => {
+        const original = initialWindows.find((init) => init.id === w.id);
+        if (!original) return w;
+        return {
+          ...w,
+          x: original.x,
+          y: original.y,
+          w: original.w,
+          h: original.h,
+          isMaximized: false,
+          isMinimized: false,
+          isOpen: true,
+        };
+      });
+      return { windows: cleaned };
+    }),
   updateWindowCoords: (id, coords) =>
     set((state) => ({
       windows: state.windows.map((w) =>

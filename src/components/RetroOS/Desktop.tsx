@@ -1,6 +1,4 @@
-"use client";
-
-import React from "react";
+import React, { forwardRef } from "react";
 import { useOSStore } from "@/store/useOSStore";
 import { useAudio } from "@/hooks/useAudio";
 
@@ -100,79 +98,84 @@ function DesktopIcon({ id, title, iconType, onDoubleClick }: DesktopIconProps) {
   );
 }
 
-export default function Desktop({ children }: { children?: React.ReactNode }) {
-  const openWindow = useOSStore((state) => state.openWindow);
-  const activeTheme = useOSStore((state) => state.activeTheme);
-  const { playSound } = useAudio();
+const Desktop = forwardRef<HTMLDivElement, { children?: React.ReactNode }>(
+  ({ children }, ref) => {
+    const openWindow = useOSStore((state) => state.openWindow);
+    const activeTheme = useOSStore((state) => state.activeTheme);
+    const { playSound } = useAudio();
 
-  const handleLaunch = (id: string) => {
-    playSound("disk");
-    openWindow(id);
-  };
+    const handleLaunch = (id: string) => {
+      playSound("disk");
+      openWindow(id);
+    };
 
-  const getWallpaperClass = () => {
-    switch (activeTheme) {
-      case "vaporwave":
-        return "bg-[#008080] bg-[radial-gradient(#ff007f_1px,transparent_1px)] [background-size:16px_16px]";
-      case "dark-mode":
-        return "bg-[#121212] bg-[linear-gradient(rgba(255,255,255,0.05)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.05)_1px,transparent_1px)] [background-size:20px_20px]";
-      case "system7":
-      default:
-        // System 7 Checkered Pattern
-        return "bg-retro-desktop bg-[radial-gradient(#000000_1px,transparent_1px)] [background-size:4px_4px] bg-repeat";
-    }
-  };
+    const getWallpaperClass = () => {
+      switch (activeTheme) {
+        case "vaporwave":
+          return "bg-[#008080] bg-[radial-gradient(#ff007f_1px,transparent_1px)] [background-size:16px_16px]";
+        case "dark-mode":
+          return "bg-[#121212] bg-[linear-gradient(rgba(255,255,255,0.05)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.05)_1px,transparent_1px)] [background-size:20px_20px]";
+        case "system7":
+        default:
+          return "bg-retro-desktop bg-[radial-gradient(#000000_1px,transparent_1px)] [background-size:4px_4px] bg-repeat";
+      }
+    };
 
-  return (
-    <div className={`relative flex-1 w-full h-[calc(100%-24px)] ${getWallpaperClass()} overflow-hidden`}>
-      {/* Absolute Aligned Desktop Icons on the Right */}
-      <div className="absolute right-4 top-4 flex flex-col space-y-4 items-end z-20 pointer-events-auto">
-        <DesktopIcon
-          id="about"
-          title="About Me"
-          iconType="document"
-          onDoubleClick={() => handleLaunch("about")}
-        />
-        <DesktopIcon
-          id="projects"
-          title="Finder HD"
-          iconType="folder"
-          onDoubleClick={() => handleLaunch("projects")}
-        />
-        <DesktopIcon
-          id="terminal"
-          title="MacTerminal"
-          iconType="terminal"
-          onDoubleClick={() => handleLaunch("terminal")}
-        />
-        <DesktopIcon
-          id="settings"
-          title="Control Panel"
-          iconType="settings"
-          onDoubleClick={() => handleLaunch("settings")}
-        />
-        <DesktopIcon
-          id="contact"
-          title="Mail Box"
-          iconType="mail"
-          onDoubleClick={() => handleLaunch("contact")}
-        />
+    return (
+      <div ref={ref} className={`relative flex-1 w-full h-[calc(100%-24px)] ${getWallpaperClass()} overflow-hidden`}>
+        {/* Absolute Aligned Desktop Icons on the Right */}
+        <div className="absolute right-4 top-4 flex flex-col space-y-4 items-end z-20 pointer-events-auto">
+          <DesktopIcon
+            id="about"
+            title="About Me"
+            iconType="document"
+            onDoubleClick={() => handleLaunch("about")}
+          />
+          <DesktopIcon
+            id="projects"
+            title="Finder HD"
+            iconType="folder"
+            onDoubleClick={() => handleLaunch("projects")}
+          />
+          <DesktopIcon
+            id="terminal"
+            title="MacTerminal"
+            iconType="terminal"
+            onDoubleClick={() => handleLaunch("terminal")}
+          />
+          <DesktopIcon
+            id="settings"
+            title="Control Panel"
+            iconType="settings"
+            onDoubleClick={() => handleLaunch("settings")}
+          />
+          <DesktopIcon
+            id="contact"
+            title="Mail Box"
+            iconType="mail"
+            onDoubleClick={() => handleLaunch("contact")}
+          />
+        </div>
+
+        {/* Bottom Right Trash Can */}
+        <div className="absolute right-4 bottom-4 z-20 pointer-events-auto">
+          <DesktopIcon
+            id="trash"
+            title="Trash"
+            iconType="trash"
+            onDoubleClick={() => handleLaunch("settings")}
+          />
+        </div>
+
+        {/* Render layered Windows inside this boundaries */}
+        <div className="absolute inset-0 z-10 pointer-events-none">
+          {children}
+        </div>
       </div>
+    );
+  }
+);
 
-      {/* Bottom Right Trash Can */}
-      <div className="absolute right-4 bottom-4 z-20 pointer-events-auto">
-        <DesktopIcon
-          id="trash"
-          title="Trash"
-          iconType="trash"
-          onDoubleClick={() => handleLaunch("settings")} // Skeletons route settings as default
-        />
-      </div>
+Desktop.displayName = "Desktop";
 
-      {/* Render layered Windows inside this boundaries */}
-      <div className="absolute inset-0 z-10 pointer-events-none">
-        {children}
-      </div>
-    </div>
-  );
-}
+export default Desktop;

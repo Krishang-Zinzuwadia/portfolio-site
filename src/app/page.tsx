@@ -1,19 +1,22 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useOSStore } from "@/store/useOSStore";
 import { useAudio } from "@/hooks/useAudio";
 import MenuBar from "@/components/RetroOS/MenuBar";
 import Desktop from "@/components/RetroOS/Desktop";
 import CRTOverlay from "@/components/RetroOS/CRTOverlay";
+import Window from "@/components/RetroOS/Window";
 
 export default function Home() {
   const isBooted = useOSStore((state) => state.isBooted);
   const bootSystem = useOSStore((state) => state.bootSystem);
   const isBypassed3D = useOSStore((state) => state.isBypassed3D);
   const isViewportZoomed = useOSStore((state) => state.isViewportZoomed);
+  const windows = useOSStore((state) => state.windows);
   
   const { playSound } = useAudio();
+  const desktopRef = useRef<HTMLDivElement>(null);
 
   // Boot sequence stages: 'insert-disk' | 'happy-mac' | 'welcome' | 'ready'
   const [bootStage, setBootStage] = useState<"insert-disk" | "happy-mac" | "welcome" | "ready">("insert-disk");
@@ -142,7 +145,20 @@ export default function Home() {
       >
         <MenuBar />
         
-        <Desktop />
+        <Desktop ref={desktopRef}>
+          {windows.map((w) => (
+            <Window key={w.id} windowItem={w} dragConstraints={desktopRef}>
+              <div className="p-2 font-geneva text-[12px] text-black">
+                <h3 className="font-chicago font-bold border-b border-black pb-1 mb-2 text-[10px] tracking-wide uppercase">
+                  {w.title}
+                </h3>
+                <p className="mt-1 leading-relaxed">
+                  This is a placeholder for the {w.id} application. Full retro functionality will be added in Phase 7.
+                </p>
+              </div>
+            </Window>
+          ))}
+        </Desktop>
 
         <CRTOverlay />
       </div>

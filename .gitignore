@@ -33,6 +33,10 @@ yarn-error.log*
 
 # env files (can opt-in for committing if needed)
 .env*
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
 
 # vercel
 .vercel
@@ -58,3 +62,15 @@ logs/
 *.zip
 *.tar
 *.gz
+
+# Stage tracker: floating window shell component
+# Stage tracker: mount windows to Desktop in page.tsx
+# Stage tracker: fix drag prop type error in Window.tsx
+# Stage tracker: introduce dragControls for Window header dragging
+# Stage tracker: forward ref in Desktop component
+# Stage tracker: dragConstraints support in Window component
+# Stage tracker: wire drag constraints to Desktop and Windows in page.tsx
+# Stage tracker: define closeAllWindows and minimizeAllWindows in types.ts
+# Stage tracker: implement close, minimize all, and cleanup actions in useOSStore.ts
+# Stage tracker: wire Special menu in MenuBar.tsx
+# Stage tracker: add handoff notes for phase 4
