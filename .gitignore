@@ -95,4 +95,6 @@ logs/
 # Stage tracker: add help dialog state and UI in MenuBar.tsx
 # Stage tracker: add Help menu items in MenuBar.tsx
 # Stage tracker: add handoff notes for phase 6
+# Stage tracker: add SimpleText component
+
 
