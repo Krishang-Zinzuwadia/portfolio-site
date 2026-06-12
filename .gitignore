@@ -71,3 +71,4 @@ logs/
 # Stage tracker: dragConstraints support in Window component
 # Stage tracker: wire drag constraints to Desktop and Windows in page.tsx
 # Stage tracker: define closeAllWindows and minimizeAllWindows in types.ts
+# Stage tracker: implement close, minimize all, and cleanup actions in useOSStore.ts
