@@ -110,6 +110,8 @@ __MACOSX/
 # Stage tracker: add extracted computer model source files
 # Stage tracker: add keystroke audio and register in useAudio
 # Stage tracker: add mechanical typing sounds to Terminal and Mail
+# Stage tracker: add audio preloaders in page.tsx
+
 
 
 

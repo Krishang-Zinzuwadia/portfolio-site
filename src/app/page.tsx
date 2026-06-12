@@ -166,6 +166,14 @@ export default function Home() {
 
         <CRTOverlay />
       </div>
+
+      {/* Invisible HTML5 Audio Preloaders for zero-latency triggers */}
+      <audio id="audio-click" src="/assets/audio/click.mp3" preload="auto" className="hidden" />
+      <audio id="audio-beep" src="/assets/audio/beep.mp3" preload="auto" className="hidden" />
+      <audio id="audio-chime" src="/assets/audio/chime.mp3" preload="auto" className="hidden" />
+      <audio id="audio-trash" src="/assets/audio/trash.mp3" preload="auto" className="hidden" />
+      <audio id="audio-disk" src="/assets/audio/disk.mp3" preload="auto" className="hidden" />
+      <audio id="audio-keystroke" src="/assets/audio/keystroke.mp3" preload="auto" className="hidden" />
     </div>
   );
 }
