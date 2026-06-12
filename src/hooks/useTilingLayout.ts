@@ -118,6 +118,15 @@ export function useTilingLayout(desktopRef: RefObject<HTMLDivElement | null>) {
           };
         }
       }
+    } else if (tilingLayout === "monocle") {
+      openWindows.forEach((w) => {
+        coordsMap[w.id] = {
+          x: gaps,
+          y: gaps,
+          w: dimensions.width - 2 * gaps,
+          h: dimensions.height - 2 * gaps,
+        };
+      });
     } else {
       // Fallback placeholder
       openWindows.forEach((w) => {

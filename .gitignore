@@ -77,3 +77,4 @@ logs/
 # Stage tracker: create useTilingLayout hook skeleton
 # Stage tracker: implement master-stack layout algorithm in useTilingLayout
 # Stage tracker: implement grid layout algorithm in useTilingLayout
+# Stage tracker: implement monocle layout algorithm in useTilingLayout
