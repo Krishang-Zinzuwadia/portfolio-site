@@ -85,3 +85,14 @@ logs/
 # Stage tracker: add edge drag snapping to Window.tsx
 # Stage tracker: render dropzone overlay guides in Desktop.tsx
 # Stage tracker: write handoff notes for phase 5
+# Stage tracker: add cycleWindowOrder to types.ts
+# Stage tracker: implement cycleWindowOrder in useOSStore.ts
+# Stage tracker: create useKeyboardShortcuts hook skeleton
+# Stage tracker: add focus cycling and maximize key shortcuts in useKeyboardShortcuts.ts
+# Stage tracker: implement window swapping and layout toggling hotkeys
+# Stage tracker: implement split ratio and window closing shortcuts
+# Stage tracker: wire useKeyboardShortcuts hook in page.tsx
+# Stage tracker: add help dialog state and UI in MenuBar.tsx
+# Stage tracker: add Help menu items in MenuBar.tsx
+# Stage tracker: add handoff notes for phase 6
+

@@ -8,6 +8,7 @@ import Desktop from "@/components/RetroOS/Desktop";
 import CRTOverlay from "@/components/RetroOS/CRTOverlay";
 import Window from "@/components/RetroOS/Window";
 import { useTilingLayout } from "@/hooks/useTilingLayout";
+import { useKeyboardShortcuts } from "@/hooks/useKeyboardShortcuts";
 
 export default function Home() {
   const isBooted = useOSStore((state) => state.isBooted);
@@ -19,6 +20,7 @@ export default function Home() {
   const { playSound } = useAudio();
   const desktopRef = useRef<HTMLDivElement>(null);
   const { tiledCoords } = useTilingLayout(desktopRef);
+  useKeyboardShortcuts();
 
   // Boot sequence stages: 'insert-disk' | 'happy-mac' | 'welcome' | 'ready'
   const [bootStage, setBootStage] = useState<"insert-disk" | "happy-mac" | "welcome" | "ready">("insert-disk");

@@ -56,6 +56,7 @@ export interface OSActions {
   closeAllWindows: () => void;
   minimizeAllWindows: () => void;
   cleanUpDesktop: () => void;
+  cycleWindowOrder: (id: string, direction: "next" | "prev") => void;
   updateWindowCoords: (
     id: string,
     coords: Partial<Pick<WindowItem, "x" | "y" | "w" | "h">>
