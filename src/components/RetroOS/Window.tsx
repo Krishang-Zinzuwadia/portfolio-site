@@ -25,6 +25,9 @@ export default function Window({ windowItem, children, tiledCoords, dragConstrai
     minimizeWindow,
     maximizeWindow,
     updateWindowCoords,
+    setTilingMode,
+    setTilingLayout,
+    setActiveDropZone,
   } = useOSStore();
 
   const [isCollapsed, setIsCollapsed] = useState(false); // Windowshade state
@@ -135,6 +138,7 @@ export default function Window({ windowItem, children, tiledCoords, dragConstrai
 
   return (
     <motion.div
+      layout
       onMouseDown={handleMouseDown}
       style={windowStyle}
       drag={tilingMode === "floating" && !isMaximized}
@@ -143,12 +147,49 @@ export default function Window({ windowItem, children, tiledCoords, dragConstrai
       dragElastic={0.05}
       dragMomentum={false}
       dragConstraints={dragConstraints}
+      onDrag={(e, info) => {
+        if (tilingMode !== "floating") return;
+        const desktopElement = dragConstraints?.current;
+        if (!desktopElement) return;
+
+        const rect = desktopElement.getBoundingClientRect();
+        const pointerX = info.point.x;
+        const pointerY = info.point.y;
+
+        const edgeThreshold = 60; // 60px edge threshold
+
+        if (pointerX < rect.left + edgeThreshold) {
+          setActiveDropZone("left");
+        } else if (pointerX > rect.right - edgeThreshold) {
+          setActiveDropZone("right");
+        } else if (pointerY < rect.top + edgeThreshold + 24) {
+          setActiveDropZone("top");
+        } else if (pointerY > rect.bottom - edgeThreshold) {
+          setActiveDropZone("bottom");
+        } else {
+          setActiveDropZone(null);
+        }
+      }}
       onDragEnd={() => {
-        // Commit drag coordinates to store upon release directly from motion values
-        updateWindowCoords(id, {
-          x: Math.max(0, Math.round(mx.get())),
-          y: Math.max(0, Math.round(my.get())),
-        });
+        const activeZone = useOSStore.getState().activeDropZone;
+        if (activeZone) {
+          playSound("chime");
+          setTilingMode("tiling");
+          if (activeZone === "left" || activeZone === "right") {
+            setTilingLayout("master-stack");
+          } else if (activeZone === "top") {
+            setTilingLayout("monocle");
+          } else if (activeZone === "bottom") {
+            setTilingLayout("grid");
+          }
+          setActiveDropZone(null);
+        } else {
+          // Commit drag coordinates to store upon release directly from motion values
+          updateWindowCoords(id, {
+            x: Math.max(0, Math.round(mx.get())),
+            y: Math.max(0, Math.round(my.get())),
+          });
+        }
       }}
       className={`
         flex flex-col bg-retro-bg border-2 border-retro-borderDarkest rounded select-none pointer-events-auto

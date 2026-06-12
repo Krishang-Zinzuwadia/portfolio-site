@@ -38,6 +38,7 @@ export interface OSState {
   // Window states
   windows: WindowItem[];
   focusedWindowId: string | null;
+  activeDropZone: "left" | "right" | "top" | "bottom" | null;
 }
 
 export interface OSActions {
@@ -65,6 +66,7 @@ export interface OSActions {
   setTilingLayout: (layout: TilingLayout) => void;
   setSplitRatio: (ratio: number) => void;
   setGaps: (gaps: number) => void;
+  setActiveDropZone: (zone: "left" | "right" | "top" | "bottom" | null) => void;
 
   // Configuration actions
   toggleSound: () => void;

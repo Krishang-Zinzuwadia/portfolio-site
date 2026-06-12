@@ -74,3 +74,14 @@ logs/
 # Stage tracker: implement close, minimize all, and cleanup actions in useOSStore.ts
 # Stage tracker: wire Special menu in MenuBar.tsx
 # Stage tracker: add handoff notes for phase 4
+# Stage tracker: create useTilingLayout hook skeleton
+# Stage tracker: implement master-stack layout algorithm in useTilingLayout
+# Stage tracker: implement grid layout algorithm in useTilingLayout
+# Stage tracker: implement monocle layout algorithm in useTilingLayout
+# Stage tracker: wire useTilingLayout hook and pass tiledCoords to Windows in page.tsx
+# Stage tracker: enable Framer Motion layout transitions in Window.tsx
+# Stage tracker: add activeDropZone state and action to types.ts
+# Stage tracker: implement activeDropZone and setActiveDropZone in useOSStore.ts
+# Stage tracker: add edge drag snapping to Window.tsx
+# Stage tracker: render dropzone overlay guides in Desktop.tsx
+# Stage tracker: write handoff notes for phase 5
