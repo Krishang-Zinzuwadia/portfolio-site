@@ -100,6 +100,8 @@ logs/
 # Stage tracker: add ControlPanel component
 # Stage tracker: add Mail component
 # Stage tracker: add Projects component
+# Stage tracker: wire apps to page.tsx
+
 
 
 
