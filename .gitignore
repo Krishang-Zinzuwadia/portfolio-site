@@ -89,3 +89,4 @@ logs/
 # Stage tracker: implement cycleWindowOrder in useOSStore.ts
 # Stage tracker: create useKeyboardShortcuts hook skeleton
 # Stage tracker: add focus cycling and maximize key shortcuts in useKeyboardShortcuts.ts
+# Stage tracker: implement window swapping and layout toggling hotkeys

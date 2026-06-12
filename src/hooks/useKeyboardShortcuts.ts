@@ -8,6 +8,11 @@ export function useKeyboardShortcuts() {
   const focusedWindowId = useOSStore((state) => state.focusedWindowId);
   const focusWindow = useOSStore((state) => state.focusWindow);
   const maximizeWindow = useOSStore((state) => state.maximizeWindow);
+  const tilingMode = useOSStore((state) => state.tilingMode);
+  const tilingLayout = useOSStore((state) => state.tilingLayout);
+  const setTilingMode = useOSStore((state) => state.setTilingMode);
+  const setTilingLayout = useOSStore((state) => state.setTilingLayout);
+  const cycleWindowOrder = useOSStore((state) => state.cycleWindowOrder);
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -54,11 +59,56 @@ export function useKeyboardShortcuts() {
           maximizeWindow(focusedWindowId);
         }
       }
+
+      // Swap Window Order Stack (Alt+Shift+J/K)
+      if (key === "j" && e.shiftKey) {
+        e.preventDefault();
+        if (focusedWindowId) {
+          playSound("click");
+          cycleWindowOrder(focusedWindowId, "next");
+        }
+      }
+      if (key === "k" && e.shiftKey) {
+        e.preventDefault();
+        if (focusedWindowId) {
+          playSound("click");
+          cycleWindowOrder(focusedWindowId, "prev");
+        }
+      }
+
+      // Toggle floating vs tiling layouts (Alt+Space)
+      // Cycle tiling layouts (Alt+Shift+Space)
+      if (e.code === "Space") {
+        e.preventDefault();
+        if (e.shiftKey) {
+          if (tilingMode === "tiling") {
+            playSound("click");
+            const layouts: ("master-stack" | "grid" | "monocle")[] = ["master-stack", "grid", "monocle"];
+            const currentIdx = layouts.indexOf(tilingLayout);
+            const nextLayout = layouts[(currentIdx + 1) % layouts.length];
+            setTilingLayout(nextLayout);
+          }
+        } else {
+          playSound("click");
+          setTilingMode(tilingMode === "floating" ? "tiling" : "floating");
+        }
+      }
     };
 
     window.addEventListener("keydown", handleKeyDown);
     return () => {
       window.removeEventListener("keydown", handleKeyDown);
     };
-  }, [windows, focusedWindowId, playSound, focusWindow, maximizeWindow]);
+  }, [
+    windows,
+    focusedWindowId,
+    playSound,
+    focusWindow,
+    maximizeWindow,
+    tilingMode,
+    tilingLayout,
+    setTilingMode,
+    setTilingLayout,
+    cycleWindowOrder,
+  ]);
 }
