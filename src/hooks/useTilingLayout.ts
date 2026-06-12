@@ -47,17 +47,55 @@ export function useTilingLayout(desktopRef: RefObject<HTMLDivElement | null>) {
 
   const calculateTiledCoords = (): Record<string, { x: number; y: number; w: number; h: number }> => {
     const coordsMap: Record<string, { x: number; y: number; w: number; h: number }> = {};
-    if (openWindows.length === 0) return coordsMap;
+    const n = openWindows.length;
+    if (n === 0) return coordsMap;
 
-    // We will implement specific layout algorithms in subsequent commits
-    openWindows.forEach((w) => {
-      coordsMap[w.id] = {
-        x: w.x,
-        y: w.y,
-        w: w.w,
-        h: w.h,
-      };
-    });
+    if (tilingLayout === "master-stack") {
+      if (n === 1) {
+        coordsMap[openWindows[0].id] = {
+          x: gaps,
+          y: gaps,
+          w: dimensions.width - 2 * gaps,
+          h: dimensions.height - 2 * gaps,
+        };
+      } else {
+        // Master window on the left
+        const masterW = Math.round(dimensions.width * splitRatio) - gaps;
+        const masterH = dimensions.height - 2 * gaps;
+        coordsMap[openWindows[0].id] = {
+          x: gaps,
+          y: gaps,
+          w: masterW,
+          h: masterH,
+        };
+
+        // Stack windows on the right
+        const stackX = masterW + 2 * gaps;
+        const stackW = dimensions.width - masterW - 3 * gaps;
+        const k = n - 1;
+        const totalStackGapsHeight = (k + 1) * gaps;
+        const stackCellH = Math.floor((dimensions.height - totalStackGapsHeight) / k);
+
+        for (let i = 0; i < k; i++) {
+          coordsMap[openWindows[i + 1].id] = {
+            x: stackX,
+            y: gaps + i * (stackCellH + gaps),
+            w: stackW,
+            h: stackCellH,
+          };
+        }
+      }
+    } else {
+      // Fallback placeholder
+      openWindows.forEach((w) => {
+        coordsMap[w.id] = {
+          x: w.x,
+          y: w.y,
+          w: w.w,
+          h: w.h,
+        };
+      });
+    }
 
     return coordsMap;
   };

@@ -75,3 +75,4 @@ logs/
 # Stage tracker: wire Special menu in MenuBar.tsx
 # Stage tracker: add handoff notes for phase 4
 # Stage tracker: create useTilingLayout hook skeleton
+# Stage tracker: implement master-stack layout algorithm in useTilingLayout
