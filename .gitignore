@@ -70,3 +70,4 @@ logs/
 # Stage tracker: forward ref in Desktop component
 # Stage tracker: dragConstraints support in Window component
 # Stage tracker: wire drag constraints to Desktop and Windows in page.tsx
+# Stage tracker: define closeAllWindows and minimizeAllWindows in types.ts
