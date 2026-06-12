@@ -86,3 +86,4 @@ logs/
 # Stage tracker: render dropzone overlay guides in Desktop.tsx
 # Stage tracker: write handoff notes for phase 5
 # Stage tracker: add cycleWindowOrder to types.ts
+# Stage tracker: implement cycleWindowOrder in useOSStore.ts

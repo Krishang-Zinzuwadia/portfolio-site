@@ -129,6 +129,28 @@ export const useOSStore = create<OSStore>((set, get) => ({
       });
       return { windows: cleaned };
     }),
+  cycleWindowOrder: (id, direction) =>
+    set((state) => {
+      const open = state.windows.filter((w) => w.isOpen && !w.isMinimized);
+      const idx = open.findIndex((w) => w.id === id);
+      if (idx === -1 || open.length <= 1) return {};
+
+      let targetIdx = direction === "next" ? idx + 1 : idx - 1;
+      if (targetIdx < 0) targetIdx = open.length - 1;
+      if (targetIdx >= open.length) targetIdx = 0;
+
+      const targetId = open[targetIdx].id;
+
+      const idxOriginal1 = state.windows.findIndex((w) => w.id === id);
+      const idxOriginal2 = state.windows.findIndex((w) => w.id === targetId);
+
+      const windows = [...state.windows];
+      const temp = windows[idxOriginal1];
+      windows[idxOriginal1] = windows[idxOriginal2];
+      windows[idxOriginal2] = temp;
+
+      return { windows };
+    }),
   updateWindowCoords: (id, coords) =>
     set((state) => ({
       windows: state.windows.map((w) =>
