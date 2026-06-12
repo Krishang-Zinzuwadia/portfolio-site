@@ -69,3 +69,4 @@ logs/
 # Stage tracker: introduce dragControls for Window header dragging
 # Stage tracker: forward ref in Desktop component
 # Stage tracker: dragConstraints support in Window component
+# Stage tracker: wire drag constraints to Desktop and Windows in page.tsx

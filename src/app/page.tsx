@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useOSStore } from "@/store/useOSStore";
 import { useAudio } from "@/hooks/useAudio";
 import MenuBar from "@/components/RetroOS/MenuBar";
@@ -16,6 +16,7 @@ export default function Home() {
   const windows = useOSStore((state) => state.windows);
   
   const { playSound } = useAudio();
+  const desktopRef = useRef<HTMLDivElement>(null);
 
   // Boot sequence stages: 'insert-disk' | 'happy-mac' | 'welcome' | 'ready'
   const [bootStage, setBootStage] = useState<"insert-disk" | "happy-mac" | "welcome" | "ready">("insert-disk");
@@ -144,9 +145,9 @@ export default function Home() {
       >
         <MenuBar />
         
-        <Desktop>
+        <Desktop ref={desktopRef}>
           {windows.map((w) => (
-            <Window key={w.id} windowItem={w}>
+            <Window key={w.id} windowItem={w} dragConstraints={desktopRef}>
               <div className="p-2 font-geneva text-[12px] text-black">
                 <h3 className="font-chicago font-bold border-b border-black pb-1 mb-2 text-[10px] tracking-wide uppercase">
                   {w.title}
