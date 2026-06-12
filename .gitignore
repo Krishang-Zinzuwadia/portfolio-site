@@ -73,3 +73,4 @@ logs/
 # Stage tracker: define closeAllWindows and minimizeAllWindows in types.ts
 # Stage tracker: implement close, minimize all, and cleanup actions in useOSStore.ts
 # Stage tracker: wire Special menu in MenuBar.tsx
+# Stage tracker: add handoff notes for phase 4
