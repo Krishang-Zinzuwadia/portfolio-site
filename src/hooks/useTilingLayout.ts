@@ -85,6 +85,39 @@ export function useTilingLayout(desktopRef: RefObject<HTMLDivElement | null>) {
           };
         }
       }
+    } else if (tilingLayout === "grid") {
+      const cols = Math.ceil(Math.sqrt(n));
+      const rows = Math.ceil(n / cols);
+
+      const totalGapsWidth = (cols + 1) * gaps;
+      const cellW = Math.floor((dimensions.width - totalGapsWidth) / cols);
+      const totalGapsHeight = (rows + 1) * gaps;
+      const cellH = Math.floor((dimensions.height - totalGapsHeight) / rows);
+
+      for (let idx = 0; idx < n; idx++) {
+        const r = Math.floor(idx / cols);
+        const c = idx % cols;
+        const isLastRow = r === rows - 1;
+        const remainingInLastRow = n - r * cols;
+
+        if (isLastRow && remainingInLastRow < cols) {
+          // Stretch windows in the last row to fill the row width
+          const lastRowCellW = Math.floor((dimensions.width - (remainingInLastRow + 1) * gaps) / remainingInLastRow);
+          coordsMap[openWindows[idx].id] = {
+            x: gaps + c * (lastRowCellW + gaps),
+            y: gaps + r * (cellH + gaps),
+            w: lastRowCellW,
+            h: cellH,
+          };
+        } else {
+          coordsMap[openWindows[idx].id] = {
+            x: gaps + c * (cellW + gaps),
+            y: gaps + r * (cellH + gaps),
+            w: cellW,
+            h: cellH,
+          };
+        }
+      }
     } else {
       // Fallback placeholder
       openWindows.forEach((w) => {
