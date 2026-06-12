@@ -112,6 +112,7 @@ __MACOSX/
 # Stage tracker: add mechanical typing sounds to Terminal and Mail
 # Stage tracker: add audio preloaders in page.tsx
 # Stage tracker: add Test Click button to ControlPanel
+# Stage tracker: implement empty trash alert and sound trigger in Desktop
 
 
 
