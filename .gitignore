@@ -87,3 +87,4 @@ logs/
 # Stage tracker: write handoff notes for phase 5
 # Stage tracker: add cycleWindowOrder to types.ts
 # Stage tracker: implement cycleWindowOrder in useOSStore.ts
+# Stage tracker: create useKeyboardShortcuts hook skeleton
