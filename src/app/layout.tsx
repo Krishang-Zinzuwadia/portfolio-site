@@ -4,7 +4,9 @@ import "./globals.css";
 const productionHost = process.env.VERCEL_PROJECT_PRODUCTION_URL;
 const siteUrl =
   process.env.NEXT_PUBLIC_SITE_URL ??
-  (productionHost ? `https://${productionHost}` : "http://localhost:3000");
+  (productionHost
+    ? `https://${productionHost}`
+    : "https://krishang-macintosh.krishangzinzuwadia.chatgpt.site");
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
