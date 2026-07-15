@@ -18,6 +18,13 @@
 /out/
 /.turbo/
 /build
+/dist/
+/.wrangler/
+
+# Sites deployment adapter source
+!/build/
+/build/*
+!/build/sites-vite-plugin.ts
 
 # Environment files
 .env*

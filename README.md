@@ -53,6 +53,12 @@ npm run build
 npm run start
 ```
 
+The private Sites deployment uses the same source through a Vinext/Vite adapter:
+
+```bash
+npm run build:sites
+```
+
 ## Main architecture
 
 - `src/app/page.tsx` — server-rendered entry and structured data
