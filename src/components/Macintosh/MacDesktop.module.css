@@ -1,0 +1,1351 @@
+@font-face {
+  font-family: "KZ Chicago";
+  src: url("/fonts/ChicagoKare-Regular.woff2") format("woff2");
+  font-display: swap;
+}
+
+.desktop {
+  --black: #101010;
+  --desktop: #7f8a7d;
+  --paper: #fbfbf5;
+  --platinum: #d7d6cc;
+  --platinum-dark: #9a9991;
+  --selection: #151515;
+  position: relative;
+  width: 100%;
+  height: 100%;
+  min-width: 0;
+  min-height: 0;
+  overflow: hidden;
+  isolation: isolate;
+  container: mac-desktop / size;
+  color: var(--black);
+  background-color: var(--desktop);
+  background-image:
+    linear-gradient(
+      45deg,
+      rgba(255, 255, 255, 0.09) 25%,
+      transparent 25% 75%,
+      rgba(255, 255, 255, 0.09) 75%
+    ),
+    linear-gradient(
+      45deg,
+      rgba(255, 255, 255, 0.09) 25%,
+      transparent 25% 75%,
+      rgba(255, 255, 255, 0.09) 75%
+    );
+  background-position:
+    0 0,
+    2px 2px;
+  background-size: 4px 4px;
+  font:
+    12px/1.32 "KZ Geneva",
+    Geneva,
+    Arial,
+    sans-serif;
+  user-select: none;
+  -webkit-font-smoothing: none;
+}
+
+.desktop *,
+.desktop *::before,
+.desktop *::after {
+  box-sizing: border-box;
+}
+
+.desktop button,
+.desktop a {
+  font: inherit;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.desktop button:focus-visible,
+.desktop a:focus-visible,
+.window:focus-visible {
+  outline: 2px solid var(--black);
+  outline-offset: 2px;
+}
+
+.menuBar {
+  position: absolute;
+  z-index: 1000;
+  inset: 0 0 auto;
+  display: flex;
+  height: 27px;
+  padding: 0 5px;
+  border-bottom: 2px solid var(--black);
+  background: #fff;
+  box-shadow: 0 1px 0 rgba(255, 255, 255, 0.6);
+  font-family: "KZ Chicago", "KZ Geneva", Arial, sans-serif;
+  align-items: stretch;
+}
+
+.menuBar > strong,
+.menuBar button,
+.clock {
+  display: inline-flex;
+  min-width: 0;
+  align-items: center;
+  white-space: nowrap;
+}
+
+.menuBar button {
+  appearance: none;
+  height: 25px;
+  padding: 0 9px;
+  border: 0;
+  border-radius: 0;
+  color: var(--black);
+  background: transparent;
+  cursor: default;
+}
+
+.menuBar button:hover,
+.menuBar button:focus-visible,
+.menuBar button[aria-expanded="true"] {
+  color: #fff;
+  background: var(--selection);
+  outline: 0;
+}
+
+.menuGroup {
+  position: relative;
+  display: flex;
+}
+
+.menuBar .appleMenuButton {
+  width: 29px;
+  padding: 0 6px;
+  justify-content: center;
+}
+
+.appleMark {
+  width: 15px;
+  height: 17px;
+  fill: currentColor;
+}
+
+.finderLabel {
+  padding: 0 7px 0 4px;
+  font-weight: 400;
+}
+
+.clock {
+  margin-left: auto;
+  padding: 0 6px;
+  font-size: 10px;
+}
+
+.menuDropdown {
+  position: absolute;
+  z-index: 1001;
+  top: 25px;
+  left: 0;
+  display: grid;
+  width: max-content;
+  min-width: 184px;
+  padding: 3px 0;
+  border: 1px solid var(--black);
+  background: #fff;
+  box-shadow: 2px 2px 0 var(--black);
+}
+
+.menuDropdownRight {
+  right: 0;
+  left: auto;
+}
+
+.menuDropdown button {
+  display: grid;
+  width: 100%;
+  height: 24px;
+  padding: 0 10px 0 17px;
+  text-align: left;
+  grid-template-columns: 1fr auto;
+  gap: 24px;
+}
+
+.menuDropdown button:disabled {
+  color: #8c8c87;
+  background: transparent;
+}
+
+.menuDivider {
+  display: block;
+  height: 1px;
+  margin: 3px 1px;
+  background: var(--black);
+}
+
+.iconGrid {
+  position: absolute;
+  z-index: 1;
+  top: 42px;
+  right: 14px;
+  display: grid;
+  padding: 0;
+  grid-template-columns: repeat(2, 78px);
+  align-content: start;
+  gap: 13px 5px;
+}
+
+.desktopIcon {
+  appearance: none;
+  display: grid;
+  width: 78px;
+  min-width: 0;
+  padding: 0;
+  border: 0;
+  color: var(--black);
+  background: transparent;
+  cursor: default;
+  place-items: center;
+  gap: 3px;
+}
+
+.desktopIcon:focus-visible {
+  outline: 1px dotted #fff;
+  outline-offset: 3px;
+}
+
+.iconArtwork {
+  display: grid;
+  width: 52px;
+  height: 49px;
+  filter: drop-shadow(1px 1px 0 rgba(255, 255, 255, 0.42));
+  place-items: center;
+}
+
+.pixelIcon {
+  display: block;
+  width: 46px;
+  height: 46px;
+  overflow: visible;
+}
+
+.iconLabel {
+  max-width: 100%;
+  padding: 1px 3px 2px;
+  color: #fff;
+  font-family: "KZ Geneva", Geneva, Arial, sans-serif;
+  font-size: 10px;
+  line-height: 1.08;
+  text-align: center;
+  text-shadow:
+    1px 0 var(--black),
+    -1px 0 var(--black),
+    0 1px var(--black),
+    0 -1px var(--black);
+}
+
+.selectedIcon .iconArtwork {
+  filter: contrast(0.58) brightness(1.35)
+    drop-shadow(1px 1px 0 rgba(255, 255, 255, 0.35));
+}
+
+.selectedIcon .iconLabel {
+  color: #fff;
+  background: var(--selection);
+  text-shadow: none;
+}
+
+.window {
+  position: absolute;
+  top: 0;
+  left: 0;
+  display: grid;
+  width: min(var(--window-width), calc(100% - 16px));
+  height: min(var(--window-height), calc(100% - 42px));
+  min-width: 0;
+  min-height: 0;
+  border: 1px solid var(--black);
+  outline: 1px solid #f5f5ed;
+  color: var(--black);
+  background: var(--platinum);
+  box-shadow:
+    2px 2px 0 var(--black),
+    4px 4px 0 rgba(16, 16, 16, 0.24);
+  transform: translate(var(--window-x), var(--window-y));
+  grid-template-rows: 25px minmax(0, 1fr) 18px;
+}
+
+.activeWindow {
+  box-shadow:
+    2px 2px 0 var(--black),
+    5px 5px 0 rgba(16, 16, 16, 0.28);
+}
+
+.titleBar {
+  display: grid;
+  min-width: 0;
+  padding: 3px 4px;
+  border-bottom: 1px solid var(--black);
+  background: var(--platinum);
+  cursor: move;
+  touch-action: none;
+  grid-template-columns: 16px minmax(8px, 1fr) auto minmax(8px, 1fr) 16px;
+  align-items: center;
+  gap: 5px;
+}
+
+.titleBar h2 {
+  overflow: hidden;
+  margin: 0;
+  padding: 0 4px;
+  font:
+    400 11px/1 "KZ Chicago",
+    "KZ Geneva",
+    Arial,
+    sans-serif;
+  text-align: center;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.titleStripes {
+  height: 13px;
+  background: repeating-linear-gradient(
+    to bottom,
+    var(--black) 0 1px,
+    transparent 1px 3px
+  );
+  opacity: 0;
+}
+
+.activeWindow .titleStripes {
+  opacity: 1;
+}
+
+.closeBox,
+.zoomBox {
+  position: relative;
+  width: 14px;
+  height: 14px;
+  border: 1px solid var(--black);
+  background: var(--paper);
+  box-shadow:
+    inset 1px 1px 0 #fff,
+    inset -1px -1px 0 #8b8a83;
+}
+
+.closeBox {
+  appearance: none;
+  display: grid;
+  padding: 0;
+  border-radius: 0;
+  place-items: center;
+}
+
+.closeBox:hover span::before,
+.closeBox:hover span::after,
+.closeBox:focus-visible span::before,
+.closeBox:focus-visible span::after {
+  position: absolute;
+  top: 5px;
+  left: 2px;
+  width: 8px;
+  height: 1px;
+  content: "";
+  background: var(--black);
+}
+
+.closeBox:hover span::before,
+.closeBox:focus-visible span::before {
+  transform: rotate(45deg);
+}
+
+.closeBox:hover span::after,
+.closeBox:focus-visible span::after {
+  transform: rotate(-45deg);
+}
+
+.zoomBox::after {
+  position: absolute;
+  right: 2px;
+  bottom: 2px;
+  width: 6px;
+  height: 6px;
+  border-top: 1px solid var(--black);
+  border-left: 1px solid var(--black);
+  content: "";
+}
+
+.windowBody {
+  min-width: 0;
+  min-height: 0;
+  overflow: auto;
+  padding: 14px;
+  border: 2px solid;
+  border-color: #77766f #fff #fff #77766f;
+  background: var(--paper);
+  font-size: 11px;
+  line-height: 1.38;
+  overscroll-behavior: contain;
+  scrollbar-color: var(--black) var(--platinum);
+  scrollbar-width: thin;
+  user-select: text;
+}
+
+.windowBody::-webkit-scrollbar {
+  width: 13px;
+  height: 13px;
+}
+
+.windowBody::-webkit-scrollbar-track {
+  border-left: 1px solid var(--black);
+  background: repeating-linear-gradient(45deg, #fff 0 1px, #c8c7bf 1px 2px);
+}
+
+.windowBody::-webkit-scrollbar-thumb {
+  border: 1px solid var(--black);
+  background: var(--platinum);
+  box-shadow: inset 1px 1px #fff;
+}
+
+.windowBody :where(h3, p, ul, ol, dl) {
+  margin-top: 0;
+}
+
+.statusBar {
+  display: flex;
+  min-width: 0;
+  padding: 2px 5px;
+  border-top: 1px solid var(--black);
+  background: var(--platinum);
+  font-size: 9px;
+  line-height: 1;
+  align-items: center;
+}
+
+.statusBar span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.statusBar i {
+  width: 12px;
+  height: 12px;
+  margin-left: auto;
+  background: repeating-linear-gradient(
+    135deg,
+    transparent 0 2px,
+    #777 2px 3px
+  );
+}
+
+.kicker {
+  margin: 0 0 4px;
+  font:
+    8px/1.2 "KZ Monaco",
+    Monaco,
+    monospace;
+  letter-spacing: 0.08em;
+}
+
+.largeIcon {
+  display: grid;
+  flex: 0 0 auto;
+  width: 55px;
+  height: 55px;
+  place-items: center;
+}
+
+.largeIcon .pixelIcon {
+  width: 52px;
+  height: 52px;
+}
+
+.welcomeView,
+.aboutView,
+.achievementsView,
+.contactView,
+.resumeView {
+  min-width: 0;
+}
+
+.welcomeHeader,
+.listIntro {
+  display: flex;
+  align-items: center;
+  gap: 13px;
+}
+
+.welcomeHeader h3,
+.listIntro h3,
+.profilePanel h3,
+.resumeSheet h3 {
+  margin: 0 0 3px;
+  font:
+    400 20px/1.05 "KZ Chicago",
+    "KZ Geneva",
+    Arial,
+    sans-serif;
+  letter-spacing: -0.02em;
+}
+
+.welcomeHeader p:last-child,
+.listIntro p:last-child,
+.profilePanel p:last-child,
+.resumeSheet > div > p:last-child {
+  margin: 0;
+  color: #45453f;
+}
+
+.lede {
+  max-width: 62ch;
+  margin: 14px 0;
+  font-size: 13px;
+  line-height: 1.45;
+}
+
+.statGrid {
+  display: grid;
+  margin: 13px 0;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 5px;
+}
+
+.statGrid article {
+  display: grid;
+  min-width: 0;
+  padding: 9px;
+  border: 1px solid var(--black);
+  background: #e7e6dc;
+  box-shadow:
+    inset 1px 1px #fff,
+    inset -1px -1px #9a9991;
+  gap: 2px;
+}
+
+.statGrid strong {
+  font:
+    400 22px/1 "KZ Chicago",
+    "KZ Geneva",
+    Arial,
+    sans-serif;
+}
+
+.statGrid span,
+.statGrid small {
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.statGrid span {
+  font-weight: 700;
+}
+
+.statGrid small {
+  color: #5f5f59;
+  font-size: 9px;
+  white-space: nowrap;
+}
+
+.educationStrip {
+  display: grid;
+  padding: 7px 9px;
+  border: 1px solid var(--black);
+  background: #fff;
+  grid-template-columns: 1.2fr 1fr auto;
+  gap: 9px;
+}
+
+.educationStrip span:not(:first-child) {
+  padding-left: 9px;
+  border-left: 1px solid #aaa9a1;
+}
+
+.buttonRow {
+  display: flex;
+  margin-top: 13px;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 8px;
+}
+
+.macButton {
+  appearance: none;
+  display: inline-flex;
+  min-height: 27px;
+  padding: 5px 13px;
+  border: 1px solid var(--black);
+  border-radius: 4px;
+  color: var(--black);
+  background: var(--platinum);
+  box-shadow:
+    inset 1px 1px #fff,
+    inset -1px -1px #77766f,
+    1px 1px 0 var(--black);
+  font-family: "KZ Chicago", "KZ Geneva", Arial, sans-serif;
+  line-height: 1;
+  text-decoration: none;
+  cursor: pointer;
+  align-items: center;
+  justify-content: center;
+}
+
+.macButton:hover,
+.macButton:focus-visible {
+  color: #fff;
+  background: var(--selection);
+  outline: 2px solid var(--black);
+  outline-offset: 2px;
+}
+
+.macButton:active {
+  box-shadow: inset 1px 1px 0 #555;
+  transform: translate(1px, 1px);
+}
+
+.profilePanel {
+  display: grid;
+  padding-bottom: 12px;
+  grid-template-columns: 56px 1fr;
+  align-items: center;
+  gap: 12px;
+}
+
+.profileMonogram {
+  display: grid;
+  width: 54px;
+  height: 54px;
+  border: 2px solid var(--black);
+  background:
+    linear-gradient(135deg, transparent 49%, rgba(255, 255, 255, 0.2) 50%),
+    #4f5a8b;
+  box-shadow:
+    inset 2px 2px #fff,
+    inset -2px -2px #272b45;
+  color: #fff;
+  font:
+    400 18px/1 "KZ Chicago",
+    "KZ Geneva",
+    Arial,
+    sans-serif;
+  place-items: center;
+}
+
+.factList {
+  display: grid;
+  margin: 0;
+  border: 1px solid var(--black);
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.factList > div {
+  min-width: 0;
+  padding: 7px 9px;
+}
+
+.factList > div + div {
+  border-left: 1px solid var(--black);
+}
+
+.factList dt,
+.resumeSheet dt {
+  margin-bottom: 2px;
+  font:
+    8px/1.2 "KZ Monaco",
+    Monaco,
+    monospace;
+  text-transform: uppercase;
+}
+
+.factList dd,
+.resumeSheet dd {
+  margin: 0;
+  font-weight: 700;
+}
+
+.sectionBlock {
+  margin-top: 15px;
+  padding-top: 12px;
+  border-top: 1px solid var(--black);
+}
+
+.sectionTitleRow {
+  display: flex;
+  margin-bottom: 8px;
+  align-items: start;
+  justify-content: space-between;
+  gap: 15px;
+}
+
+.sectionTitleRow h3,
+.skillGrid h3 {
+  margin: 0;
+  font:
+    400 13px/1.2 "KZ Chicago",
+    "KZ Geneva",
+    Arial,
+    sans-serif;
+}
+
+.alignRight {
+  display: grid;
+  text-align: right;
+  gap: 1px;
+}
+
+.alignRight span {
+  color: #565650;
+  font-size: 9px;
+}
+
+.bulletList {
+  display: grid;
+  margin: 0;
+  padding: 0 0 0 17px;
+  list-style: square;
+  gap: 4px;
+}
+
+.skillGrid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.skillGrid article {
+  min-width: 0;
+  padding: 8px;
+  border: 1px solid var(--black);
+  background: #e7e6dc;
+}
+
+.skillGrid ul,
+.tagList {
+  display: flex;
+  margin: 7px 0 0;
+  padding: 0;
+  list-style: none;
+  flex-wrap: wrap;
+  gap: 3px;
+}
+
+.skillGrid li,
+.tagList li {
+  padding: 2px 4px;
+  border: 1px solid #77766f;
+  background: #fff;
+  font-size: 9px;
+}
+
+.projectList {
+  display: grid;
+  gap: 11px;
+}
+
+.projectCard {
+  padding: 11px;
+  border: 1px solid var(--black);
+  background: #fff;
+  box-shadow:
+    inset 1px 1px #fff,
+    2px 2px 0 #b7b6ae;
+}
+
+.projectCard header {
+  display: grid;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--black);
+  grid-template-columns: 29px minmax(0, 1fr) auto;
+  align-items: start;
+  gap: 9px;
+}
+
+.projectIndex,
+.placeBadge {
+  display: grid;
+  width: 27px;
+  height: 27px;
+  border: 1px solid var(--black);
+  color: #fff;
+  background: var(--selection);
+  font:
+    9px/1 "KZ Monaco",
+    Monaco,
+    monospace;
+  place-items: center;
+}
+
+.projectCard h3,
+.achievementList h3 {
+  margin: 0 0 2px;
+  font:
+    400 14px/1.1 "KZ Chicago",
+    "KZ Geneva",
+    Arial,
+    sans-serif;
+}
+
+.projectCard header p,
+.achievementList p {
+  margin: 0;
+  color: #55554f;
+}
+
+.projectMeta {
+  display: grid;
+  max-width: 180px;
+  text-align: right;
+  gap: 2px;
+}
+
+.projectMeta strong {
+  font-size: 9px;
+}
+
+.projectSummary {
+  margin: 9px 0;
+  font-weight: 700;
+}
+
+.projectFooter {
+  display: grid;
+  margin-top: 9px;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: end;
+  gap: 8px;
+}
+
+.projectMetrics {
+  display: grid;
+  text-align: right;
+  gap: 2px;
+}
+
+.projectMetrics span {
+  font-size: 9px;
+}
+
+.projectMetrics strong {
+  font-family: "KZ Chicago", "KZ Geneva", Arial, sans-serif;
+  font-size: 11px;
+}
+
+.listIntro {
+  padding-bottom: 11px;
+  border-bottom: 1px solid var(--black);
+}
+
+.achievementList {
+  display: grid;
+  margin: 10px 0 12px;
+  padding: 0;
+  list-style: none;
+  gap: 5px;
+}
+
+.achievementList li {
+  display: grid;
+  padding: 7px;
+  border: 1px solid #8b8a83;
+  background: #fff;
+  grid-template-columns: 27px minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 9px;
+}
+
+.achievementList time {
+  font-family: "KZ Monaco", Monaco, monospace;
+  font-size: 9px;
+  white-space: nowrap;
+}
+
+.contactList {
+  display: grid;
+  margin-top: 13px;
+  font-style: normal;
+  gap: 5px;
+}
+
+.contactList a {
+  display: grid;
+  min-width: 0;
+  padding: 9px;
+  border: 1px solid var(--black);
+  color: var(--black);
+  background: #fff;
+  text-decoration: none;
+  grid-template-columns: 72px minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 9px;
+}
+
+.contactList a:hover,
+.contactList a:focus-visible {
+  color: #fff;
+  background: var(--selection);
+  outline: 0;
+}
+
+.contactList span {
+  font:
+    8px/1 "KZ Monaco",
+    Monaco,
+    monospace;
+  text-transform: uppercase;
+}
+
+.contactList strong {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.contactList i {
+  font-style: normal;
+}
+
+.resumeSheet {
+  display: grid;
+  padding: 14px;
+  border: 1px solid var(--black);
+  background: #fff;
+  box-shadow: 3px 3px 0 #b4b3ab;
+  grid-template-columns: 58px minmax(0, 1fr);
+  align-items: center;
+  gap: 4px 12px;
+}
+
+.resumeSheet dl {
+  display: grid;
+  margin: 12px 0 0;
+  padding-top: 10px;
+  border-top: 1px solid var(--black);
+  grid-column: 1 / -1;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 9px 16px;
+}
+
+.desktopHint,
+.touchHint {
+  position: absolute;
+  z-index: 0;
+  bottom: 8px;
+  left: 10px;
+  margin: 0;
+  padding: 3px 5px;
+  color: rgba(255, 255, 255, 0.88);
+  background: rgba(16, 16, 16, 0.68);
+  font:
+    8px/1.2 "KZ Monaco",
+    Monaco,
+    monospace;
+}
+
+.touchHint {
+  display: none;
+}
+
+@container mac-desktop (max-width: 720px) {
+  .desktop {
+    font-size: 10px;
+  }
+
+  .menuBar {
+    height: 23px;
+    padding-inline: 2px;
+    border-bottom-width: 1px;
+  }
+
+  .menuBar button {
+    height: 22px;
+    padding-inline: 6px;
+    font-size: 9px;
+  }
+
+  .menuBar .appleMenuButton {
+    width: 24px;
+    padding-inline: 4px;
+  }
+
+  .appleMark {
+    width: 13px;
+    height: 15px;
+  }
+
+  .finderLabel {
+    padding-inline: 3px 5px;
+    font-size: 9px;
+  }
+
+  .clock {
+    padding-inline: 4px;
+    font-size: 8px;
+  }
+
+  .menuDropdown {
+    top: 22px;
+    min-width: 150px;
+  }
+
+  .menuDropdown button {
+    height: 21px;
+    padding-left: 12px;
+  }
+
+  .iconGrid {
+    top: 31px;
+    right: 7px;
+    grid-template-columns: repeat(2, 62px);
+    gap: 5px 1px;
+  }
+
+  .desktopIcon {
+    width: 62px;
+    gap: 0;
+  }
+
+  .iconArtwork {
+    width: 42px;
+    height: 40px;
+  }
+
+  .pixelIcon {
+    width: 38px;
+    height: 38px;
+  }
+
+  .iconLabel {
+    font-size: 8px;
+  }
+
+  .window {
+    grid-template-rows: 21px minmax(0, 1fr) 15px;
+  }
+
+  .titleBar {
+    padding: 2px 3px;
+    grid-template-columns: 13px minmax(6px, 1fr) auto minmax(6px, 1fr) 13px;
+    gap: 4px;
+  }
+
+  .titleBar h2 {
+    font-size: 9px;
+  }
+
+  .titleStripes {
+    height: 10px;
+    background-size: auto;
+  }
+
+  .closeBox,
+  .zoomBox {
+    width: 12px;
+    height: 12px;
+  }
+
+  .windowBody {
+    padding: 8px;
+    font-size: 9px;
+    line-height: 1.3;
+  }
+
+  .statusBar {
+    padding-block: 1px;
+    font-size: 7px;
+  }
+
+  .statusBar i {
+    width: 9px;
+    height: 9px;
+  }
+
+  .largeIcon {
+    width: 43px;
+    height: 43px;
+  }
+
+  .largeIcon .pixelIcon {
+    width: 42px;
+    height: 42px;
+  }
+
+  .welcomeHeader,
+  .listIntro {
+    gap: 8px;
+  }
+
+  .welcomeHeader h3,
+  .listIntro h3,
+  .profilePanel h3,
+  .resumeSheet h3 {
+    font-size: 14px;
+  }
+
+  .lede {
+    margin: 8px 0;
+    font-size: 10px;
+    line-height: 1.35;
+  }
+
+  .statGrid {
+    margin: 7px 0;
+    gap: 3px;
+  }
+
+  .statGrid article {
+    padding: 5px;
+  }
+
+  .statGrid strong {
+    font-size: 15px;
+  }
+
+  .statGrid span {
+    font-size: 8px;
+  }
+
+  .statGrid small {
+    font-size: 7px;
+  }
+
+  .educationStrip {
+    padding: 5px;
+    gap: 5px;
+    font-size: 8px;
+  }
+
+  .educationStrip span:not(:first-child) {
+    padding-left: 5px;
+  }
+
+  .buttonRow {
+    margin-top: 7px;
+    gap: 5px;
+  }
+
+  .macButton {
+    min-height: 22px;
+    padding: 4px 8px;
+    font-size: 8px;
+  }
+
+  .profilePanel {
+    padding-bottom: 7px;
+    grid-template-columns: 42px 1fr;
+    gap: 8px;
+  }
+
+  .profileMonogram {
+    width: 40px;
+    height: 40px;
+    font-size: 13px;
+  }
+
+  .factList > div {
+    padding: 5px;
+  }
+
+  .factList dt,
+  .resumeSheet dt,
+  .kicker {
+    font-size: 7px;
+  }
+
+  .factList dd,
+  .resumeSheet dd {
+    font-size: 8px;
+  }
+
+  .sectionBlock {
+    margin-top: 8px;
+    padding-top: 7px;
+  }
+
+  .sectionTitleRow {
+    margin-bottom: 5px;
+  }
+
+  .sectionTitleRow h3,
+  .skillGrid h3 {
+    font-size: 10px;
+  }
+
+  .bulletList {
+    padding-left: 13px;
+    gap: 2px;
+  }
+
+  .skillGrid {
+    gap: 4px;
+  }
+
+  .skillGrid article {
+    padding: 5px;
+  }
+
+  .skillGrid ul,
+  .tagList {
+    margin-top: 4px;
+    gap: 2px;
+  }
+
+  .skillGrid li,
+  .tagList li {
+    padding: 1px 3px;
+    font-size: 7px;
+  }
+
+  .projectList {
+    gap: 7px;
+  }
+
+  .projectCard {
+    padding: 7px;
+  }
+
+  .projectCard header {
+    padding-bottom: 5px;
+    grid-template-columns: 23px minmax(0, 1fr) auto;
+    gap: 6px;
+  }
+
+  .projectIndex,
+  .placeBadge {
+    width: 22px;
+    height: 22px;
+    font-size: 7px;
+  }
+
+  .projectCard h3,
+  .achievementList h3 {
+    font-size: 10px;
+  }
+
+  .projectMeta {
+    max-width: 132px;
+  }
+
+  .projectMeta strong,
+  .projectMetrics span {
+    font-size: 7px;
+  }
+
+  .projectSummary {
+    margin: 5px 0;
+  }
+
+  .projectFooter {
+    margin-top: 5px;
+  }
+
+  .achievementList {
+    margin: 7px 0;
+    gap: 3px;
+  }
+
+  .achievementList li {
+    padding: 4px;
+    grid-template-columns: 22px minmax(0, 1fr) auto;
+    gap: 5px;
+  }
+
+  .achievementList time {
+    font-size: 7px;
+  }
+
+  .contactList {
+    margin-top: 8px;
+    gap: 3px;
+  }
+
+  .contactList a {
+    padding: 6px;
+    grid-template-columns: 54px minmax(0, 1fr) auto;
+    gap: 5px;
+  }
+
+  .contactList span {
+    font-size: 7px;
+  }
+
+  .resumeSheet {
+    padding: 8px;
+    grid-template-columns: 44px minmax(0, 1fr);
+    gap: 2px 7px;
+  }
+
+  .resumeSheet dl {
+    margin-top: 7px;
+    padding-top: 6px;
+    gap: 5px 8px;
+  }
+
+  .desktopHint,
+  .touchHint {
+    display: none;
+  }
+}
+
+@container mac-desktop (max-width: 390px) {
+  .optionalMenu,
+  .clock {
+    display: none;
+  }
+
+  .window {
+    inset: 28px 6px 6px;
+    width: auto;
+    height: auto;
+    max-width: none;
+    max-height: none;
+    transform: none !important;
+  }
+
+  .factList,
+  .skillGrid,
+  .statGrid,
+  .resumeSheet dl {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .factList > div:nth-child(3) {
+    border-top: 1px solid var(--black);
+    border-left: 0;
+    grid-column: 1 / -1;
+  }
+
+  .educationStrip {
+    grid-template-columns: 1fr;
+  }
+
+  .educationStrip span:not(:first-child) {
+    padding-top: 3px;
+    padding-left: 0;
+    border-top: 1px solid #aaa9a1;
+    border-left: 0;
+  }
+
+  .projectCard header,
+  .projectFooter {
+    grid-template-columns: 22px minmax(0, 1fr);
+  }
+
+  .projectMeta,
+  .projectMetrics {
+    text-align: left;
+    grid-column: 2;
+  }
+}
+
+@media (pointer: coarse) {
+  .desktopHint {
+    display: none;
+  }
+
+  .touchHint {
+    display: block;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .desktop *,
+  .desktop *::before,
+  .desktop *::after {
+    scroll-behavior: auto !important;
+  }
+}

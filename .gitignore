@@ -60,4 +60,8 @@ yarn-error.log*
 *.gz
 __MACOSX/
 
+# Blender recovery files
+*.blend1
+*.blend2
+
 # Stage tracker: clean up and optimize .gitignore rules

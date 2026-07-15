@@ -1,46 +1,68 @@
-# Retro 90s Desktop Portfolio Simulator (System 7)
+# Krishang Zinzuwadia — Interactive Macintosh Portfolio
 
-An immersive, high-fidelity portfolio website simulating a classic 90s Macintosh desktop environment (System 7.0.1). Built with Next.js, Tailwind CSS, Zustand, and Framer Motion.
+A two-mode portfolio centered on an original, browser-rendered 1990 Macintosh Classic. The default experience places a working System 7-inspired portfolio inside the modeled CRT; a persistent switch in the top-right opens a separate editorial version of the same verified resume content.
 
-## 🚀 Key Features
+## Experience
 
-* **Authentic 90s Macintosh UI**: Features a classic pixel layout, Chicago/Geneva typography, horizontal title-bar stripes, Windowshade double-click rollup, dynamic drop-down MenuBar, and a CRT scanner shader overlay.
-* **Hybrid Draggable & Tiling Window Manager**:
-  * *Floating Mode*: Fully draggable and resizable windows constrained to the desktop bounds.
-  * *Tiling Mode*: Edge-snapping overlays. Automatic arranging in **Master-Stack**, **Grid**, and **Monocle** mathematical tiling configurations.
-* **Global Keyboard Nav (Alt Hotkeys)**: Focus cycling (`Alt+J/K`), swap order stack (`Alt+Shift+J/K`), layout toggle (`Alt+Space`), split ratio resizing (`Alt+H/L`), maximize (`Alt+Enter`), and close active window (`Alt+W`).
-* **Interactive Desktop Applications**:
-  * 📝 **SimpleText**: Vintage plain-text document viewer to read the About Me and Resume files.
-  * 📟 **MacTerminal**: Monaco green-screen command shell supporting file reads (`cat`), skill lists (`skills`), hardware info (`sysinfo`), audio tests (`beep`), theme switching, and command history log.
-  * 📁 **Finder HD (Projects)**: Project catalog folder browser showing custom detail inspector sheets ("Get Info") and source links.
-  * 🎛️ **Control Panel**: Desktop settings adjusting CRT scanner intensities, theme layers (System 7, Vaporwave, Dark Mode), sound effects, and fullscreen zooms.
-  * 📬 **Mail Box**: SMTP mail sender simulator mimicking dial-up handshake loaders and custom popup prompts.
+- **Mac OS mode:** full-viewport Three.js workstation with a live 512 × 342 desktop projected onto the CRT.
+- **Interactive desktop:** open, focus, close, and drag Finder-style windows for About, Projects, Achievements, Contact, and Resume.
+- **Enlarged desktop:** a readable, keyboard-accessible view of the same OS for smaller screens.
+- **Editorial mode:** responsive alternate portfolio with the same projects, achievements, experience, and links.
+- **Responsive framing:** the Macintosh, CRT projection, labels, and controls adapt from phone to wide desktop without horizontal overflow.
 
----
+All portfolio copy is sourced from `Krishang_Zinzuwadia_latest.pdf`. The public resume is available at `/Krishang-Zinzuwadia-Resume.pdf`.
 
-## 🛠️ Tech Stack
+## Original 3D assets
 
-* **Framework**: Next.js 16 (App Router & Turbopack)
-* **Styling**: Tailwind CSS + Custom retro shadow tokens
-* **Animations**: Framer Motion
-* **State Manager**: Zustand
-* **Icons & Typography**: SVG pixel-art vectors, Chicago, Geneva, and Monaco TTF font bundles
+The Macintosh Classic, keyboard, mouse, cables, and the alternate Signal Terminal were modeled for this project through the official [`ahujasid/blender-mcp`](https://github.com/ahujasid/blender-mcp) server. No downloaded third-party computer model is used by the site.
 
----
+- Browser model: `public/assets/models/macintosh-classic.glb`
+- Transparent poster: `public/assets/blender/macintosh-classic.webp`
+- Editable Blender source: `assets-source/blender/macintosh-classic.blend`
+- Reproducible build: `scripts/blender/build_macintosh_classic.py`
 
-## 💻 Getting Started
+The case follows Apple's published Macintosh Classic dimensions: 13.2 × 9.7 × 11.2 inches, with the characteristic 9-inch monochrome display.
 
-First, install dependencies:
+The classic system face is [Chicago Kare](https://github.com/KingDuane/Chicago-Kare), distributed under the MIT License in `public/fonts/LICENSE-Chicago-Kare.txt`. Body and monospace text use local system fallbacks, so the repository does not redistribute Apple's original Geneva or Monaco font files.
+
+This is an unofficial, fan-made recreation and is not affiliated with or endorsed by Apple Inc. Macintosh is a trademark of Apple Inc.
+
+## Stack
+
+- Next.js 16 App Router and React 19
+- React Three Fiber, Drei, and Three.js
+- CSS Modules for the projected desktop and view switcher
+- Custom CSS for the editorial experience
+- Blender 5.2 and Blender MCP for authored geometry
+
+## Run locally
 
 ```bash
 npm install
-```
-
-Start the development server:
-
-```bash
 npm run dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) in your web browser. Follow the floppy disk boot screen animation to enter the desktop shell!
+Open [http://localhost:3000](http://localhost:3000).
 
+Production checks:
+
+```bash
+npm run lint
+npx tsc --noEmit
+npm run build
+npm run start
+```
+
+## Main architecture
+
+- `src/app/page.tsx` — server-rendered entry and structured data
+- `src/components/Portfolio/PortfolioViewSwitcher.tsx` — persistent Mac OS / Editorial switch
+- `src/components/Macintosh/MacExperience.tsx` — immersive scene and enlarged-desktop presentation
+- `src/components/Macintosh/MacintoshScene.tsx` — GLB loading, camera framing, and precise CRT projection
+- `src/components/Macintosh/MacDesktop.tsx` — interactive System 7-inspired desktop
+- `src/components/Portfolio/EditorialPortfolio.tsx` — alternate editorial portfolio
+- `src/data/portfolio.ts` — verified resume content shared across both views
+
+## Blender MCP setup
+
+The repository's generated assets work without Blender. To regenerate or inspect them, install Blender 5.2, enable the Blender MCP add-on, run its local server on `127.0.0.1:9876`, and execute the build script through the MCP `execute_blender_code` tool. Telemetry was disabled for the local server used to build these assets.

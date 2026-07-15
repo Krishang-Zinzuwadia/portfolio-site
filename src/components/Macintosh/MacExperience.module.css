@@ -1,0 +1,271 @@
+.experience {
+  position: relative;
+  min-height: 100svh;
+  overflow: hidden;
+  isolation: isolate;
+  color: #f4f0e7;
+  background:
+    radial-gradient(
+      circle at 50% 45%,
+      rgba(94, 102, 255, 0.2),
+      transparent 32%
+    ),
+    radial-gradient(
+      circle at 50% 80%,
+      rgba(202, 255, 67, 0.1),
+      transparent 28%
+    ),
+    #11120f;
+}
+
+.srOnly {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.ambientGrid {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  opacity: 0.26;
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.055) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.055) 1px, transparent 1px);
+  background-size: 48px 48px;
+  mask-image: linear-gradient(
+    to bottom,
+    transparent,
+    black 18%,
+    black 78%,
+    transparent
+  );
+}
+
+.sceneStage {
+  position: absolute;
+  z-index: 1;
+  inset: 0;
+}
+
+.screenFocused .sceneStage {
+  display: none;
+}
+
+.sceneLoading {
+  width: 100%;
+  height: 100%;
+  background:
+    radial-gradient(circle, rgba(202, 255, 67, 0.13), transparent 28%),
+    url("/assets/blender/macintosh-classic.webp") center 54% / min(72vw, 760px)
+      auto no-repeat;
+}
+
+.hardwareLabel,
+.identityLabel,
+.interactionHint,
+.focusButton {
+  position: absolute;
+  z-index: 4;
+}
+
+.hardwareLabel {
+  top: 28px;
+  left: 32px;
+  display: grid;
+  gap: 5px;
+  font-family: var(--font-code);
+  font-size: 0.68rem;
+  line-height: 1.2;
+  letter-spacing: 0.13em;
+}
+
+.hardwareLabel span:last-child {
+  color: rgba(244, 240, 231, 0.5);
+}
+
+.identityLabel {
+  right: 32px;
+  bottom: 30px;
+  display: grid;
+  gap: 5px;
+  justify-items: end;
+  font-family: var(--font-code);
+  font-size: 0.68rem;
+  letter-spacing: 0.12em;
+}
+
+.identityLabel strong {
+  color: #caff43;
+  font-size: 0.62rem;
+  font-weight: 600;
+}
+
+.interactionHint {
+  bottom: 31px;
+  left: 32px;
+  max-width: 30rem;
+  margin: 0;
+  color: rgba(244, 240, 231, 0.58);
+  font-family: var(--font-code);
+  font-size: 0.68rem;
+  letter-spacing: 0.04em;
+}
+
+.focusButton,
+.closeFocus {
+  appearance: none;
+  border: 1px solid rgba(244, 240, 231, 0.35);
+  color: #f4f0e7;
+  background: rgba(17, 18, 15, 0.76);
+  backdrop-filter: blur(14px);
+  font: 600 0.7rem/1 var(--font-code);
+  letter-spacing: 0.08em;
+  cursor: pointer;
+  transition:
+    color 160ms ease,
+    border-color 160ms ease,
+    background 160ms ease;
+}
+
+.focusButton {
+  right: 32px;
+  bottom: 78px;
+  padding: 14px 17px;
+  border-radius: 999px;
+}
+
+.focusButton:hover,
+.focusButton:focus-visible,
+.closeFocus:hover,
+.closeFocus:focus-visible {
+  border-color: #caff43;
+  color: #11120f;
+  background: #caff43;
+  outline: none;
+}
+
+.focusOverlay {
+  position: fixed;
+  inset: 0;
+  z-index: 90;
+  display: grid;
+  place-items: center;
+  padding: 72px clamp(16px, 4vw, 64px) 32px;
+  background: rgba(8, 9, 8, 0.93);
+  backdrop-filter: blur(20px);
+}
+
+.focusHardware {
+  width: min(1080px, 94vw, calc((100svh - 160px) * 1.45));
+  padding: clamp(18px, 3vw, 42px) clamp(18px, 3vw, 42px) clamp(38px, 5vw, 66px);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: clamp(28px, 4vw, 58px);
+  background:
+    linear-gradient(145deg, rgba(255, 255, 255, 0.28), transparent 20%), #d9d1bd;
+  box-shadow:
+    0 42px 120px rgba(0, 0, 0, 0.55),
+    inset 0 0 0 2px rgba(68, 62, 52, 0.15),
+    inset 0 -20px 50px rgba(82, 69, 48, 0.16);
+}
+
+.focusScreen {
+  aspect-ratio: 512 / 342;
+  overflow: hidden;
+  border: clamp(12px, 2vw, 25px) solid #2d2e2b;
+  border-radius: clamp(22px, 3vw, 44px) / clamp(16px, 2vw, 32px);
+  background: #a7ad9c;
+  box-shadow:
+    inset 0 0 40px rgba(0, 0, 0, 0.38),
+    0 2px 0 rgba(255, 255, 255, 0.45);
+}
+
+.focusBrand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 18px 0 -26px 12px;
+  color: #4d493f;
+  font: 500 clamp(0.72rem, 1.2vw, 0.9rem)/1 var(--font-body);
+}
+
+.rainbowMark {
+  width: 15px;
+  height: 15px;
+  border-radius: 4px 6px 5px 7px;
+  background: linear-gradient(
+    to bottom,
+    #55a7d9 0 16%,
+    #7abf61 16% 32%,
+    #f5d24e 32% 48%,
+    #ec9b3c 48% 64%,
+    #df5d4d 64% 80%,
+    #9d68a9 80%
+  );
+}
+
+.closeFocus {
+  position: absolute;
+  top: 18px;
+  left: 20px;
+  padding: 12px 15px;
+  border-radius: 999px;
+}
+
+@media (max-width: 760px) {
+  .hardwareLabel {
+    top: 82px;
+    left: 16px;
+    font-size: 0.58rem;
+  }
+
+  .interactionHint {
+    bottom: 22px;
+    left: 16px;
+    max-width: calc(100vw - 155px);
+    font-size: 0.58rem;
+  }
+
+  .identityLabel {
+    display: none;
+  }
+
+  .focusButton {
+    right: 16px;
+    bottom: 18px;
+    padding: 12px 13px;
+    font-size: 0.61rem;
+  }
+
+  .focusOverlay {
+    padding: 68px 8px 16px;
+  }
+
+  .focusHardware {
+    width: 100%;
+    padding: 10px 10px 34px;
+    border-radius: 25px;
+  }
+
+  .focusScreen {
+    border-width: 9px;
+    border-radius: 18px / 14px;
+  }
+
+  .focusBrand {
+    margin: 11px 0 -24px 8px;
+    font-size: 0.68rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .focusButton,
+  .closeFocus {
+    transition: none;
+  }
+}

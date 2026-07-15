@@ -1,0 +1,63 @@
+.canvas {
+  width: 100% !important;
+  height: 100% !important;
+  touch-action: none;
+}
+
+.screenSurface {
+  position: relative;
+  width: 512px;
+  height: 342px;
+  overflow: hidden;
+  border-radius: 17px / 13px;
+  background: #d6d8ca;
+  box-shadow:
+    inset 0 0 22px rgba(12, 18, 10, 0.5),
+    inset 0 0 3px 2px rgba(255, 255, 255, 0.22),
+    0 0 8px rgba(198, 255, 141, 0.14);
+  color: #080a08;
+  image-rendering: pixelated;
+  transform: translateZ(0);
+}
+
+.screenSurface::before,
+.screenSurface::after {
+  position: absolute;
+  z-index: 1000;
+  inset: 0;
+  pointer-events: none;
+  content: "";
+}
+
+.screenSurface::before {
+  opacity: 0.13;
+  background: repeating-linear-gradient(
+    to bottom,
+    transparent 0,
+    transparent 2px,
+    rgba(8, 12, 8, 0.32) 3px
+  );
+  mix-blend-mode: multiply;
+}
+
+.screenSurface::after {
+  background:
+    linear-gradient(
+      112deg,
+      rgba(255, 255, 255, 0.16),
+      transparent 21% 72%,
+      rgba(255, 255, 255, 0.07)
+    ),
+    radial-gradient(ellipse at center, transparent 65%, rgba(9, 13, 8, 0.2));
+}
+
+.screenSurface > * {
+  width: 100%;
+  height: 100%;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .screenSurface::before {
+    opacity: 0.08;
+  }
+}
