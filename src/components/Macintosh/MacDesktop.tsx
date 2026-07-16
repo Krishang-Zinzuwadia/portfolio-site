@@ -20,6 +20,7 @@ import {
   skills,
 } from "@/data/portfolio";
 import styles from "./MacDesktop.module.css";
+import type { MacSound } from "./useMacSounds";
 
 const RESUME_PATH = "/Krishang-Zinzuwadia-Resume.pdf";
 
@@ -69,6 +70,11 @@ type WindowStyle = CSSProperties & {
   "--window-y": string;
   "--window-width": string;
   "--window-height": string;
+};
+
+type MacDesktopProps = {
+  onRestart?: () => void;
+  onSound?: (sound: MacSound) => void;
 };
 
 const WINDOW_IDS: WindowId[] = [
@@ -625,7 +631,7 @@ function ResumeView() {
   );
 }
 
-export default function MacDesktop() {
+export default function MacDesktop({ onRestart, onSound }: MacDesktopProps) {
   const [windows, setWindows] = useState(createInitialWindows);
   const [activeWindow, setActiveWindow] = useState<WindowId | null>("welcome");
   const [selectedIcon, setSelectedIcon] = useState<WindowId | null>("welcome");
@@ -663,21 +669,26 @@ export default function MacDesktop() {
     setActiveWindow(id);
   }, []);
 
-  const openWindow = useCallback((id: WindowId) => {
-    const z = ++nextZ.current;
-    setWindows((current) => ({
-      ...current,
-      [id]: { ...current[id], open: true, z },
-    }));
-    setSelectedIcon(id);
-    setActiveWindow(id);
-    setActiveMenu(null);
+  const openWindow = useCallback(
+    (id: WindowId) => {
+      onSound?.("open");
+      const z = ++nextZ.current;
+      setWindows((current) => ({
+        ...current,
+        [id]: { ...current[id], open: true, z },
+      }));
+      setSelectedIcon(id);
+      setActiveWindow(id);
+      setActiveMenu(null);
 
-    window.requestAnimationFrame(() => windowRefs.current[id]?.focus());
-  }, []);
+      window.requestAnimationFrame(() => windowRefs.current[id]?.focus());
+    },
+    [onSound]
+  );
 
   const closeWindow = useCallback(
     (id: WindowId) => {
+      onSound?.("close");
       const nextActive = WINDOW_IDS.filter(
         (candidate) => candidate !== id && windows[candidate].open
       ).sort((left, right) => windows[right].z - windows[left].z)[0];
@@ -692,10 +703,11 @@ export default function MacDesktop() {
       setActiveMenu(null);
       window.requestAnimationFrame(() => rootRef.current?.focus());
     },
-    [windows]
+    [onSound, windows]
   );
 
   const openAllWindows = useCallback(() => {
+    onSound?.("open");
     const firstZ = nextZ.current + 1;
     nextZ.current += WINDOW_IDS.length;
     setWindows((current) =>
@@ -710,9 +722,10 @@ export default function MacDesktop() {
     setActiveWindow("resume");
     setSelectedIcon("resume");
     setActiveMenu(null);
-  }, []);
+  }, [onSound]);
 
   const resetDesktop = useCallback(() => {
+    onSound?.("close");
     nextZ.current = 20;
     dragRef.current = null;
     setWindows(createInitialWindows());
@@ -720,7 +733,15 @@ export default function MacDesktop() {
     setSelectedIcon("welcome");
     setActiveMenu(null);
     window.requestAnimationFrame(() => windowRefs.current.welcome?.focus());
-  }, []);
+  }, [onSound]);
+
+  const toggleMenu = useCallback(
+    (menu: MenuId) => {
+      onSound?.("menu");
+      setActiveMenu((current) => (current === menu ? null : menu));
+    },
+    [onSound]
+  );
 
   const performMenuAction = (action: () => void) => {
     action();
@@ -833,9 +854,7 @@ export default function MacDesktop() {
             aria-label="Portfolio menu"
             aria-haspopup="true"
             aria-expanded={activeMenu === "apple"}
-            onClick={() =>
-              setActiveMenu((current) => (current === "apple" ? null : "apple"))
-            }
+            onClick={() => toggleMenu("apple")}
           >
             <AppleMark />
           </button>
@@ -872,9 +891,7 @@ export default function MacDesktop() {
             type="button"
             aria-haspopup="true"
             aria-expanded={activeMenu === "file"}
-            onClick={() =>
-              setActiveMenu((current) => (current === "file" ? null : "file"))
-            }
+            onClick={() => toggleMenu("file")}
           >
             File
           </button>
@@ -915,9 +932,7 @@ export default function MacDesktop() {
             type="button"
             aria-haspopup="true"
             aria-expanded={activeMenu === "view"}
-            onClick={() =>
-              setActiveMenu((current) => (current === "view" ? null : "view"))
-            }
+            onClick={() => toggleMenu("view")}
           >
             View
           </button>
@@ -951,11 +966,7 @@ export default function MacDesktop() {
             type="button"
             aria-haspopup="true"
             aria-expanded={activeMenu === "special"}
-            onClick={() =>
-              setActiveMenu((current) =>
-                current === "special" ? null : "special"
-              )
-            }
+            onClick={() => toggleMenu("special")}
           >
             Special
           </button>
@@ -970,8 +981,10 @@ export default function MacDesktop() {
               >
                 Contact Krishang…
               </MenuAction>
-              <MenuAction onSelect={() => performMenuAction(resetDesktop)}>
-                Reset Desktop
+              <MenuAction
+                onSelect={() => performMenuAction(onRestart ?? resetDesktop)}
+              >
+                Restart…
               </MenuAction>
             </div>
           ) : null}

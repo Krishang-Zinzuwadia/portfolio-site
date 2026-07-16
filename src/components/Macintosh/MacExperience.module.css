@@ -1,21 +1,33 @@
 .experience {
+  --viewport-height: 100svh;
   position: relative;
-  min-height: 100svh;
+  display: grid;
+  width: 100%;
+  min-height: var(--viewport-height);
   overflow: hidden;
+  padding: clamp(8px, 1.2vw, 18px);
   isolation: isolate;
-  color: #f4f0e7;
   background:
     radial-gradient(
-      circle at 50% 45%,
-      rgba(94, 102, 255, 0.2),
-      transparent 32%
+      ellipse at 50% 48%,
+      rgba(255, 249, 228, 0.055),
+      transparent 58%
     ),
-    radial-gradient(
-      circle at 50% 80%,
-      rgba(202, 255, 67, 0.1),
-      transparent 28%
-    ),
-    #11120f;
+    #050605;
+  place-items: center;
+}
+
+.experience::before {
+  position: absolute;
+  z-index: -1;
+  right: 6%;
+  bottom: -7%;
+  left: 6%;
+  height: 14%;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.9);
+  content: "";
+  filter: blur(42px);
 }
 
 .srOnly {
@@ -29,175 +41,266 @@
   border: 0;
 }
 
-.ambientGrid {
-  position: absolute;
-  inset: 0;
-  z-index: -1;
-  opacity: 0.26;
-  background-image:
-    linear-gradient(rgba(255, 255, 255, 0.055) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(255, 255, 255, 0.055) 1px, transparent 1px);
-  background-size: 48px 48px;
-  mask-image: linear-gradient(
-    to bottom,
-    transparent,
-    black 18%,
-    black 78%,
-    transparent
-  );
-}
-
-.sceneStage {
-  position: absolute;
-  z-index: 1;
-  inset: 0;
-}
-
-.screenFocused .sceneStage {
-  display: none;
-}
-
-.sceneLoading {
-  width: 100%;
-  height: 100%;
+.macintoshDisplay {
+  position: relative;
+  width: min(95vw, calc((var(--viewport-height) - 90px) * 1.42), 1440px);
+  padding: clamp(18px, 3.75vw, 54px) clamp(18px, 3.75vw, 54px)
+    clamp(46px, 5.3vw, 76px);
+  border: 1px solid rgba(255, 255, 255, 0.38);
+  border-radius: clamp(34px, 5vw, 76px);
   background:
-    radial-gradient(circle, rgba(202, 255, 67, 0.13), transparent 28%),
-    url("/assets/blender/macintosh-classic.webp") center 54% / min(72vw, 760px)
-      auto no-repeat;
+    linear-gradient(112deg, rgba(255, 255, 255, 0.38), transparent 22%),
+    linear-gradient(168deg, transparent 58%, rgba(92, 77, 49, 0.2)), #d8d0bc;
+  box-shadow:
+    0 3px 1px rgba(255, 255, 255, 0.35) inset,
+    0 -18px 42px rgba(78, 66, 44, 0.15) inset,
+    0 2px 0 rgba(59, 53, 43, 0.54),
+    0 34px 90px rgba(0, 0, 0, 0.58);
 }
 
-.hardwareLabel,
-.identityLabel,
-.interactionHint,
-.focusButton {
+.macintoshDisplay::before {
   position: absolute;
-  z-index: 4;
+  inset: 2px;
+  border: 1px solid rgba(80, 72, 58, 0.15);
+  border-radius: inherit;
+  content: "";
+  pointer-events: none;
 }
 
-.hardwareLabel {
-  top: 28px;
-  left: 32px;
-  display: grid;
-  gap: 5px;
-  font-family: var(--font-code);
-  font-size: 0.68rem;
-  line-height: 1.2;
-  letter-spacing: 0.13em;
+.macintoshDisplay::after {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background-image:
+    repeating-radial-gradient(
+      circle at 22% 31%,
+      rgba(62, 54, 40, 0.09) 0 0.35px,
+      transparent 0.55px 3px
+    ),
+    repeating-radial-gradient(
+      circle at 73% 62%,
+      rgba(255, 255, 255, 0.12) 0 0.3px,
+      transparent 0.6px 4px
+    );
+  background-size:
+    5px 5px,
+    7px 7px;
+  content: "";
+  mix-blend-mode: multiply;
+  opacity: 0.35;
+  pointer-events: none;
 }
 
-.hardwareLabel span:last-child {
-  color: rgba(244, 240, 231, 0.5);
+.screenBezel {
+  position: relative;
+  z-index: 1;
+  padding: clamp(14px, 2.15vw, 31px);
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: clamp(24px, 3.6vw, 54px) / clamp(20px, 3vw, 43px);
+  background: #292a27;
+  box-shadow:
+    0 2px 0 rgba(255, 255, 255, 0.4),
+    0 0 0 2px rgba(67, 61, 50, 0.2),
+    0 10px 24px rgba(75, 62, 41, 0.2),
+    0 12px 26px rgba(0, 0, 0, 0.32) inset;
 }
 
-.identityLabel {
-  right: 32px;
-  bottom: 30px;
-  display: grid;
-  gap: 5px;
-  justify-items: end;
-  font-family: var(--font-code);
-  font-size: 0.68rem;
-  letter-spacing: 0.12em;
+.screen {
+  width: 100%;
+  height: auto;
+  aspect-ratio: 512 / 342;
+  overflow: hidden;
+  border-radius: clamp(9px, 1vw, 14px) / clamp(7px, 0.8vw, 11px);
+  background: #899487;
+  box-shadow:
+    0 0 26px rgba(0, 0, 0, 0.35) inset,
+    0 0 0 1px rgba(0, 0, 0, 0.78);
+  container: startup-screen / size;
 }
 
-.identityLabel strong {
-  color: #caff43;
-  font-size: 0.62rem;
-  font-weight: 600;
-}
-
-.interactionHint {
-  bottom: 31px;
-  left: 32px;
-  max-width: 30rem;
-  margin: 0;
-  color: rgba(244, 240, 231, 0.58);
-  font-family: var(--font-code);
-  font-size: 0.68rem;
-  letter-spacing: 0.04em;
-}
-
-.focusButton,
-.closeFocus {
-  appearance: none;
-  border: 1px solid rgba(244, 240, 231, 0.35);
-  color: #f4f0e7;
-  background: rgba(17, 18, 15, 0.76);
-  backdrop-filter: blur(14px);
-  font: 600 0.7rem/1 var(--font-code);
-  letter-spacing: 0.08em;
-  cursor: pointer;
-  transition:
-    color 160ms ease,
-    border-color 160ms ease,
-    background 160ms ease;
-}
-
-.focusButton {
-  right: 32px;
-  bottom: 78px;
-  padding: 14px 17px;
-  border-radius: 999px;
-}
-
-.focusButton:hover,
-.focusButton:focus-visible,
-.closeFocus:hover,
-.closeFocus:focus-visible {
-  border-color: #caff43;
-  color: #11120f;
-  background: #caff43;
+.screen:focus {
   outline: none;
 }
 
-.focusOverlay {
-  position: fixed;
-  inset: 0;
-  z-index: 90;
+.startup {
+  position: relative;
   display: grid;
-  place-items: center;
-  padding: 72px clamp(16px, 4vw, 64px) 32px;
-  background: rgba(8, 9, 8, 0.93);
-  backdrop-filter: blur(20px);
-}
-
-.focusHardware {
-  width: min(1080px, 94vw, calc((100svh - 160px) * 1.45));
-  padding: clamp(18px, 3vw, 42px) clamp(18px, 3vw, 42px) clamp(38px, 5vw, 66px);
-  border: 1px solid rgba(255, 255, 255, 0.18);
-  border-radius: clamp(28px, 4vw, 58px);
-  background:
-    linear-gradient(145deg, rgba(255, 255, 255, 0.28), transparent 20%), #d9d1bd;
-  box-shadow:
-    0 42px 120px rgba(0, 0, 0, 0.55),
-    inset 0 0 0 2px rgba(68, 62, 52, 0.15),
-    inset 0 -20px 50px rgba(82, 69, 48, 0.16);
-}
-
-.focusScreen {
-  aspect-ratio: 512 / 342;
+  width: 100%;
+  height: 100%;
   overflow: hidden;
-  border: clamp(12px, 2vw, 25px) solid #2d2e2b;
-  border-radius: clamp(22px, 3vw, 44px) / clamp(16px, 2vw, 32px);
-  background: #a7ad9c;
-  box-shadow:
-    inset 0 0 40px rgba(0, 0, 0, 0.38),
-    0 2px 0 rgba(255, 255, 255, 0.45);
+  color: #111;
+  background-color: #b8bbb0;
+  background-image:
+    linear-gradient(
+      45deg,
+      rgba(255, 255, 255, 0.12) 25%,
+      transparent 25% 75%,
+      rgba(255, 255, 255, 0.12) 75%
+    ),
+    linear-gradient(
+      45deg,
+      rgba(255, 255, 255, 0.12) 25%,
+      transparent 25% 75%,
+      rgba(255, 255, 255, 0.12) 75%
+    );
+  background-position:
+    0 0,
+    2px 2px;
+  background-size: 4px 4px;
+  font-family: "KZ Chicago", "Courier New", monospace;
+  place-items: center;
 }
 
-.focusBrand {
-  display: flex;
+.startup[data-phase="idle"],
+.startup[data-phase="powerOn"] {
+  background: #050605;
+}
+
+.startButton {
+  display: grid;
+  min-width: 148px;
+  min-height: 118px;
+  padding: 18px 24px;
+  border: 0;
+  color: #eee9dd;
+  background: transparent;
+  font: inherit;
+  text-align: center;
+  cursor: pointer;
+  place-items: center;
+  align-content: center;
+  gap: 11px;
+}
+
+.startButton strong {
+  font-size: clamp(0.68rem, 2.2cqw, 1rem);
+  font-weight: 400;
+  letter-spacing: 0.02em;
+}
+
+.startButton small {
+  color: rgba(238, 233, 221, 0.54);
+  font: 500 clamp(0.52rem, 1.4cqw, 0.68rem) / 1 var(--font-code);
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+}
+
+.startButton:hover .powerIcon,
+.startButton:focus-visible .powerIcon {
+  border-color: #c9ff63;
+  box-shadow: 0 0 24px rgba(201, 255, 99, 0.32);
+}
+
+.startButton:focus-visible {
+  outline: 2px solid #eee9dd;
+  outline-offset: -8px;
+}
+
+.powerIcon {
+  position: relative;
+  display: block;
+  width: clamp(36px, 7cqw, 56px);
+  aspect-ratio: 1;
+  border: clamp(2px, 0.45cqw, 4px) solid #eee9dd;
+  border-top-color: transparent;
+  border-radius: 50%;
+  transition:
+    border-color 160ms ease,
+    box-shadow 160ms ease;
+}
+
+.powerIcon::before {
+  position: absolute;
+  top: -12%;
+  left: 50%;
+  width: clamp(2px, 0.45cqw, 4px);
+  height: 54%;
+  background: currentColor;
+  content: "";
+  transform: translateX(-50%);
+}
+
+.crtGlow {
+  width: 8%;
+  height: 2px;
+  border-radius: 50%;
+  background: #fff;
+  box-shadow: 0 0 28px rgba(255, 255, 255, 0.9);
+  animation: crt-power-on 280ms cubic-bezier(0.2, 0.75, 0.4, 1) forwards;
+}
+
+.happyMac {
+  display: grid;
+  width: clamp(62px, 13cqw, 108px);
+  aspect-ratio: 1;
+  place-items: center;
+  animation: boot-item-in 180ms steps(2, end) both;
+}
+
+.happyMacIcon {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.welcomePanel {
+  display: grid;
+  width: min(64%, 430px);
+  min-width: 190px;
+  padding: clamp(14px, 3cqw, 28px);
+  border: clamp(2px, 0.34cqw, 3px) solid #111;
+  background: #f8f8f1;
+  box-shadow:
+    clamp(3px, 0.55cqw, 6px) clamp(3px, 0.55cqw, 6px) 0 #111,
+    inset 0 0 0 1px #fff;
+  grid-template-columns: clamp(45px, 9cqw, 76px) 1fr;
   align-items: center;
-  gap: 10px;
-  margin: 18px 0 -26px 12px;
-  color: #4d493f;
-  font: 500 clamp(0.72rem, 1.2vw, 0.9rem)/1 var(--font-body);
+  gap: clamp(12px, 2.8cqw, 26px);
+  animation: boot-item-in 180ms steps(2, end) both;
+}
+
+.welcomePanel p {
+  font-size: clamp(0.68rem, 2.1cqw, 1.08rem);
+  line-height: 1.25;
+}
+
+.bootProgress {
+  height: clamp(8px, 1.4cqw, 13px);
+  overflow: hidden;
+  border: 2px solid #111;
+  background: #fff;
+  grid-column: 1 / -1;
+}
+
+.bootProgress span {
+  display: block;
+  width: 100%;
+  height: 100%;
+  background:
+    repeating-linear-gradient(90deg, #111 0 3px, transparent 3px 5px), #111;
+  transform: scaleX(0);
+  transform-origin: left;
+  animation: boot-progress 1500ms steps(18, end) 80ms forwards;
+}
+
+.brand {
+  position: absolute;
+  z-index: 2;
+  bottom: clamp(17px, 2.1vw, 31px);
+  left: clamp(28px, 5.1vw, 74px);
+  display: flex;
+  color: #514d43;
+  font: 600 clamp(0.7rem, 1vw, 0.94rem) / 1 var(--font-body);
+  letter-spacing: -0.01em;
+  align-items: center;
+  gap: clamp(7px, 0.85vw, 12px);
 }
 
 .rainbowMark {
-  width: 15px;
-  height: 15px;
-  border-radius: 4px 6px 5px 7px;
+  width: clamp(14px, 1.35vw, 20px);
+  aspect-ratio: 1;
+  border-radius: 45% 48% 42% 52%;
   background: linear-gradient(
     to bottom,
     #55a7d9 0 16%,
@@ -207,65 +310,161 @@
     #df5d4d 64% 80%,
     #9d68a9 80%
   );
+  box-shadow: 0 0 0 1px rgba(52, 48, 40, 0.12);
 }
 
-.closeFocus {
+.soundToggle {
   position: absolute;
-  top: 18px;
-  left: 20px;
-  padding: 12px 15px;
-  border-radius: 999px;
+  z-index: 3;
+  right: clamp(20px, 4.2vw, 61px);
+  bottom: clamp(9px, 1.3vw, 19px);
+  display: grid;
+  width: 44px;
+  height: 44px;
+  padding: 11px;
+  border: 1px solid rgba(70, 64, 52, 0.24);
+  border-radius: 50%;
+  color: #514d43;
+  background: rgba(231, 224, 205, 0.5);
+  box-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.48),
+    inset 0 1px 3px rgba(83, 70, 47, 0.13);
+  cursor: pointer;
+  place-items: center;
 }
 
-@media (max-width: 760px) {
-  .hardwareLabel {
-    top: 82px;
-    left: 16px;
-    font-size: 0.58rem;
-  }
+.soundToggle:hover,
+.soundToggle:focus-visible {
+  color: #111;
+  background: #eee7d5;
+}
 
-  .interactionHint {
-    bottom: 22px;
-    left: 16px;
-    max-width: calc(100vw - 155px);
-    font-size: 0.58rem;
-  }
+.soundToggle:focus-visible {
+  outline: 3px solid #5862f3;
+  outline-offset: 3px;
+}
 
-  .identityLabel {
-    display: none;
-  }
+.soundToggle svg {
+  display: block;
+  width: 100%;
+  fill: currentColor;
+  stroke: currentColor;
+  stroke-width: 1.8;
+  stroke-linecap: square;
+  stroke-linejoin: miter;
+}
 
-  .focusButton {
-    right: 16px;
-    bottom: 18px;
-    padding: 12px 13px;
-    font-size: 0.61rem;
+@keyframes crt-power-on {
+  0% {
+    width: 3%;
+    height: 2px;
+    opacity: 0;
   }
-
-  .focusOverlay {
-    padding: 68px 8px 16px;
+  35% {
+    width: 82%;
+    height: 3px;
+    opacity: 1;
   }
-
-  .focusHardware {
+  100% {
     width: 100%;
-    padding: 10px 10px 34px;
-    border-radius: 25px;
+    height: 100%;
+    opacity: 1;
+  }
+}
+
+@keyframes boot-item-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes boot-progress {
+  to {
+    transform: scaleX(1);
+  }
+}
+
+@supports (height: 100dvh) {
+  .experience {
+    --viewport-height: 100dvh;
+  }
+}
+
+@media (max-width: 560px) {
+  .experience {
+    padding: 6px;
   }
 
-  .focusScreen {
-    border-width: 9px;
-    border-radius: 18px / 14px;
+  .macintoshDisplay {
+    width: min(98vw, calc((var(--viewport-height) - 76px) * 1.42));
+    padding: 12px 12px 38px;
+    border-radius: 29px;
   }
 
-  .focusBrand {
-    margin: 11px 0 -24px 8px;
-    font-size: 0.68rem;
+  .screenBezel {
+    padding: 9px;
+    border-radius: 19px / 15px;
+  }
+
+  .screen {
+    border-radius: 7px / 5px;
+  }
+
+  .brand {
+    bottom: 15px;
+    left: 25px;
+    font-size: 0.66rem;
+  }
+
+  .rainbowMark {
+    width: 13px;
+  }
+
+  .soundToggle {
+    right: 15px;
+    bottom: 5px;
+  }
+
+  .welcomePanel {
+    min-width: 0;
+    width: 72%;
+    padding: 10px;
+    grid-template-columns: 38px 1fr;
+    gap: 9px;
+  }
+}
+
+@media (max-height: 560px) and (min-width: 561px) {
+  .experience {
+    padding: 62px 8px 6px;
+  }
+
+  .macintoshDisplay {
+    width: min(95vw, calc((var(--viewport-height) - 102px) * 1.42));
   }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .focusButton,
-  .closeFocus {
+  .powerIcon {
     transition: none;
+  }
+
+  .crtGlow,
+  .happyMac,
+  .welcomePanel,
+  .bootProgress span {
+    animation-duration: 1ms;
+    animation-delay: 0ms;
+  }
+}
+
+@media (forced-colors: active) {
+  .macintoshDisplay,
+  .screenBezel,
+  .screen {
+    border: 1px solid CanvasText;
   }
 }
