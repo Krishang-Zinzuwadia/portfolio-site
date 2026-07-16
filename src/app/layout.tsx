@@ -6,7 +6,7 @@ const siteUrl =
   process.env.NEXT_PUBLIC_SITE_URL ??
   (productionHost
     ? `https://${productionHost}`
-    : "https://krishang-macintosh.krishangzinzuwadia.chatgpt.site");
+    : "https://krishang-portfolio.vercel.app");
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
