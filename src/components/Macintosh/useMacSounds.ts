@@ -85,13 +85,31 @@ function addTone(
   });
 }
 
+function primeAudioContext(context: AudioContext) {
+  const source = context.createBufferSource();
+  source.buffer = context.createBuffer(1, 1, context.sampleRate);
+  source.connect(context.destination);
+  source.start();
+  source.addEventListener("ended", () => source.disconnect(), { once: true });
+}
+
+function disposeAudioContext(context: AudioContext) {
+  if (context.state === "closed") return;
+
+  try {
+    void context.close().catch(() => undefined);
+  } catch {
+    // Older WebKit implementations can throw while the context is changing state.
+  }
+}
+
 function scheduleSound(context: AudioContext, sound: MacSound) {
   const now = context.currentTime + 0.012;
   const filter = context.createBiquadFilter();
   const master = context.createGain();
   filter.type = "lowpass";
   filter.frequency.setValueAtTime(sound === "startup" ? 3100 : 2400, now);
-  master.gain.value = 0.78;
+  master.gain.value = 0.88;
   filter.connect(master);
   master.connect(context.destination);
 
@@ -102,7 +120,7 @@ function scheduleSound(context: AudioContext, sound: MacSound) {
         frequency,
         start: now + index * 0.055,
         duration: 1.35 - index * 0.035,
-        volume: index === 0 ? 0.09 : 0.065,
+        volume: index === 0 ? 0.16 : 0.115,
         type: index < 2 ? "triangle" : "sine",
       });
     });
@@ -112,7 +130,7 @@ function scheduleSound(context: AudioContext, sound: MacSound) {
       endFrequency: 610,
       start: now,
       duration: 0.11,
-      volume: 0.045,
+      volume: 0.11,
       type: "triangle",
     });
   } else if (sound === "close") {
@@ -121,7 +139,7 @@ function scheduleSound(context: AudioContext, sound: MacSound) {
       endFrequency: 280,
       start: now,
       duration: 0.095,
-      volume: 0.042,
+      volume: 0.1,
       type: "triangle",
     });
   } else {
@@ -130,7 +148,7 @@ function scheduleSound(context: AudioContext, sound: MacSound) {
       endFrequency: 610,
       start: now,
       duration: 0.035,
-      volume: 0.024,
+      volume: 0.065,
       type: "square",
     });
   }
@@ -146,47 +164,92 @@ export function useMacSounds() {
   const muted = useSyncExternalStore(subscribeToMuted, readMuted, () => false);
   const contextRef = useRef<AudioContext | null>(null);
 
-  useEffect(
-    () => () => {
-      const context = contextRef.current;
-      contextRef.current = null;
-      if (context && context.state !== "closed") void context.close();
-    },
-    []
-  );
+  const closeContext = useCallback(() => {
+    const context = contextRef.current;
+    contextRef.current = null;
 
-  const playSound = useCallback(
+    if (context) disposeAudioContext(context);
+  }, []);
+
+  useEffect(() => closeContext, [closeContext]);
+
+  const getContext = useCallback(() => {
+    const currentContext = contextRef.current;
+    if (currentContext && currentContext.state !== "closed") {
+      return currentContext;
+    }
+
+    const AudioContextConstructor =
+      window.AudioContext ?? (window as AudioWindow).webkitAudioContext;
+    if (!AudioContextConstructor) return null;
+
+    let nextContext: AudioContext;
+    try {
+      nextContext = new AudioContextConstructor({ latencyHint: "interactive" });
+    } catch {
+      nextContext = new AudioContextConstructor();
+    }
+    contextRef.current = nextContext;
+    return nextContext;
+  }, []);
+
+  const startSound = useCallback(
     (sound: MacSound) => {
-      if (muted || typeof window === "undefined") return;
-
-      const AudioContextConstructor =
-        window.AudioContext ?? (window as AudioWindow).webkitAudioContext;
-      if (!AudioContextConstructor) return;
-
       try {
-        const context =
-          contextRef.current ??
-          (contextRef.current = new AudioContextConstructor());
+        const context = getContext();
+        if (!context) return;
 
         if (context.state === "running") {
           scheduleSound(context, sound);
           return;
         }
 
+        // Starting a silent source during the original click/key gesture is
+        // required to unlock Web Audio reliably in Safari and iOS browsers.
+        primeAudioContext(context);
         void context
           .resume()
-          .then(() => scheduleSound(context, sound))
-          .catch(() => undefined);
+          .then(() => {
+            if (
+              contextRef.current === context &&
+              context.state === "running" &&
+              !readMuted()
+            ) {
+              scheduleSound(context, sound);
+            }
+          })
+          .catch(() => {
+            if (contextRef.current === context) contextRef.current = null;
+            disposeAudioContext(context);
+          });
       } catch {
-        // Audio is progressive enhancement; the desktop remains fully usable.
+        closeContext();
       }
     },
-    [muted]
+    [closeContext, getContext]
+  );
+
+  const playSound = useCallback(
+    (sound: MacSound) => {
+      if (typeof window === "undefined" || readMuted()) return;
+      startSound(sound);
+    },
+    [startSound]
   );
 
   const toggleMuted = useCallback(() => {
-    setStoredMuted(!readMuted());
-  }, []);
+    const nextMuted = !readMuted();
+    setStoredMuted(nextMuted);
+
+    if (nextMuted) {
+      closeContext();
+      return;
+    }
+
+    // Confirm that sound is active and unlock the engine in the same trusted
+    // user gesture as the toggle click.
+    startSound("menu");
+  }, [closeContext, startSound]);
 
   return { muted, playSound, toggleMuted };
 }

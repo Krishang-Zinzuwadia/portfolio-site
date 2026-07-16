@@ -72,6 +72,19 @@ function HappyMacIcon() {
   );
 }
 
+function SoundIcon({ muted }: { muted: boolean }) {
+  return (
+    <svg viewBox="0 0 24 24" aria-hidden="true">
+      <path d="M4 9v6h4l5 4V5L8 9H4Z" />
+      {muted ? (
+        <path d="m16 9 5 6m0-6-5 6" />
+      ) : (
+        <path d="M16 9c1.7 1.7 1.7 4.3 0 6m2.5-8.5c3 3 3 8 0 11" />
+      )}
+    </svg>
+  );
+}
+
 export default function MacExperience() {
   const [introPhase, setIntroPhase] = useState<IntroPhase>(() =>
     hasPortfolioEntryCompleted() ? "complete" : "cover"
@@ -404,14 +417,7 @@ export default function MacExperience() {
           title={muted ? "Sound off" : "Sound on"}
           onClick={toggleMuted}
         >
-          <svg viewBox="0 0 24 24" aria-hidden="true">
-            <path d="M4 9v6h4l5 4V5L8 9H4Z" />
-            {muted ? (
-              <path d="m16 9 5 6m0-6-5 6" />
-            ) : (
-              <path d="M16 9c1.7 1.7 1.7 4.3 0 6m2.5-8.5c3 3 3 8 0 11" />
-            )}
-          </svg>
+          <SoundIcon muted={muted} />
         </button>
       </div>
 
@@ -423,6 +429,20 @@ export default function MacExperience() {
           data-ready={introImageReady}
           aria-label="Portfolio introduction"
         >
+          <button
+            type="button"
+            className={styles.introSoundToggle}
+            aria-label={
+              muted ? "Turn Macintosh sounds on" : "Mute Macintosh sounds"
+            }
+            aria-pressed={muted}
+            title={muted ? "Sound off" : "Sound on"}
+            onClick={toggleMuted}
+          >
+            <SoundIcon muted={muted} />
+            <span>Sound {muted ? "off" : "on"}</span>
+          </button>
+
           <div className={styles.introPhotoLayer} aria-hidden="true">
             <Image
               src={INTRO_IMAGE}
