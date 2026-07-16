@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { useEffect, useRef, type CSSProperties } from "react";
 
 import TechIcon from "@/components/Portfolio/TechIcon";
@@ -139,42 +140,52 @@ export default function EditorialPortfolio() {
               </div>
             </div>
 
-            <aside
-              className="hero-profile"
-              data-reveal="right"
-              aria-label="Krishang at a glance"
+            <figure
+              className="hero-art"
+              data-reveal="scale"
+              style={revealDelay(140)}
             >
-              <p>AT A GLANCE</p>
-              <dl>
-                <div>
-                  <dt>Education</dt>
-                  <dd>
-                    <strong>B.Tech CSE · VIT</strong>
-                    <span>Expected July 2028</span>
-                  </dd>
-                </div>
-                <div>
-                  <dt>Current work</dt>
-                  <dd>
-                    <strong>AI agents · full-stack systems</strong>
-                    <span>Desktop, web, and infrastructure</span>
-                  </dd>
-                </div>
-                <div>
-                  <dt>CTFTime</dt>
-                  <dd>
-                    <strong>1st in India · 7th globally</strong>
-                    <span>Team ranking · April 2026</span>
-                  </dd>
-                </div>
-                <div>
-                  <dt>Based in</dt>
-                  <dd>
-                    <strong>Vellore, India</strong>
-                  </dd>
-                </div>
-              </dl>
-            </aside>
+              <div className="hero-art-canvas">
+                <Image
+                  className="hero-art-image"
+                  src="/assets/editorial/hero-systems-map.webp"
+                  alt=""
+                  width={1254}
+                  height={1254}
+                  sizes="(max-width: 560px) calc(100vw - 2rem), (max-width: 860px) calc(100vw - 3rem), (max-width: 1120px) 42vw, 36rem"
+                  fetchPriority="high"
+                />
+
+                <ol className="hero-art-labels" aria-label="Selected systems">
+                  <li className="hero-art-label hero-art-label-atlas">
+                    <span>01</span>
+                    <span>
+                      <strong>Atlas</strong>
+                      <small>Local desktop agent</small>
+                    </span>
+                  </li>
+                  <li className="hero-art-label hero-art-label-labyrinth">
+                    <span>02</span>
+                    <span>
+                      <strong>Labyrinth</strong>
+                      <small>27-agent dev system</small>
+                    </span>
+                  </li>
+                  <li className="hero-art-label hero-art-label-ocs">
+                    <span>03</span>
+                    <span>
+                      <strong>OCS</strong>
+                      <small>Recruitment platform</small>
+                    </span>
+                  </li>
+                </ol>
+              </div>
+
+              <figcaption className="hero-art-caption">
+                <span>Selected systems</span>
+                <span>2025—26</span>
+              </figcaption>
+            </figure>
           </div>
         </section>
 
