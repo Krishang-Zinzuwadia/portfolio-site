@@ -1,13 +1,40 @@
 "use client";
 
-import { useCallback, useEffect, useRef, useState } from "react";
+import Image from "next/image";
+import {
+  type CSSProperties,
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
+import {
+  hasPortfolioEntryCompleted,
+  markPortfolioEntryComplete,
+} from "../Portfolio/portfolioEntryState";
 import MacDesktop from "./MacDesktop";
 import styles from "./MacExperience.module.css";
 import { useMacSounds } from "./useMacSounds";
 
 type BootPhase = "idle" | "powerOn" | "happyMac" | "welcome" | "ready";
+type IntroPhase = "cover" | "priming" | "zooming" | "complete";
+
+type IntroMotionStyle = CSSProperties & {
+  [key: `--intro-${string}`]: string | number;
+};
 
 let hasBootedInThisPage = false;
+
+const INTRO_IMAGE = "/assets/intro/macintosh-entry.jpg";
+const INTRO_IMAGE_WIDTH = 1280;
+const INTRO_IMAGE_HEIGHT = 672;
+const INTRO_DURATION = 1500;
+const PHOTO_SCREEN = {
+  x: 681,
+  y: 143,
+  width: 242,
+  height: 169,
+};
 
 const NEXT_BOOT_PHASE: Partial<Record<BootPhase, BootPhase>> = {
   powerOn: "happyMac",
@@ -46,11 +73,44 @@ function HappyMacIcon() {
 }
 
 export default function MacExperience() {
-  const [bootPhase, setBootPhase] = useState<BootPhase>(() =>
-    hasBootedInThisPage ? "ready" : "idle"
+  const [introPhase, setIntroPhase] = useState<IntroPhase>(() =>
+    hasPortfolioEntryCompleted() ? "complete" : "cover"
   );
+  const [introImageReady, setIntroImageReady] = useState(false);
+  const [introStyle, setIntroStyle] = useState<IntroMotionStyle>();
+  const [bootPhase, setBootPhase] = useState<BootPhase>(() =>
+    hasBootedInThisPage
+      ? "ready"
+      : hasPortfolioEntryCompleted()
+        ? "powerOn"
+        : "idle"
+  );
+  const introStageRef = useRef<HTMLElement>(null);
+  const enterButtonRef = useRef<HTMLButtonElement>(null);
+  const introFrameRef = useRef<number | null>(null);
+  const introTimerRef = useRef<number | null>(null);
   const screenRef = useRef<HTMLDivElement>(null);
   const { muted, playSound, toggleMuted } = useMacSounds();
+  const introActive = introPhase !== "complete";
+
+  const finishIntro = useCallback(() => {
+    if (introFrameRef.current !== null) {
+      window.cancelAnimationFrame(introFrameRef.current);
+      introFrameRef.current = null;
+    }
+    if (introTimerRef.current !== null) {
+      window.clearTimeout(introTimerRef.current);
+      introTimerRef.current = null;
+    }
+
+    markPortfolioEntryComplete();
+    setIntroPhase("complete");
+
+    introFrameRef.current = window.requestAnimationFrame(() => {
+      screenRef.current?.focus();
+      introFrameRef.current = null;
+    });
+  }, []);
 
   useEffect(() => {
     const nextPhase = NEXT_BOOT_PHASE[bootPhase];
@@ -68,11 +128,78 @@ export default function MacExperience() {
     return () => window.clearTimeout(timer);
   }, [bootPhase]);
 
+  useEffect(
+    () => () => {
+      if (introFrameRef.current !== null) {
+        window.cancelAnimationFrame(introFrameRef.current);
+      }
+      if (introTimerRef.current !== null) {
+        window.clearTimeout(introTimerRef.current);
+      }
+    },
+    []
+  );
+
+  useEffect(() => {
+    if (introPhase !== "cover" || !introImageReady) return;
+
+    const frame = window.requestAnimationFrame(() =>
+      enterButtonRef.current?.focus({ preventScroll: true })
+    );
+    return () => window.cancelAnimationFrame(frame);
+  }, [introImageReady, introPhase]);
+
+  useEffect(() => {
+    if (!introActive) return;
+
+    const previousOverflow = document.body.style.overflow;
+    const previousOverscroll = document.body.style.overscrollBehavior;
+    document.body.style.overflow = "hidden";
+    document.body.style.overscrollBehavior = "none";
+
+    return () => {
+      document.body.style.overflow = previousOverflow;
+      document.body.style.overscrollBehavior = previousOverscroll;
+    };
+  }, [introActive]);
+
+  useEffect(() => {
+    if (introPhase !== "priming" && introPhase !== "zooming") return;
+
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key !== "Escape") return;
+      event.preventDefault();
+      finishIntro();
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+    window.addEventListener("resize", finishIntro);
+    window.visualViewport?.addEventListener("resize", finishIntro);
+
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+      window.removeEventListener("resize", finishIntro);
+      window.visualViewport?.removeEventListener("resize", finishIntro);
+    };
+  }, [finishIntro, introPhase]);
+
   useEffect(() => {
     if (bootPhase !== "ready") return;
-    const frame = window.requestAnimationFrame(() =>
-      screenRef.current?.focus()
-    );
+
+    const frame = window.requestAnimationFrame(() => {
+      const screen = screenRef.current;
+      const activeElement = document.activeElement;
+      if (
+        !screen ||
+        (activeElement &&
+          activeElement !== document.body &&
+          !screen.contains(activeElement))
+      ) {
+        return;
+      }
+
+      screen.focus();
+    });
     return () => window.cancelAnimationFrame(frame);
   }, [bootPhase]);
 
@@ -86,8 +213,91 @@ export default function MacExperience() {
     setBootPhase("powerOn");
   }, [playSound]);
 
-  const bootStatus =
-    bootPhase === "ready"
+  const beginIntro = useCallback(() => {
+    if (introPhase !== "cover" || !introImageReady) return;
+
+    startMac();
+
+    const reducedMotion = window.matchMedia(
+      "(prefers-reduced-motion: reduce)"
+    ).matches;
+    if (reducedMotion) {
+      finishIntro();
+      return;
+    }
+
+    const stageRect = introStageRef.current?.getBoundingClientRect();
+    const targetRect = screenRef.current?.getBoundingClientRect();
+    if (!stageRect || !targetRect || !stageRect.width || !stageRect.height) {
+      finishIntro();
+      return;
+    }
+
+    const portraitCrop = stageRect.width / stageRect.height <= 0.8;
+    const imageScale = portraitCrop
+      ? Math.max(
+          stageRect.width / INTRO_IMAGE_WIDTH,
+          stageRect.height / INTRO_IMAGE_HEIGHT
+        )
+      : Math.min(
+          stageRect.width / INTRO_IMAGE_WIDTH,
+          stageRect.height / INTRO_IMAGE_HEIGHT
+        );
+    const imageWidth = INTRO_IMAGE_WIDTH * imageScale;
+    const imageHeight = INTRO_IMAGE_HEIGHT * imageScale;
+    const imageLeft =
+      (stageRect.width - imageWidth) * (portraitCrop ? 0.66 : 0.5);
+    const imageTop = (stageRect.height - imageHeight) / 2;
+    const sourceLeft = imageLeft + PHOTO_SCREEN.x * imageScale;
+    const sourceTop = imageTop + PHOTO_SCREEN.y * imageScale;
+    const sourceWidth = PHOTO_SCREEN.width * imageScale;
+    const sourceHeight = PHOTO_SCREEN.height * imageScale;
+    const sourceCenterX = sourceLeft + sourceWidth / 2;
+    const sourceCenterY = sourceTop + sourceHeight / 2;
+    const targetLeft = targetRect.left - stageRect.left;
+    const targetTop = targetRect.top - stageRect.top;
+    const targetCenterX = targetLeft + targetRect.width / 2;
+    const targetCenterY = targetTop + targetRect.height / 2;
+    const photoScale = Math.max(
+      targetRect.width / sourceWidth,
+      targetRect.height / sourceHeight
+    );
+
+    setIntroStyle({
+      "--intro-photo-origin-x": `${sourceCenterX}px`,
+      "--intro-photo-origin-y": `${sourceCenterY}px`,
+      "--intro-photo-shift-x": `${targetCenterX - sourceCenterX}px`,
+      "--intro-photo-shift-y": `${targetCenterY - sourceCenterY}px`,
+      "--intro-photo-scale": photoScale,
+      "--intro-flight-left": `${sourceLeft}px`,
+      "--intro-flight-top": `${sourceTop}px`,
+      "--intro-flight-width": `${sourceWidth}px`,
+      "--intro-flight-height": `${sourceHeight}px`,
+      "--intro-flight-shift-x": `${targetLeft - sourceLeft}px`,
+      "--intro-flight-shift-y": `${targetTop - sourceTop}px`,
+      "--intro-flight-scale-x": targetRect.width / sourceWidth,
+      "--intro-flight-scale-y": targetRect.height / sourceHeight,
+      "--intro-flight-image-left": `${imageLeft - sourceLeft}px`,
+      "--intro-flight-image-top": `${imageTop - sourceTop}px`,
+      "--intro-flight-image-width": `${imageWidth}px`,
+      "--intro-flight-image-height": `${imageHeight}px`,
+    });
+    setIntroPhase("priming");
+
+    introFrameRef.current = window.requestAnimationFrame(() => {
+      setIntroPhase("zooming");
+      introFrameRef.current = null;
+      introTimerRef.current = window.setTimeout(finishIntro, INTRO_DURATION);
+    });
+  }, [finishIntro, introImageReady, introPhase, startMac]);
+
+  const bootStatus = introActive
+    ? introPhase === "cover"
+      ? introImageReady
+        ? "Portfolio entry ready"
+        : "Loading portfolio entry"
+      : "Opening Macintosh portfolio"
+    : bootPhase === "ready"
       ? "Desktop ready"
       : bootPhase === "idle"
         ? ""
@@ -97,6 +307,8 @@ export default function MacExperience() {
     <main
       className={styles.experience}
       aria-labelledby="macintosh-portfolio-title"
+      data-entry-phase={introPhase}
+      style={introStyle}
     >
       <h1 id="macintosh-portfolio-title" className={styles.srOnly}>
         Krishang Zinzuwadia — interactive Macintosh portfolio
@@ -105,7 +317,13 @@ export default function MacExperience() {
         {bootStatus}
       </p>
 
-      <div className={styles.macintoshDisplay}>
+      <div
+        className={`${styles.macintoshDisplay} ${
+          introActive ? styles.displayBehindIntro : ""
+        }`}
+        aria-hidden={introActive}
+        inert={introActive}
+      >
         <div className={styles.screenBezel}>
           <div
             ref={screenRef}
@@ -182,6 +400,65 @@ export default function MacExperience() {
           </svg>
         </button>
       </div>
+
+      {introActive ? (
+        <section
+          ref={introStageRef}
+          className={styles.intro}
+          data-phase={introPhase}
+          aria-label="Portfolio introduction"
+        >
+          <div className={styles.introPhotoLayer} aria-hidden="true">
+            <Image
+              src={INTRO_IMAGE}
+              alt=""
+              fill
+              priority
+              sizes="100vw"
+              className={styles.introPhoto}
+              onLoad={() => setIntroImageReady(true)}
+              onError={finishIntro}
+            />
+          </div>
+
+          {introStyle ? (
+            <div className={styles.screenFlight} aria-hidden="true">
+              <Image
+                src={INTRO_IMAGE}
+                alt=""
+                width={INTRO_IMAGE_WIDTH}
+                height={INTRO_IMAGE_HEIGHT}
+                className={styles.screenFlightImage}
+              />
+            </div>
+          ) : null}
+
+          <div className={styles.introVignette} aria-hidden="true" />
+
+          <button
+            ref={enterButtonRef}
+            type="button"
+            className={styles.enterButton}
+            disabled={!introImageReady || introPhase !== "cover"}
+            aria-label={
+              introImageReady
+                ? "Enter Krishang's Macintosh portfolio"
+                : "Loading Krishang's Macintosh portfolio"
+            }
+            aria-busy={!introImageReady}
+            onClick={beginIntro}
+          >
+            <span className={styles.enterEyebrow}>
+              Krishang Zinzuwadia · Interactive portfolio
+            </span>
+            <span className={styles.enterAction}>
+              <strong>{introImageReady ? "Enter" : "Loading"}</strong>
+              <span aria-hidden="true">→</span>
+            </span>
+            <small>Macintosh boot · Sound {muted ? "off" : "on"}</small>
+          </button>
+        </section>
+      ) : null}
     </main>
   );
 }

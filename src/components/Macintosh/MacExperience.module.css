@@ -30,6 +30,197 @@
   filter: blur(42px);
 }
 
+.displayBehindIntro {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.experience[data-entry-phase="zooming"] .displayBehindIntro {
+  animation: macintosh-entry-reveal 1500ms cubic-bezier(0.77, 0, 0.18, 1) both;
+  will-change: opacity, transform;
+}
+
+.intro {
+  position: fixed;
+  z-index: 100;
+  inset: 0;
+  overflow: hidden;
+  background: #020302;
+  color: #f3f1e8;
+  isolation: isolate;
+}
+
+.introPhotoLayer {
+  position: absolute;
+  z-index: 1;
+  inset: 0;
+  overflow: hidden;
+  background: #020302;
+  transform-origin: var(--intro-photo-origin-x, 62.66%)
+    var(--intro-photo-origin-y, 33.85%);
+}
+
+.intro[data-phase="zooming"] .introPhotoLayer {
+  animation: intro-photo-zoom 1500ms cubic-bezier(0.77, 0, 0.18, 1) both;
+  will-change: opacity, transform;
+}
+
+.introPhoto {
+  object-fit: contain;
+  object-position: center;
+  pointer-events: none;
+  user-select: none;
+  -webkit-user-drag: none;
+}
+
+.screenFlight {
+  position: absolute;
+  z-index: 3;
+  top: var(--intro-flight-top);
+  left: var(--intro-flight-left);
+  width: var(--intro-flight-width);
+  height: var(--intro-flight-height);
+  overflow: hidden;
+  opacity: 0;
+  clip-path: polygon(0 0, 100% 3%, 98.3% 100%, 1.2% 93.5%);
+  transform-origin: 0 0;
+  pointer-events: none;
+}
+
+.intro[data-phase="zooming"] .screenFlight {
+  animation: intro-screen-flight 1500ms cubic-bezier(0.77, 0, 0.18, 1) both;
+  will-change: opacity, transform, clip-path;
+}
+
+.screenFlightImage {
+  position: absolute;
+  top: var(--intro-flight-image-top);
+  left: var(--intro-flight-image-left);
+  display: block;
+  width: var(--intro-flight-image-width);
+  max-width: none;
+  height: var(--intro-flight-image-height);
+  user-select: none;
+  -webkit-user-drag: none;
+}
+
+.introVignette {
+  position: absolute;
+  z-index: 2;
+  inset: 0;
+  background:
+    linear-gradient(90deg, rgba(0, 0, 0, 0.34), transparent 42%),
+    radial-gradient(circle at 50% 45%, transparent 44%, rgba(0, 0, 0, 0.24));
+  pointer-events: none;
+}
+
+.intro[data-phase="zooming"] .introVignette {
+  animation: intro-controls-out 260ms ease forwards;
+}
+
+.enterButton {
+  position: absolute;
+  z-index: 4;
+  bottom: max(
+    clamp(2rem, 7vh, 4.75rem),
+    calc(env(safe-area-inset-bottom) + 1rem)
+  );
+  left: max(clamp(1.5rem, 5vw, 4.5rem), calc(env(safe-area-inset-left) + 1rem));
+  display: grid;
+  width: min(19rem, calc(100vw - 3rem));
+  min-height: 8.25rem;
+  padding: 1.15rem 1.25rem 1rem;
+  border: 1px solid rgba(201, 255, 99, 0.72);
+  border-radius: 0;
+  background: rgba(3, 5, 3, 0.88);
+  box-shadow:
+    0 1.25rem 3.5rem rgba(0, 0, 0, 0.42),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.08);
+  color: #f4f1e7;
+  font-family: var(--font-code);
+  text-align: left;
+  cursor: pointer;
+  backdrop-filter: blur(18px) saturate(110%);
+  -webkit-backdrop-filter: blur(18px) saturate(110%);
+  align-content: space-between;
+  gap: 0.55rem;
+  transition:
+    border-color 180ms ease,
+    background-color 180ms ease,
+    transform 180ms ease;
+}
+
+.enterButton::before {
+  position: absolute;
+  top: -1px;
+  left: -1px;
+  width: 3.25rem;
+  height: 3px;
+  background: #c9ff63;
+  content: "";
+}
+
+.enterButton:hover:not(:disabled) {
+  border-color: #c9ff63;
+  background: rgba(7, 10, 6, 0.95);
+  transform: translateY(-3px);
+}
+
+.enterButton:focus-visible {
+  outline: 3px solid #c9ff63;
+  outline-offset: 5px;
+}
+
+.enterButton:disabled {
+  cursor: wait;
+  opacity: 0.78;
+}
+
+.intro[data-phase="priming"] .enterButton,
+.intro[data-phase="zooming"] .enterButton {
+  pointer-events: none;
+  animation: intro-controls-out 220ms ease forwards;
+}
+
+.enterEyebrow {
+  color: rgba(244, 241, 231, 0.58);
+  font-size: 0.58rem;
+  font-weight: 650;
+  letter-spacing: 0.13em;
+  text-transform: uppercase;
+}
+
+.enterAction {
+  display: flex;
+  color: #c9ff63;
+  font-size: 2rem;
+  line-height: 1;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.enterAction strong {
+  font-weight: 550;
+  letter-spacing: -0.055em;
+}
+
+.enterAction > span {
+  font-family: var(--font-body);
+  font-size: 1.45rem;
+  transition: transform 180ms ease;
+}
+
+.enterButton:hover:not(:disabled) .enterAction > span {
+  transform: translateX(0.3rem);
+}
+
+.enterButton small {
+  color: rgba(244, 241, 231, 0.48);
+  font-size: 0.55rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
 .srOnly {
   position: absolute;
   width: 1px;
@@ -354,6 +545,82 @@
   stroke-linejoin: miter;
 }
 
+@keyframes intro-photo-zoom {
+  0% {
+    opacity: 1;
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+  48% {
+    opacity: 0.98;
+  }
+  76% {
+    opacity: 0.22;
+  }
+  100% {
+    opacity: 0;
+    transform: translate3d(
+        var(--intro-photo-shift-x),
+        var(--intro-photo-shift-y),
+        0
+      )
+      scale(var(--intro-photo-scale));
+  }
+}
+
+@keyframes intro-screen-flight {
+  0% {
+    opacity: 0;
+    clip-path: polygon(0 0, 100% 3%, 98.3% 100%, 1.2% 93.5%);
+    transform: translate3d(0, 0, 0) scale(1, 1);
+  }
+  5% {
+    opacity: 1;
+  }
+  68% {
+    opacity: 1;
+  }
+  88% {
+    opacity: 0.3;
+    clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
+    transform: translate3d(
+        var(--intro-flight-shift-x),
+        var(--intro-flight-shift-y),
+        0
+      )
+      scale(var(--intro-flight-scale-x), var(--intro-flight-scale-y));
+  }
+  100% {
+    opacity: 0;
+    clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
+    transform: translate3d(
+        var(--intro-flight-shift-x),
+        var(--intro-flight-shift-y),
+        0
+      )
+      scale(var(--intro-flight-scale-x), var(--intro-flight-scale-y));
+  }
+}
+
+@keyframes macintosh-entry-reveal {
+  0%,
+  61% {
+    opacity: 0;
+    transform: scale(1.018);
+  }
+  76%,
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes intro-controls-out {
+  to {
+    opacity: 0;
+    transform: translateY(0.5rem);
+  }
+}
+
 @keyframes crt-power-on {
   0% {
     width: 3%;
@@ -393,9 +660,29 @@
   }
 }
 
+@media (max-aspect-ratio: 4 / 5) {
+  .introPhoto {
+    object-fit: cover;
+    object-position: 66% center;
+  }
+}
+
 @media (max-width: 560px) {
   .experience {
     padding: 6px;
+  }
+
+  .enterButton {
+    right: max(1rem, calc(env(safe-area-inset-right) + 0.75rem));
+    bottom: max(1.25rem, calc(env(safe-area-inset-bottom) + 0.75rem));
+    left: max(1rem, calc(env(safe-area-inset-left) + 0.75rem));
+    width: auto;
+    min-height: 7.5rem;
+    padding: 1rem;
+  }
+
+  .enterAction {
+    font-size: 1.75rem;
   }
 
   .macintoshDisplay {
@@ -437,7 +724,27 @@
   }
 }
 
-@media (max-height: 560px) and (min-width: 561px) {
+@media (max-height: 360px) {
+  .enterButton {
+    bottom: max(0.5rem, calc(env(safe-area-inset-bottom) + 0.25rem));
+    left: max(0.5rem, calc(env(safe-area-inset-left) + 0.25rem));
+    width: 12rem;
+    min-height: 4.75rem;
+    padding: 0.6rem 0.7rem;
+    gap: 0.25rem;
+  }
+
+  .enterEyebrow,
+  .enterButton small {
+    display: none;
+  }
+
+  .enterAction {
+    font-size: 1.25rem;
+  }
+}
+
+@media (min-height: 361px) and (max-height: 560px) and (min-width: 561px) {
   .experience {
     padding: 62px 8px 6px;
   }
@@ -445,9 +752,37 @@
   .macintoshDisplay {
     width: min(95vw, calc((var(--viewport-height) - 102px) * 1.42));
   }
+
+  .enterButton {
+    bottom: max(0.75rem, calc(env(safe-area-inset-bottom) + 0.5rem));
+    width: 15rem;
+    min-height: 6.5rem;
+    padding: 0.8rem 0.9rem;
+  }
+
+  .enterAction {
+    font-size: 1.5rem;
+  }
+
+  .enterButton small {
+    display: none;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
+  .enterButton,
+  .enterAction > span {
+    transition: none;
+  }
+
+  .introPhotoLayer,
+  .screenFlight,
+  .displayBehindIntro,
+  .introVignette,
+  .enterButton {
+    animation: none !important;
+  }
+
   .powerIcon {
     transition: none;
   }
@@ -462,6 +797,39 @@
 }
 
 @media (forced-colors: active) {
+  .enterButton {
+    border: 2px solid ButtonText;
+    background: ButtonFace;
+    color: ButtonText;
+    forced-color-adjust: none;
+  }
+
+  .enterButton::before {
+    background: Highlight;
+  }
+
+  .enterAction,
+  .enterEyebrow,
+  .enterButton small {
+    color: ButtonText;
+  }
+
+  .enterButton:focus-visible {
+    outline-color: Highlight;
+  }
+
+  .enterButton:hover:not(:disabled) {
+    border-color: Highlight;
+    background: Highlight;
+    color: HighlightText;
+  }
+
+  .enterButton:hover:not(:disabled) .enterAction,
+  .enterButton:hover:not(:disabled) .enterEyebrow,
+  .enterButton:hover:not(:disabled) small {
+    color: HighlightText;
+  }
+
   .macintoshDisplay,
   .screenBezel,
   .screen {

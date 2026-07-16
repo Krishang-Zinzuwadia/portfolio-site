@@ -2,6 +2,11 @@
 
 import { useSyncExternalStore, type ReactNode } from "react";
 import styles from "./PortfolioViewSwitcher.module.css";
+import {
+  hasPortfolioEntryCompleted,
+  PORTFOLIO_ENTRY_COMPLETE_EVENT,
+  subscribeToPortfolioEntry,
+} from "./portfolioEntryState";
 
 type PortfolioView = "immersive" | "editorial";
 
@@ -21,6 +26,8 @@ function isPortfolioView(value: string | null): value is PortfolioView {
 }
 
 function readStoredView(): PortfolioView {
+  if (!hasPortfolioEntryCompleted()) return DEFAULT_VIEW;
+
   try {
     const storedView = window.localStorage.getItem(STORAGE_KEY);
     return isPortfolioView(storedView) ? storedView : DEFAULT_VIEW;
@@ -36,10 +43,12 @@ function getServerView(): PortfolioView {
 function subscribeToView(listener: () => void) {
   window.addEventListener("storage", listener);
   window.addEventListener(VIEW_CHANGE_EVENT, listener);
+  window.addEventListener(PORTFOLIO_ENTRY_COMPLETE_EVENT, listener);
 
   return () => {
     window.removeEventListener("storage", listener);
     window.removeEventListener(VIEW_CHANGE_EVENT, listener);
+    window.removeEventListener(PORTFOLIO_ENTRY_COMPLETE_EVENT, listener);
   };
 }
 
@@ -64,33 +73,40 @@ export default function PortfolioViewSwitcher({
     readStoredView,
     getServerView
   );
+  const entryComplete = useSyncExternalStore(
+    subscribeToPortfolioEntry,
+    hasPortfolioEntryCompleted,
+    () => false
+  );
   const optionClass = (option: PortfolioView) =>
     styles.option + (view === option ? " " + styles.active : "");
 
   return (
     <>
-      <div
-        className={styles.switcher}
-        role="group"
-        aria-label="Portfolio view mode"
-      >
-        <button
-          type="button"
-          className={optionClass("immersive")}
-          aria-pressed={view === "immersive"}
-          onClick={() => persistView("immersive")}
+      {entryComplete ? (
+        <div
+          className={styles.switcher}
+          role="group"
+          aria-label="Portfolio view mode"
         >
-          Mac OS
-        </button>
-        <button
-          type="button"
-          className={optionClass("editorial")}
-          aria-pressed={view === "editorial"}
-          onClick={() => persistView("editorial")}
-        >
-          Editorial
-        </button>
-      </div>
+          <button
+            type="button"
+            className={optionClass("immersive")}
+            aria-pressed={view === "immersive"}
+            onClick={() => persistView("immersive")}
+          >
+            Mac OS
+          </button>
+          <button
+            type="button"
+            className={optionClass("editorial")}
+            aria-pressed={view === "editorial"}
+            onClick={() => persistView("editorial")}
+          >
+            Editorial
+          </button>
+        </div>
+      ) : null}
 
       {view === "immersive" ? immersive : editorial}
     </>
