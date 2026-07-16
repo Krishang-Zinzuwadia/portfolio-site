@@ -1,3 +1,7 @@
+"use client";
+
+import { useEffect, useRef, type CSSProperties } from "react";
+
 import SceneShell from "@/components/Portfolio/SceneShell";
 import {
   achievements,
@@ -10,9 +14,72 @@ import {
 
 const resumePath = "/Krishang-Zinzuwadia-Resume.pdf";
 
+type RevealStyle = CSSProperties & { "--reveal-delay": string };
+
+const revealDelay = (delay: number): RevealStyle => ({
+  "--reveal-delay": `${delay}ms`,
+});
+
 export default function EditorialPortfolio() {
+  const portfolioRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const root = portfolioRef.current;
+
+    if (!root) {
+      return;
+    }
+
+    const revealItems = Array.from(
+      root.querySelectorAll<HTMLElement>("[data-reveal]")
+    );
+    const reducedMotion = window.matchMedia(
+      "(prefers-reduced-motion: reduce)"
+    ).matches;
+
+    if (reducedMotion || !("IntersectionObserver" in window)) {
+      revealItems.forEach((item) => item.classList.add("is-visible"));
+      return;
+    }
+
+    const initialRevealLine = window.innerHeight * 0.94;
+
+    revealItems.forEach((item) => {
+      if (item.getBoundingClientRect().top <= initialRevealLine) {
+        item.classList.add("is-visible");
+      }
+    });
+
+    root.classList.add("editorial-motion-ready");
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (!entry.isIntersecting) {
+            return;
+          }
+
+          entry.target.classList.add("is-visible");
+          observer.unobserve(entry.target);
+        });
+      },
+      {
+        rootMargin: "0px 0px -10% 0px",
+        threshold: 0.12,
+      }
+    );
+
+    revealItems.forEach((item) => {
+      if (!item.classList.contains("is-visible")) {
+        observer.observe(item);
+      }
+    });
+
+    return () => observer.disconnect();
+  }, []);
+
   return (
-    <>
+    <div className="editorial-portfolio" ref={portfolioRef}>
       <header className="site-header">
         <a
           className="brand-mark"
@@ -90,7 +157,9 @@ export default function EditorialPortfolio() {
             {signalStats.map((stat, index) => (
               <article
                 className="signal-stat"
+                data-reveal="up"
                 key={`${stat.value}-${stat.label}`}
+                style={revealDelay(index * 70)}
               >
                 <span className="signal-index">0{index + 1}</span>
                 <strong>{stat.value}</strong>
@@ -104,7 +173,7 @@ export default function EditorialPortfolio() {
         </section>
 
         <section className="work-section section-shell" id="work">
-          <div className="section-heading">
+          <div className="section-heading" data-reveal="up">
             <p className="eyebrow">
               <span>02</span>
               SELECTED BUILDS
@@ -122,7 +191,9 @@ export default function EditorialPortfolio() {
             {projects.map((project, index) => (
               <article
                 className={`project-card project-${project.tone}`}
+                data-reveal="scale"
                 key={project.slug}
+                style={revealDelay(index * 100)}
               >
                 <div className="project-card-top">
                   <span className="project-number">0{index + 1}</span>
@@ -172,7 +243,10 @@ export default function EditorialPortfolio() {
 
         <section className="about-section" id="about">
           <div className="about-inner section-shell">
-            <div className="section-heading section-heading-light">
+            <div
+              className="section-heading section-heading-light"
+              data-reveal="up"
+            >
               <p className="eyebrow">
                 <span>03</span>
                 OPERATING PRINCIPLES
@@ -183,7 +257,7 @@ export default function EditorialPortfolio() {
             </div>
 
             <div className="about-grid">
-              <div className="about-statement">
+              <div className="about-statement" data-reveal="left">
                 <p className="statement-lead">
                   I work where AI research, product engineering, and adversarial
                   thinking overlap.
@@ -196,7 +270,7 @@ export default function EditorialPortfolio() {
                 </p>
               </div>
 
-              <aside className="education-card">
+              <aside className="education-card" data-reveal="right">
                 <span className="card-kicker">CURRENTLY</span>
                 <h3>{identity.school}</h3>
                 <p>{identity.education}</p>
@@ -207,7 +281,7 @@ export default function EditorialPortfolio() {
               </aside>
             </div>
 
-            <article className="experience-row">
+            <article className="experience-row" data-reveal="up">
               <div className="experience-meta">
                 <span>{experience.date}</span>
                 <span>{experience.location}</span>
@@ -224,7 +298,7 @@ export default function EditorialPortfolio() {
             </article>
 
             <div className="skills-grid">
-              <article>
+              <article data-reveal="up" style={revealDelay(0)}>
                 <span>01 / LANGUAGES</span>
                 <ul>
                   {skills.languages.map((skill) => (
@@ -232,7 +306,7 @@ export default function EditorialPortfolio() {
                   ))}
                 </ul>
               </article>
-              <article>
+              <article data-reveal="up" style={revealDelay(90)}>
                 <span>02 / SYSTEMS & FRAMEWORKS</span>
                 <ul>
                   {skills.systems.map((skill) => (
@@ -240,7 +314,7 @@ export default function EditorialPortfolio() {
                   ))}
                 </ul>
               </article>
-              <article>
+              <article data-reveal="up" style={revealDelay(180)}>
                 <span>03 / TOOLS & INFRA</span>
                 <ul>
                   {skills.tools.map((skill) => (
@@ -253,7 +327,7 @@ export default function EditorialPortfolio() {
         </section>
 
         <section className="proof-section section-shell" id="proof">
-          <div className="section-heading proof-heading">
+          <div className="section-heading proof-heading" data-reveal="up">
             <p className="eyebrow">
               <span>04</span>
               COMPETITIVE PROOF
@@ -268,7 +342,11 @@ export default function EditorialPortfolio() {
 
           <div className="achievement-list">
             {achievements.map((achievement, index) => (
-              <article key={`${achievement.title}-${achievement.date}`}>
+              <article
+                data-reveal="line"
+                key={`${achievement.title}-${achievement.date}`}
+                style={revealDelay(index * 55)}
+              >
                 <span className="achievement-index">
                   {String(index + 1).padStart(2, "0")}
                 </span>
@@ -285,16 +363,20 @@ export default function EditorialPortfolio() {
 
         <section className="contact-section" id="contact">
           <div className="contact-inner section-shell">
-            <p className="eyebrow">
+            <p className="eyebrow" data-reveal="up">
               <span>05</span>
               OPEN CHANNEL
             </p>
 
             <div className="contact-grid">
-              <h2>
+              <h2 data-reveal="left">
                 Let&apos;s build what <em>should exist next.</em>
               </h2>
-              <div className="contact-copy">
+              <div
+                className="contact-copy"
+                data-reveal="right"
+                style={revealDelay(110)}
+              >
                 <p>
                   Have an ambitious AI system, a hard engineering problem, or a
                   security-shaped challenge? Send the signal.
@@ -305,7 +387,7 @@ export default function EditorialPortfolio() {
               </div>
             </div>
 
-            <footer>
+            <footer data-reveal="up">
               <div className="footer-links">
                 <a href={identity.github} target="_blank" rel="noreferrer">
                   GitHub ↗
@@ -326,6 +408,6 @@ export default function EditorialPortfolio() {
           </div>
         </section>
       </main>
-    </>
+    </div>
   );
 }

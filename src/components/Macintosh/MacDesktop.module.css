@@ -46,6 +46,7 @@
     sans-serif;
   user-select: none;
   -webkit-font-smoothing: none;
+  animation: desktop-pattern-drift 18s linear infinite;
 }
 
 .desktop *,
@@ -79,6 +80,7 @@
   box-shadow: 0 1px 0 rgba(255, 255, 255, 0.6);
   font-family: "KZ Chicago", "KZ Geneva", Arial, sans-serif;
   align-items: stretch;
+  animation: menu-bar-enter 420ms cubic-bezier(0.16, 1, 0.3, 1) both;
 }
 
 .menuBar > strong,
@@ -149,6 +151,8 @@
   border: 1px solid var(--black);
   background: #fff;
   box-shadow: 2px 2px 0 var(--black);
+  transform-origin: top left;
+  animation: menu-drop-in 150ms cubic-bezier(0.2, 0.8, 0.2, 1) both;
 }
 
 .menuDropdownRight {
@@ -202,6 +206,35 @@
   cursor: default;
   place-items: center;
   gap: 3px;
+  opacity: 0;
+  animation: desktop-icon-enter 440ms cubic-bezier(0.16, 1, 0.3, 1) both;
+  transition:
+    filter 180ms ease,
+    transform 220ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.desktopIcon:nth-child(1) {
+  animation-delay: 90ms;
+}
+
+.desktopIcon:nth-child(2) {
+  animation-delay: 145ms;
+}
+
+.desktopIcon:nth-child(3) {
+  animation-delay: 200ms;
+}
+
+.desktopIcon:nth-child(4) {
+  animation-delay: 255ms;
+}
+
+.desktopIcon:nth-child(5) {
+  animation-delay: 310ms;
+}
+
+.desktopIcon:nth-child(6) {
+  animation-delay: 365ms;
 }
 
 .desktopIcon:focus-visible {
@@ -215,6 +248,9 @@
   height: 49px;
   filter: drop-shadow(1px 1px 0 rgba(255, 255, 255, 0.42));
   place-items: center;
+  transition:
+    filter 160ms ease,
+    transform 220ms cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .pixelIcon {
@@ -242,12 +278,29 @@
 .selectedIcon .iconArtwork {
   filter: contrast(0.58) brightness(1.35)
     drop-shadow(1px 1px 0 rgba(255, 255, 255, 0.35));
+  animation: selected-icon-pulse 760ms steps(2, end) infinite;
 }
 
 .selectedIcon .iconLabel {
   color: #fff;
   background: var(--selection);
   text-shadow: none;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .desktopIcon:hover {
+    filter: brightness(1.08);
+    transform: translateY(-3px);
+  }
+
+  .desktopIcon:hover .iconArtwork {
+    filter: drop-shadow(2px 4px 0 rgba(16, 16, 16, 0.22));
+    transform: rotate(-2deg) scale(1.05);
+  }
+
+  .desktopIcon:active {
+    transform: translateY(0) scale(0.96);
+  }
 }
 
 .window {
@@ -274,7 +327,11 @@
     outline-color 90ms steps(2, end);
   grid-template-rows: 25px minmax(0, 1fr) 18px;
   will-change: transform, width, height;
-  animation: window-appear 100ms steps(2, end) both;
+  animation: window-appear 360ms cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.windowBody > * {
+  animation: window-content-enter 360ms 90ms cubic-bezier(0.16, 1, 0.3, 1) both;
 }
 
 .activeWindow {
@@ -1124,9 +1181,83 @@
 @keyframes window-appear {
   from {
     opacity: 0;
+    clip-path: inset(45% 48% 45% 48%);
+    filter: brightness(1.25);
   }
   to {
     opacity: 1;
+    clip-path: inset(0);
+    filter: brightness(1);
+  }
+}
+
+@keyframes desktop-pattern-drift {
+  from {
+    background-position:
+      0 0,
+      2px 2px;
+  }
+
+  to {
+    background-position:
+      16px 8px,
+      18px 10px;
+  }
+}
+
+@keyframes menu-bar-enter {
+  from {
+    opacity: 0;
+    transform: translateY(-100%);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes menu-drop-in {
+  from {
+    opacity: 0;
+    transform: translateY(-5px) scaleY(0.82);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scaleY(1);
+  }
+}
+
+@keyframes desktop-icon-enter {
+  from {
+    opacity: 0;
+    filter: blur(3px);
+    transform: translateY(12px) scale(0.9);
+  }
+
+  to {
+    opacity: 1;
+    filter: blur(0);
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes selected-icon-pulse {
+  50% {
+    transform: translateY(-1px);
+  }
+}
+
+@keyframes window-content-enter {
+  from {
+    opacity: 0;
+    transform: translateY(7px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
   }
 }
 
@@ -1580,6 +1711,17 @@
   }
 
   .window {
+    animation: none;
+    transition: none;
+  }
+
+  .desktop,
+  .menuBar,
+  .menuDropdown,
+  .desktopIcon,
+  .selectedIcon .iconArtwork,
+  .windowBody > * {
+    opacity: 1;
     animation: none;
     transition: none;
   }

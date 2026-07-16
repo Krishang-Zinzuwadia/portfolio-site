@@ -25,15 +25,15 @@ type IntroMotionStyle = CSSProperties & {
 
 let hasBootedInThisPage = false;
 
-const INTRO_IMAGE = "/assets/intro/macintosh-entry.jpg";
-const INTRO_IMAGE_WIDTH = 1280;
-const INTRO_IMAGE_HEIGHT = 672;
-const INTRO_DURATION = 1500;
+const INTRO_IMAGE = "/assets/intro/macintosh-entry-v2.png";
+const INTRO_IMAGE_WIDTH = 1672;
+const INTRO_IMAGE_HEIGHT = 941;
+const INTRO_DURATION = 1900;
 const PHOTO_SCREEN = {
-  x: 681,
-  y: 143,
-  width: 242,
-  height: 169,
+  x: 892,
+  y: 176,
+  width: 351,
+  height: 253,
 };
 
 const NEXT_BOOT_PHASE: Partial<Record<BootPhase, BootPhase>> = {
@@ -277,6 +277,14 @@ export default function MacExperience() {
       "--intro-flight-shift-y": `${targetTop - sourceTop}px`,
       "--intro-flight-scale-x": targetRect.width / sourceWidth,
       "--intro-flight-scale-y": targetRect.height / sourceHeight,
+      "--intro-target-left": `${targetLeft}px`,
+      "--intro-target-top": `${targetTop}px`,
+      "--intro-target-width": `${targetRect.width}px`,
+      "--intro-target-height": `${targetRect.height}px`,
+      "--intro-target-radius": `${Math.max(
+        6,
+        Math.min(targetRect.width, targetRect.height) * 0.026
+      )}px`,
       "--intro-flight-image-left": `${imageLeft - sourceLeft}px`,
       "--intro-flight-image-top": `${imageTop - sourceTop}px`,
       "--intro-flight-image-width": `${imageWidth}px`,
@@ -284,10 +292,15 @@ export default function MacExperience() {
     });
     setIntroPhase("priming");
 
+    // Give React and the browser one complete painted frame with the measured
+    // geometry before starting the transition. This prevents the first
+    // transform frame from being skipped on fast devices.
     introFrameRef.current = window.requestAnimationFrame(() => {
-      setIntroPhase("zooming");
-      introFrameRef.current = null;
-      introTimerRef.current = window.setTimeout(finishIntro, INTRO_DURATION);
+      introFrameRef.current = window.requestAnimationFrame(() => {
+        setIntroPhase("zooming");
+        introFrameRef.current = null;
+        introTimerRef.current = window.setTimeout(finishIntro, INTRO_DURATION);
+      });
     });
   }, [finishIntro, introImageReady, introPhase, startMac]);
 
@@ -328,6 +341,7 @@ export default function MacExperience() {
           <div
             ref={screenRef}
             className={styles.screen}
+            data-boot-phase={bootPhase}
             tabIndex={-1}
             aria-label={
               bootPhase === "ready"
@@ -406,6 +420,7 @@ export default function MacExperience() {
           ref={introStageRef}
           className={styles.intro}
           data-phase={introPhase}
+          data-ready={introImageReady}
           aria-label="Portfolio introduction"
         >
           <div className={styles.introPhotoLayer} aria-hidden="true">
@@ -413,7 +428,9 @@ export default function MacExperience() {
               src={INTRO_IMAGE}
               alt=""
               fill
-              priority
+              loading="eager"
+              fetchPriority="high"
+              quality={90}
               sizes="100vw"
               className={styles.introPhoto}
               onLoad={() => setIntroImageReady(true)}
@@ -421,16 +438,23 @@ export default function MacExperience() {
             />
           </div>
 
+          <div className={styles.screenFlight} aria-hidden="true">
+            <Image
+              src={INTRO_IMAGE}
+              alt=""
+              width={INTRO_IMAGE_WIDTH}
+              height={INTRO_IMAGE_HEIGHT}
+              loading="eager"
+              fetchPriority="low"
+              quality={90}
+              className={styles.screenFlightImage}
+            />
+          </div>
+
           {introStyle ? (
-            <div className={styles.screenFlight} aria-hidden="true">
-              <Image
-                src={INTRO_IMAGE}
-                alt=""
-                width={INTRO_IMAGE_WIDTH}
-                height={INTRO_IMAGE_HEIGHT}
-                className={styles.screenFlightImage}
-              />
-            </div>
+            <>
+              <div className={styles.screenHandoff} aria-hidden="true" />
+            </>
           ) : null}
 
           <div className={styles.introVignette} aria-hidden="true" />

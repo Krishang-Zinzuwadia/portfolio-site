@@ -16,6 +16,7 @@
   color: #171813;
   backdrop-filter: blur(14px) saturate(125%);
   -webkit-backdrop-filter: blur(14px) saturate(125%);
+  view-transition-name: portfolio-switcher;
 }
 
 .option {
@@ -73,6 +74,48 @@
 @media (prefers-reduced-motion: reduce) {
   .option {
     transition: none;
+  }
+}
+
+@supports (view-transition-name: portfolio-switcher) {
+  :global(::view-transition-group(root)) {
+    animation-duration: 720ms;
+    animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  :global(::view-transition-old(root)) {
+    animation: portfolio-view-out 340ms cubic-bezier(0.55, 0, 1, 0.45) both;
+  }
+
+  :global(::view-transition-new(root)) {
+    animation: portfolio-view-in 720ms cubic-bezier(0.16, 1, 0.3, 1) both;
+  }
+
+  :global(::view-transition-old(portfolio-switcher)),
+  :global(::view-transition-new(portfolio-switcher)) {
+    animation: none;
+  }
+}
+
+@keyframes portfolio-view-out {
+  to {
+    opacity: 0;
+    filter: blur(10px) saturate(72%);
+    transform: scale(1.025);
+  }
+}
+
+@keyframes portfolio-view-in {
+  from {
+    opacity: 0;
+    filter: blur(16px) saturate(75%);
+    transform: scale(0.975);
+  }
+
+  to {
+    opacity: 1;
+    filter: blur(0) saturate(100%);
+    transform: scale(1);
   }
 }
 

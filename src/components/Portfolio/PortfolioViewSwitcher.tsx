@@ -10,6 +10,12 @@ import {
 
 type PortfolioView = "immersive" | "editorial";
 
+type ViewTransitionDocument = Document & {
+  startViewTransition?: (update: () => void) => {
+    finished: Promise<void>;
+  };
+};
+
 interface PortfolioViewSwitcherProps {
   immersive: ReactNode;
   editorial: ReactNode;
@@ -64,6 +70,27 @@ function persistView(view: PortfolioView) {
   window.dispatchEvent(new Event(VIEW_CHANGE_EVENT));
 }
 
+function transitionToView(view: PortfolioView) {
+  const transitionDocument = document as ViewTransitionDocument;
+  const reducedMotion = window.matchMedia(
+    "(prefers-reduced-motion: reduce)"
+  ).matches;
+
+  if (!transitionDocument.startViewTransition || reducedMotion) {
+    persistView(view);
+    return;
+  }
+
+  document.documentElement.dataset.portfolioTransition = `to-${view}`;
+  const transition = transitionDocument.startViewTransition(() =>
+    persistView(view)
+  );
+
+  void transition.finished.finally(() => {
+    delete document.documentElement.dataset.portfolioTransition;
+  });
+}
+
 export default function PortfolioViewSwitcher({
   immersive,
   editorial,
@@ -93,7 +120,9 @@ export default function PortfolioViewSwitcher({
             type="button"
             className={optionClass("immersive")}
             aria-pressed={view === "immersive"}
-            onClick={() => persistView("immersive")}
+            onClick={() => {
+              if (view !== "immersive") transitionToView("immersive");
+            }}
           >
             Mac OS
           </button>
@@ -101,7 +130,9 @@ export default function PortfolioViewSwitcher({
             type="button"
             className={optionClass("editorial")}
             aria-pressed={view === "editorial"}
-            onClick={() => persistView("editorial")}
+            onClick={() => {
+              if (view !== "editorial") transitionToView("editorial");
+            }}
           >
             Editorial
           </button>
