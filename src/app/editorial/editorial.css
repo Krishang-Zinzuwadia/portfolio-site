@@ -1510,6 +1510,12 @@
   }
 }
 
+@keyframes editorial-project-orbit {
+  to {
+    transform: rotate(1turn);
+  }
+}
+
 @media (prefers-reduced-motion: no-preference) {
   .editorial-portfolio .site-header {
     animation: editorial-header-drop 560ms 60ms var(--motion-ease) backwards;
@@ -1525,6 +1531,10 @@
     transform-box: fill-box;
     transform-origin: center;
     animation: editorial-specimen-pulse 850ms 420ms var(--motion-ease) backwards;
+  }
+
+  .editorial-portfolio .project-acid .project-orbit {
+    animation: editorial-project-orbit 16s linear infinite;
   }
 
   .editorial-motion-ready [data-reveal] {
@@ -1875,6 +1885,11 @@
 
   .project-orbit {
     display: none;
+  }
+
+  .project-acid .project-orbit {
+    display: block;
+    width: 3.5rem;
   }
 
   .project-title-row h3,
