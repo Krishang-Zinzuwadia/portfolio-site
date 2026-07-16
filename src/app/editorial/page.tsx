@@ -1,13 +1,13 @@
-import MacExperience from "@/components/Macintosh/MacExperience";
+import EditorialPortfolio from "@/components/Portfolio/EditorialPortfolio";
 import PortfolioJsonLd from "@/components/Portfolio/PortfolioJsonLd";
 import PortfolioViewSwitcher from "@/components/Portfolio/PortfolioViewSwitcher";
 
-export default function Home() {
+export default function EditorialPage() {
   return (
     <>
       <PortfolioJsonLd />
-      <PortfolioViewSwitcher currentView="immersive" waitForEntry />
-      <MacExperience />
+      <PortfolioViewSwitcher currentView="editorial" />
+      <EditorialPortfolio />
     </>
   );
 }

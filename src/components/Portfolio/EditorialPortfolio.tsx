@@ -1,8 +1,8 @@
-"use client";
+import type { CSSProperties } from "react";
 
-import { useEffect, useRef, type CSSProperties } from "react";
-
+import InfiniteMenu from "@/components/InfiniteMenu/InfiniteMenu";
 import EditorialHeroArtwork from "@/components/Portfolio/EditorialHeroArtwork";
+import EditorialRevealController from "@/components/Portfolio/EditorialRevealController";
 import TechIcon from "@/components/Portfolio/TechIcon";
 import {
   achievements,
@@ -13,6 +13,21 @@ import {
 } from "@/data/portfolio";
 
 const resumePath = "/Krishang-Zinzuwadia-Resume.pdf";
+
+const projectImages: Record<(typeof projects)[number]["slug"], string> = {
+  atlas: "/assets/blender/krishang-signal-terminal.webp",
+  labyrinth: "/assets/blender/macintosh-classic.webp",
+  ocs: "/og.jpg",
+};
+
+const projectMenuItems = projects.map((project) => ({
+  image: projectImages[project.slug],
+  link: `${identity.github}?tab=repositories`,
+  title: project.title,
+  kicker: `${project.date} · ${project.recognition}`,
+  description: project.summary,
+  background: project.slug === "atlas" ? "#0b2f25" : "#151713",
+}));
 
 const toolRoles: Record<string, string> = {
   TypeScript: "Language",
@@ -36,65 +51,9 @@ const revealDelay = (delay: number): RevealStyle => ({
 });
 
 export default function EditorialPortfolio() {
-  const portfolioRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    const root = portfolioRef.current;
-
-    if (!root) {
-      return;
-    }
-
-    const revealItems = Array.from(
-      root.querySelectorAll<HTMLElement>("[data-reveal]")
-    );
-    const reducedMotion = window.matchMedia(
-      "(prefers-reduced-motion: reduce)"
-    ).matches;
-
-    if (reducedMotion || !("IntersectionObserver" in window)) {
-      revealItems.forEach((item) => item.classList.add("is-visible"));
-      return;
-    }
-
-    const initialRevealLine = window.innerHeight * 0.94;
-
-    revealItems.forEach((item) => {
-      if (item.getBoundingClientRect().top <= initialRevealLine) {
-        item.classList.add("is-visible");
-      }
-    });
-
-    root.classList.add("editorial-motion-ready");
-
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (!entry.isIntersecting) {
-            return;
-          }
-
-          entry.target.classList.add("is-visible");
-          observer.unobserve(entry.target);
-        });
-      },
-      {
-        rootMargin: "0px 0px -10% 0px",
-        threshold: 0.12,
-      }
-    );
-
-    revealItems.forEach((item) => {
-      if (!item.classList.contains("is-visible")) {
-        observer.observe(item);
-      }
-    });
-
-    return () => observer.disconnect();
-  }, []);
-
   return (
-    <div className="editorial-portfolio" ref={portfolioRef}>
+    <div className="editorial-portfolio" id="editorial-portfolio">
+      <EditorialRevealController rootId="editorial-portfolio" />
       <header className="site-header">
         <a
           className="brand-mark"
@@ -180,55 +139,34 @@ export default function EditorialPortfolio() {
             </p>
           </div>
 
-          <div className="projects-grid">
-            {projects.map((project, index) => (
-              <article
-                className={`project-card project-${project.tone}`}
-                data-reveal="scale"
-                key={project.slug}
-                style={revealDelay(index * 100)}
-              >
-                <div className="project-card-top">
-                  <span className="project-number">0{index + 1}</span>
-                  <span className="project-date">{project.date}</span>
-                </div>
-
-                <div className="project-title-row">
-                  <div>
-                    <p>{project.recognition}</p>
-                    <h3>{project.title}</h3>
-                    <span>{project.subtitle}</span>
-                  </div>
-                  <div className="project-orbit" aria-hidden="true">
-                    <i />
-                  </div>
-                </div>
-
-                <p className="project-summary">{project.summary}</p>
-
-                <ul className="project-details">
-                  {project.details.map((detail) => (
-                    <li key={detail}>{detail}</li>
-                  ))}
-                </ul>
-
-                <ul
-                  className="project-tech"
-                  aria-label={`${project.title} technologies`}
-                >
-                  {project.stack.map((technology) => (
-                    <li key={technology}>
-                      <TechIcon
-                        className="project-tech-icon"
-                        name={technology}
-                      />
-                      <span>{technology}</span>
-                    </li>
-                  ))}
-                </ul>
-              </article>
-            ))}
+          <div
+            className="project-menu-shell"
+            data-reveal="scale"
+            style={revealDelay(80)}
+          >
+            <div className="project-menu-chrome" aria-hidden="true">
+              <span>SELECTED WORK / 2025—2026</span>
+              <span>DRAG TO NAVIGATE</span>
+            </div>
+            <InfiniteMenu items={projectMenuItems} scale={1} />
+            <p className="project-menu-hint">
+              <span aria-hidden="true">↔</span> Drag the sphere, then use the
+              arrow to open the project archive.
+            </p>
           </div>
+
+          <ol className="project-menu-index" aria-label="Project index">
+            {projects.map((project, index) => (
+              <li key={project.slug}>
+                <span>{String(index + 1).padStart(2, "0")}</span>
+                <div>
+                  <strong>{project.title}</strong>
+                  <p>{project.subtitle}</p>
+                </div>
+                <time>{project.date}</time>
+              </li>
+            ))}
+          </ol>
         </section>
 
         <section className="about-section" id="experience">
