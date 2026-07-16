@@ -1,8 +1,8 @@
 "use client";
 
-import Image from "next/image";
 import { useEffect, useRef, type CSSProperties } from "react";
 
+import EditorialHeroArtwork from "@/components/Portfolio/EditorialHeroArtwork";
 import TechIcon from "@/components/Portfolio/TechIcon";
 import {
   achievements,
@@ -118,13 +118,13 @@ export default function EditorialPortfolio() {
               </p>
 
               <h1>
-                I build AI agents and <em>full-stack software.</em>
+                <span>I build AI systems,</span>
+                <em>end to end.</em>
               </h1>
 
               <p className="hero-lede">
-                Recent work includes a desktop automation agent, a 27-agent
-                development system, and a recruitment platform used by 1,000+
-                applicants.
+                Desktop automation, multi-agent development, and production
+                platforms used by 1,000+ applicants.
               </p>
 
               <div className="hero-actions">
@@ -140,52 +140,13 @@ export default function EditorialPortfolio() {
               </div>
             </div>
 
-            <figure
-              className="hero-art"
+            <div
+              className="hero-specimens-wrap"
               data-reveal="scale"
               style={revealDelay(140)}
             >
-              <div className="hero-art-canvas">
-                <Image
-                  className="hero-art-image"
-                  src="/assets/editorial/hero-systems-map.webp"
-                  alt=""
-                  width={1254}
-                  height={1254}
-                  sizes="(max-width: 560px) calc(100vw - 2rem), (max-width: 860px) calc(100vw - 3rem), (max-width: 1120px) 42vw, 36rem"
-                  fetchPriority="high"
-                />
-
-                <ol className="hero-art-labels" aria-label="Selected systems">
-                  <li className="hero-art-label hero-art-label-atlas">
-                    <span>01</span>
-                    <span>
-                      <strong>Atlas</strong>
-                      <small>Local desktop agent</small>
-                    </span>
-                  </li>
-                  <li className="hero-art-label hero-art-label-labyrinth">
-                    <span>02</span>
-                    <span>
-                      <strong>Labyrinth</strong>
-                      <small>27-agent dev system</small>
-                    </span>
-                  </li>
-                  <li className="hero-art-label hero-art-label-ocs">
-                    <span>03</span>
-                    <span>
-                      <strong>OCS</strong>
-                      <small>Recruitment platform</small>
-                    </span>
-                  </li>
-                </ol>
-              </div>
-
-              <figcaption className="hero-art-caption">
-                <span>Selected systems</span>
-                <span>2025—26</span>
-              </figcaption>
-            </figure>
+              <EditorialHeroArtwork />
+            </div>
           </div>
         </section>
 

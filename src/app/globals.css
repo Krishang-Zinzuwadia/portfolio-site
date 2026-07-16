@@ -207,11 +207,11 @@ em {
 .hero-grid {
   display: grid;
   width: min(100%, var(--page-width));
-  min-height: min(44rem, calc(100vh - 6rem));
+  min-height: min(46rem, calc(100vh - 5rem));
   margin-inline: auto;
-  grid-template-columns: minmax(0, 1.08fr) minmax(26rem, 0.92fr);
+  grid-template-columns: minmax(0, 1.2fr) minmax(26rem, 0.8fr);
   align-items: center;
-  gap: clamp(2.5rem, 6vw, 6rem);
+  gap: clamp(4rem, 6vw, 7rem);
 }
 
 .hero-copy {
@@ -242,169 +242,313 @@ em {
 }
 
 .hero h1 {
-  max-width: 12ch;
+  max-width: none;
   margin-top: clamp(1.5rem, 3.3vw, 2.7rem);
-  font-size: clamp(3.9rem, 5.5vw, 6.15rem);
+  font-size: clamp(4.2rem, 5.15vw, 5.75rem);
   font-weight: 550;
-  letter-spacing: -0.065em;
-  line-height: 0.94;
-  text-wrap: balance;
+  letter-spacing: -0.07em;
+  line-height: 0.92;
+}
+
+.hero h1 > span,
+.hero h1 > em {
+  display: block;
+}
+
+.hero h1 > span {
+  white-space: nowrap;
 }
 
 .hero h1 em {
+  margin-top: 0.04em;
   color: var(--blue);
   letter-spacing: -0.04em;
 }
 
 .hero-lede {
-  max-width: 39rem;
+  max-width: 35rem;
   margin-top: 2rem;
   color: var(--ink-soft);
   font-size: clamp(1rem, 1.25vw, 1.17rem);
   line-height: 1.65;
 }
 
-.hero-art {
-  position: relative;
-  width: min(100%, 36rem);
-  margin: 0;
+.hero-specimens-wrap {
+  width: min(100%, 33rem);
   justify-self: end;
 }
 
-.hero-art-canvas {
+.hero-specimens {
   position: relative;
-  aspect-ratio: 1;
+  width: 100%;
+  aspect-ratio: 1.08;
+  margin: 0;
   isolation: isolate;
 }
 
-.hero-art-canvas::before,
-.hero-art-canvas::after {
+.hero-specimen {
   position: absolute;
-  content: "";
-  pointer-events: none;
+  display: flex;
+  overflow: hidden;
+  border: 1px solid var(--ink);
+  border-radius: 0.8rem;
+  font-family: var(--font-code);
+  flex-direction: column;
+  transition: translate 600ms var(--motion-ease);
 }
 
-.hero-art-canvas::before {
-  z-index: -1;
-  inset: 12%;
+.hero-specimen-atlas {
+  z-index: 2;
+  top: 2%;
+  left: 0;
+  width: 84%;
+  height: 49%;
+  background: var(--ink);
+  color: var(--white);
+}
+
+.hero-specimen-labyrinth {
+  z-index: 3;
+  top: 43%;
+  right: 0;
+  width: 55%;
+  height: 42%;
+  background: var(--blue);
+  color: var(--white);
+}
+
+.hero-specimen-ocs {
+  z-index: 4;
+  bottom: 0;
+  left: 7%;
+  width: 54%;
+  height: 35%;
+  background: var(--white);
+  color: var(--ink);
+}
+
+.specimen-header,
+.specimen-footer {
+  display: flex;
+  min-height: 2.2rem;
+  padding-inline: 0.85rem;
+  font-size: 0.5rem;
+  letter-spacing: 0.075em;
+  line-height: 1.25;
+  text-transform: uppercase;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
+.specimen-header {
+  border-bottom: 1px solid currentColor;
+  border-color: color-mix(in srgb, currentColor 22%, transparent);
+}
+
+.specimen-footer {
+  min-height: 1.9rem;
+  border-top: 1px solid currentColor;
+  border-color: color-mix(in srgb, currentColor 22%, transparent);
+}
+
+.specimen-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.38rem;
+}
+
+.specimen-status i {
+  width: 0.42rem;
+  height: 0.42rem;
   border-radius: 50%;
-  background: radial-gradient(
-    circle,
-    rgba(88, 98, 243, 0.16),
-    rgba(201, 255, 99, 0.08) 46%,
-    transparent 72%
-  );
-  filter: blur(2.2rem);
+  background: var(--acid);
 }
 
-.hero-art-canvas::after {
-  z-index: 0;
-  inset: 8%;
-  border: 1px solid rgba(21, 23, 19, 0.16);
-  border-radius: 50%;
-  rotate: -12deg;
+.atlas-specimen-body {
+  display: grid;
+  min-height: 0;
+  padding: 0.85rem;
+  flex: 1;
+  grid-template-columns: minmax(7.8rem, 0.8fr) minmax(0, 1.2fr);
+  align-items: center;
+  gap: 0.7rem;
 }
 
-.hero-art-image {
-  position: relative;
-  z-index: 1;
+.atlas-command > span {
+  display: block;
+  margin-bottom: 0.45rem;
+  color: rgba(255, 253, 247, 0.5);
+  font-size: 0.48rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.atlas-command strong {
+  font-family: var(--font-body);
+  font-size: clamp(0.8rem, 1.1vw, 1rem);
+  font-weight: 500;
+  letter-spacing: -0.02em;
+  line-height: 1.35;
+}
+
+.atlas-viewport {
   display: block;
   width: 100%;
   height: auto;
-  mix-blend-mode: multiply;
-  transition: scale 700ms var(--motion-ease);
 }
 
-.hero-art-labels {
-  position: absolute;
-  z-index: 2;
-  inset: 0;
-  margin: 0;
-  padding: 0;
-  list-style: none;
-  pointer-events: none;
+.atlas-frame,
+.atlas-corner,
+.atlas-target-ring,
+.atlas-action-line {
+  fill: none;
+  stroke: rgba(255, 253, 247, 0.45);
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  vector-effect: non-scaling-stroke;
 }
 
-.hero-art-label {
-  --tag-shadow: var(--blue);
-  position: absolute;
-  display: grid;
-  padding: 0.58rem 0.68rem;
-  border: 1px solid var(--ink);
-  background: rgba(255, 253, 247, 0.94);
-  box-shadow: 0.32rem 0.32rem 0 var(--tag-shadow);
-  font-family: var(--font-code);
-  grid-template-columns: auto 1fr;
+.atlas-route {
+  fill: none;
+  stroke: var(--blue);
+  stroke-linecap: round;
+  stroke-width: 4;
+  vector-effect: non-scaling-stroke;
+}
+
+.atlas-target-ring {
+  stroke: var(--acid);
+  stroke-width: 2;
+}
+
+.atlas-target {
+  fill: var(--acid);
+}
+
+.atlas-cursor {
+  fill: var(--white);
+}
+
+.atlas-pipeline {
+  display: flex;
+  min-height: 2rem;
+  padding-inline: 0.85rem;
+  border-top: 1px solid rgba(255, 253, 247, 0.2);
+  color: rgba(255, 253, 247, 0.7);
+  font-size: 0.48rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
   align-items: center;
   gap: 0.55rem;
-  backdrop-filter: blur(0.35rem);
-  transition: margin 520ms var(--motion-ease);
 }
 
-.hero-art-label > span:first-child {
+.atlas-pipeline i,
+.specimen-footer i {
+  width: 1.15rem;
+  height: 1px;
+  background: currentColor;
+  opacity: 0.45;
+}
+
+.labyrinth-specimen-body,
+.ocs-specimen-body {
   display: grid;
-  width: 1.65rem;
-  height: 1.65rem;
-  border-radius: 50%;
-  background: var(--ink);
-  color: var(--white);
-  font-size: 0.56rem;
-  place-items: center;
+  min-height: 0;
+  padding: 0.75rem 0.85rem;
+  flex: 1;
+  align-items: center;
+  gap: 0.65rem;
 }
 
-.hero-art-label > span:last-child,
-.hero-art-label strong,
-.hero-art-label small {
+.labyrinth-specimen-body {
+  grid-template-columns: auto 1fr;
+}
+
+.specimen-metric strong,
+.specimen-metric span {
   display: block;
 }
 
-.hero-art-label strong {
-  font-size: 0.68rem;
-  font-weight: 650;
-  letter-spacing: 0.06em;
-  line-height: 1;
-  text-transform: uppercase;
+.specimen-metric strong {
+  font-family: var(--font-body);
+  font-size: clamp(2rem, 3.2vw, 3rem);
+  font-weight: 560;
+  letter-spacing: -0.08em;
+  line-height: 0.8;
 }
 
-.hero-art-label small {
-  margin-top: 0.26rem;
-  color: rgba(21, 23, 19, 0.56);
-  font-size: 0.51rem;
-  letter-spacing: 0.035em;
-  line-height: 1.2;
-  text-transform: uppercase;
-}
-
-.hero-art-label-atlas {
-  top: 12%;
-  left: 3%;
-}
-
-.hero-art-label-labyrinth {
-  --tag-shadow: var(--acid-deep);
-  top: 45%;
-  right: 1%;
-}
-
-.hero-art-label-ocs {
-  --tag-shadow: var(--coral);
-  bottom: 11%;
-  left: 5%;
-}
-
-.hero-art-caption {
-  display: flex;
-  margin-top: 0.75rem;
-  padding-top: 0.72rem;
-  border-top: 1px solid rgba(21, 23, 19, 0.28);
-  color: rgba(21, 23, 19, 0.55);
-  font-family: var(--font-code);
-  font-size: 0.57rem;
+.specimen-metric span {
+  margin-top: 0.45rem;
+  font-size: 0.46rem;
   letter-spacing: 0.08em;
-  line-height: 1.3;
   text-transform: uppercase;
-  justify-content: space-between;
-  gap: 1rem;
+}
+
+.agent-grid {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.agent-route {
+  fill: none;
+  stroke: rgba(255, 253, 247, 0.78);
+  stroke-dasharray: 3 3;
+  stroke-width: 1.5;
+  vector-effect: non-scaling-stroke;
+}
+
+.agent-node {
+  fill: rgba(21, 23, 19, 0.7);
+}
+
+.agent-node.is-active {
+  fill: var(--acid);
+}
+
+.ocs-specimen-body {
+  grid-template-columns: 1fr auto;
+}
+
+.hero-specimen-ocs .specimen-metric strong {
+  font-size: clamp(1.65rem, 2.6vw, 2.35rem);
+}
+
+.ocs-review-lanes {
+  display: flex;
+  align-items: center;
+  gap: 0.32rem;
+}
+
+.ocs-review-lanes > span {
+  position: relative;
+  display: block;
+  width: 1.55rem;
+  height: 2.85rem;
+  border: 1px solid var(--ink);
+}
+
+.ocs-review-lanes > span:nth-child(2) {
+  background: var(--acid);
+}
+
+.ocs-review-lanes > span::before {
+  position: absolute;
+  top: 0.5rem;
+  left: 0.35rem;
+  width: 0.82rem;
+  height: 0.2rem;
+  background: currentColor;
+  box-shadow:
+    0 0.58rem 0 -0.04rem currentColor,
+    0 1.16rem 0 -0.04rem currentColor;
+  content: "";
+  opacity: 0.65;
+}
+
+.hero-specimen-ocs .specimen-footer {
+  font-size: 0.44rem;
 }
 
 .hero-actions {
@@ -1571,20 +1715,16 @@ em {
 }
 
 @media (hover: hover) and (pointer: fine) {
-  .editorial-portfolio .hero-art:hover .hero-art-image {
-    scale: 1.018;
+  .editorial-portfolio .hero-specimens:hover .hero-specimen-atlas {
+    translate: 0 -0.2rem;
   }
 
-  .editorial-portfolio .hero-art:hover .hero-art-label-atlas {
-    margin-left: 0.2rem;
+  .editorial-portfolio .hero-specimens:hover .hero-specimen-labyrinth {
+    translate: 0.18rem -0.12rem;
   }
 
-  .editorial-portfolio .hero-art:hover .hero-art-label-labyrinth {
-    margin-right: 0.2rem;
-  }
-
-  .editorial-portfolio .hero-art:hover .hero-art-label-ocs {
-    margin-bottom: 0.2rem;
+  .editorial-portfolio .hero-specimens:hover .hero-specimen-ocs {
+    translate: -0.14rem 0.12rem;
   }
 
   .editorial-portfolio .signal-stat:hover {
@@ -1747,31 +1887,28 @@ em {
   }
 }
 
-@keyframes editorial-map-drift {
+@keyframes editorial-atlas-route {
   0%,
-  100% {
-    rotate: 0deg;
-    translate: 0 0;
+  10% {
+    opacity: 0.25;
+    stroke-dashoffset: 180;
   }
-  50% {
-    rotate: -0.28deg;
-    translate: 0 -0.38rem;
+  36%,
+  100% {
+    opacity: 1;
+    stroke-dashoffset: 0;
   }
 }
 
-@keyframes editorial-map-orbit {
-  to {
-    rotate: 348deg;
-  }
-}
-
-@keyframes editorial-label-float {
+@keyframes editorial-specimen-pulse {
   0%,
   100% {
-    translate: 0 0;
+    opacity: 0.65;
+    scale: 0.88;
   }
   50% {
-    translate: 0 -0.2rem;
+    opacity: 1;
+    scale: 1;
   }
 }
 
@@ -1797,24 +1934,16 @@ em {
     animation: editorial-contact-orbit 16s ease-in-out infinite;
   }
 
-  .editorial-portfolio .hero-art-image {
-    animation: editorial-map-drift 11s ease-in-out infinite;
+  .editorial-portfolio .atlas-route {
+    stroke-dasharray: 180;
+    animation: editorial-atlas-route 7s var(--motion-ease) infinite;
   }
 
-  .editorial-portfolio .hero-art-canvas::after {
-    animation: editorial-map-orbit 24s linear infinite;
-  }
-
-  .editorial-portfolio .hero-art-label {
-    animation: editorial-label-float 5.2s ease-in-out infinite;
-  }
-
-  .editorial-portfolio .hero-art-label-labyrinth {
-    animation-delay: -1.7s;
-  }
-
-  .editorial-portfolio .hero-art-label-ocs {
-    animation-delay: -3.4s;
+  .editorial-portfolio .specimen-status i,
+  .editorial-portfolio .agent-node.is-active {
+    transform-box: fill-box;
+    transform-origin: center;
+    animation: editorial-specimen-pulse 3.2s ease-in-out infinite;
   }
 
   .editorial-motion-ready [data-reveal] {
@@ -1891,12 +2020,19 @@ em {
 @media (max-width: 1120px) {
   .hero-grid {
     min-height: auto;
-    grid-template-columns: minmax(0, 1.02fr) minmax(23rem, 0.98fr);
-    gap: 2.25rem;
+    grid-template-columns: 1fr;
+    gap: 0;
   }
 
-  .hero-art {
-    max-width: 31rem;
+  .hero-copy {
+    max-width: 52rem;
+    padding-bottom: 0;
+  }
+
+  .hero-specimens-wrap {
+    width: min(100%, 34rem);
+    margin-block: 2.75rem 4.5rem;
+    justify-self: center;
   }
 
   .section-heading,
@@ -1937,15 +2073,8 @@ em {
     padding-bottom: 0;
   }
 
-  .hero-art {
-    width: min(100%, 38rem);
-    max-width: none;
-    margin-block: 2.5rem 4rem;
-    justify-self: center;
-  }
-
-  .hero h1 {
-    max-width: 12ch;
+  .hero h1 > span {
+    white-space: normal;
   }
 
   .hero-visual {
@@ -2078,55 +2207,100 @@ em {
 
   .hero h1 {
     font-size: clamp(3rem, 14vw, 4.4rem);
-    line-height: 0.96;
+    line-height: 0.94;
+  }
+
+  .hero h1 > span {
+    white-space: normal;
   }
 
   .hero-lede {
     font-size: 0.94rem;
   }
 
-  .hero-art {
+  .hero-specimens-wrap {
     width: 100%;
-    margin-block: 1.75rem 3rem;
+    margin-block: 2rem 3rem;
   }
 
-  .hero-art-label {
-    padding: 0.43rem 0.5rem;
-    box-shadow: 0.22rem 0.22rem 0 var(--tag-shadow);
-    gap: 0.42rem;
+  .hero-specimen {
+    border-radius: 0.6rem;
   }
 
-  .hero-art-label > span:first-child {
-    width: 1.35rem;
-    height: 1.35rem;
-    font-size: 0.46rem;
+  .specimen-header,
+  .specimen-footer {
+    min-height: 1.8rem;
+    padding-inline: 0.58rem;
+    font-size: 0.4rem;
   }
 
-  .hero-art-label strong {
-    font-size: 0.58rem;
+  .hero-specimen-labyrinth .specimen-header > span:last-child,
+  .hero-specimen-ocs .specimen-header > span:last-child {
+    display: none;
   }
 
-  .hero-art-label small {
-    font-size: 0.43rem;
+  .atlas-specimen-body {
+    padding: 0.55rem;
+    grid-template-columns: minmax(5.4rem, 0.8fr) minmax(0, 1.2fr);
+    gap: 0.35rem;
   }
 
-  .hero-art-label-atlas {
-    top: 9%;
-    left: 1%;
+  .atlas-command > span {
+    margin-bottom: 0.25rem;
+    font-size: 0.4rem;
   }
 
-  .hero-art-label-labyrinth {
-    top: 44%;
-    right: 0;
+  .atlas-command strong {
+    font-size: 0.68rem;
   }
 
-  .hero-art-label-ocs {
-    bottom: 8%;
-    left: 2%;
+  .atlas-pipeline {
+    min-height: 1.65rem;
+    padding-inline: 0.58rem;
+    font-size: 0.4rem;
+    gap: 0.35rem;
   }
 
-  .hero-art-caption {
-    font-size: 0.5rem;
+  .labyrinth-specimen-body,
+  .ocs-specimen-body {
+    padding: 0.52rem 0.58rem;
+    gap: 0.38rem;
+  }
+
+  .specimen-metric strong {
+    font-size: 1.85rem;
+  }
+
+  .hero-specimen-ocs .specimen-metric strong {
+    font-size: 1.3rem;
+  }
+
+  .specimen-metric span {
+    margin-top: 0.25rem;
+    font-size: 0.36rem;
+  }
+
+  .ocs-review-lanes {
+    gap: 0.2rem;
+  }
+
+  .ocs-review-lanes > span {
+    width: 1.05rem;
+    height: 2rem;
+  }
+
+  .ocs-review-lanes > span::before {
+    top: 0.34rem;
+    left: 0.24rem;
+    width: 0.55rem;
+    height: 0.14rem;
+    box-shadow:
+      0 0.4rem 0 -0.03rem currentColor,
+      0 0.8rem 0 -0.03rem currentColor;
+  }
+
+  .hero-specimen-ocs .specimen-footer {
+    font-size: 0.34rem;
   }
 
   .hero-actions {
