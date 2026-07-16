@@ -1269,67 +1269,142 @@ em {
   content: "";
 }
 
-.skills-grid {
-  display: grid;
-  margin-top: 1rem;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 1rem;
+.toolkit-panel {
+  margin-top: clamp(3rem, 5vw, 4.5rem);
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: 0.9rem;
+  background: rgba(255, 255, 255, 0.025);
 }
 
-.skills-grid article {
-  min-height: 18rem;
-  padding: 1.4rem;
-  border: 1px solid rgba(255, 255, 255, 0.15);
-  border-radius: 1.15rem;
-  background: rgba(255, 255, 255, 0.035);
+.toolkit-header {
+  display: flex;
+  min-height: 4rem;
+  padding: 0.8rem 1rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.14);
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.5rem;
 }
 
-.skills-grid article > span {
+.toolkit-header > div > span {
+  display: block;
+  margin-bottom: 0.28rem;
   color: var(--acid);
   font-family: var(--font-code);
-  font-size: 0.59rem;
-  letter-spacing: 0.08em;
+  font-size: 0.5rem;
+  letter-spacing: 0.11em;
 }
 
-.skills-grid ul {
+.toolkit-header h3 {
+  font-size: 1.05rem;
+  font-weight: 500;
+  letter-spacing: -0.025em;
+  line-height: 1.15;
+}
+
+.toolkit-header p {
   display: flex;
-  margin-top: 3rem;
-  flex-wrap: wrap;
-  gap: 0.6rem;
+  color: rgba(255, 253, 247, 0.44);
+  font-family: var(--font-code);
+  font-size: 0.5rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  align-items: baseline;
+  gap: 0.55rem;
 }
 
-.skills-grid li {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5rem;
-  padding: 0.55rem 0.72rem;
-  border: 1px solid rgba(255, 255, 255, 0.22);
-  border-radius: 999px;
-  color: rgba(255, 253, 247, 0.75);
-  font-size: 0.78rem;
+.toolkit-header p strong {
+  color: var(--white);
+  font-family: var(--font-body);
+  font-size: 1.2rem;
+  font-weight: 500;
+  letter-spacing: -0.05em;
 }
 
-.skills-grid.skills-grid-compact {
-  grid-template-columns: 1fr;
-}
-
-.skills-grid.skills-grid-compact article {
+.toolkit-grid {
   display: grid;
-  min-height: 0;
-  grid-template-columns: minmax(10rem, 0.24fr) 1fr;
-  align-items: start;
-  gap: 2rem;
+  margin: 0;
+  padding: 0;
+  background: rgba(255, 255, 255, 0.12);
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  gap: 1px;
+  list-style: none;
 }
 
-.skills-grid.skills-grid-compact ul {
-  margin-top: 0;
+.toolkit-item {
+  position: relative;
+  display: grid;
+  min-width: 0;
+  min-height: 5.25rem;
+  padding: 0.9rem 0.85rem;
+  background: color-mix(in srgb, var(--ink) 97%, white);
+  color: rgba(255, 253, 247, 0.82);
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 0.68rem;
+  transition:
+    background-color 220ms ease,
+    color 220ms ease;
 }
 
-.skill-icon {
-  width: 1rem;
-  height: 1rem;
-  flex: 0 0 auto;
-  color: var(--acid);
+.toolkit-icon-shell {
+  display: grid;
+  width: 2.15rem;
+  height: 2.15rem;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  border-radius: 0.55rem;
+  background: rgba(255, 255, 255, 0.035);
+  color: rgba(255, 253, 247, 0.56);
+  place-items: center;
+  transition:
+    border-color 220ms ease,
+    background-color 220ms ease,
+    color 220ms ease,
+    translate 300ms var(--motion-ease);
+}
+
+.toolkit-icon {
+  width: 1.02rem;
+  height: 1.02rem;
+}
+
+.toolkit-copy,
+.toolkit-copy strong,
+.toolkit-copy > span {
+  display: block;
+  min-width: 0;
+}
+
+.toolkit-copy strong {
+  overflow: hidden;
+  font-size: 0.78rem;
+  font-weight: 500;
+  letter-spacing: -0.015em;
+  line-height: 1.2;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  transition: translate 300ms var(--motion-ease);
+}
+
+.toolkit-copy > span {
+  margin-top: 0.28rem;
+  overflow: hidden;
+  color: rgba(255, 253, 247, 0.38);
+  font-family: var(--font-code);
+  font-size: 0.42rem;
+  letter-spacing: 0.055em;
+  line-height: 1.25;
+  text-overflow: ellipsis;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.toolkit-index {
+  color: rgba(255, 253, 247, 0.2);
+  font-family: var(--font-code);
+  font-size: 0.45rem;
+  letter-spacing: 0.05em;
 }
 
 .proof-section {
@@ -1688,21 +1763,12 @@ em {
     border-color 300ms ease;
 }
 
-.editorial-portfolio .education-card,
-.editorial-portfolio .skills-grid article {
+.editorial-portfolio .education-card {
   transition:
     transform 600ms var(--motion-ease),
     border-color 400ms ease,
     background-color 400ms ease,
     box-shadow 600ms var(--motion-ease);
-}
-
-.editorial-portfolio .skills-grid li {
-  transition:
-    transform 350ms var(--motion-ease),
-    color 250ms ease,
-    border-color 250ms ease,
-    background-color 250ms ease;
 }
 
 .editorial-portfolio .achievement-list article > strong,
@@ -1767,19 +1833,27 @@ em {
     transform: translateY(-0.16rem);
   }
 
-  .editorial-portfolio .education-card:hover,
-  .editorial-portfolio .skills-grid article:hover {
+  .editorial-portfolio .education-card:hover {
     border-color: rgba(201, 255, 99, 0.48);
     background: rgba(255, 255, 255, 0.075);
     box-shadow: 0 1.8rem 4rem rgba(0, 0, 0, 0.16);
     transform: translateY(-0.45rem);
   }
 
-  .editorial-portfolio .skills-grid li:hover {
-    border-color: var(--acid);
-    background: var(--acid);
-    color: var(--ink);
-    transform: translateY(-0.14rem);
+  .editorial-portfolio .toolkit-item:hover {
+    background: color-mix(in srgb, var(--ink) 92%, var(--acid));
+    color: var(--white);
+  }
+
+  .editorial-portfolio .toolkit-item:hover .toolkit-icon-shell {
+    border-color: rgba(201, 255, 99, 0.5);
+    background: rgba(201, 255, 99, 0.07);
+    color: var(--acid);
+    translate: 0 -0.12rem;
+  }
+
+  .editorial-portfolio .toolkit-item:hover .toolkit-copy strong {
+    translate: 0.12rem 0;
   }
 
   .editorial-portfolio .achievement-list article:hover > strong {
@@ -1912,6 +1986,17 @@ em {
   }
 }
 
+@keyframes editorial-tool-in {
+  from {
+    opacity: 0;
+    translate: 0 0.5rem;
+  }
+  to {
+    opacity: 1;
+    translate: 0 0;
+  }
+}
+
 @media (prefers-reduced-motion: no-preference) {
   .editorial-portfolio .site-header {
     animation: editorial-header-drop 850ms 80ms var(--motion-ease) both;
@@ -1985,6 +2070,12 @@ em {
       var(--motion-ease) both;
   }
 
+  .editorial-motion-ready .toolkit-panel[data-reveal].is-visible .toolkit-item {
+    opacity: 0;
+    animation: editorial-tool-in 420ms var(--reveal-delay, 0ms)
+      var(--motion-ease) forwards;
+  }
+
   .editorial-motion-ready [data-reveal].is-visible h2 em::after,
   .editorial-motion-ready h2[data-reveal].is-visible em::after {
     animation: editorial-underline 900ms 420ms var(--motion-ease) both;
@@ -2033,6 +2124,10 @@ em {
     width: min(100%, 34rem);
     margin-block: 2.75rem 4.5rem;
     justify-self: center;
+  }
+
+  .toolkit-grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
   }
 
   .section-heading,
@@ -2145,20 +2240,8 @@ em {
     grid-column: 1 / -1;
   }
 
-  .skills-grid {
-    grid-template-columns: 1fr;
-  }
-
-  .skills-grid article {
-    min-height: auto;
-  }
-
-  .skills-grid ul {
-    margin-top: 2rem;
-  }
-
-  .skills-grid.skills-grid-compact ul {
-    margin-top: 0;
+  .toolkit-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
   }
 
   .achievement-list article {
@@ -2390,12 +2473,55 @@ em {
     font-size: 2.45rem;
   }
 
-  .skills-grid.skills-grid-compact article {
-    grid-template-columns: 1fr;
+  .toolkit-panel {
+    margin-top: 2.5rem;
+    border-radius: 0.75rem;
   }
 
-  .skills-grid.skills-grid-compact ul {
-    margin-top: 1.5rem;
+  .toolkit-header {
+    min-height: 3.6rem;
+    padding: 0.72rem 0.78rem;
+  }
+
+  .toolkit-header h3 {
+    font-size: 0.94rem;
+  }
+
+  .toolkit-header p span {
+    display: none;
+  }
+
+  .toolkit-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .toolkit-item {
+    min-height: 4.6rem;
+    padding: 0.72rem;
+    grid-template-columns: auto minmax(0, 1fr);
+    gap: 0.55rem;
+  }
+
+  .toolkit-icon-shell {
+    width: 1.9rem;
+    height: 1.9rem;
+  }
+
+  .toolkit-icon {
+    width: 0.9rem;
+    height: 0.9rem;
+  }
+
+  .toolkit-copy strong {
+    font-size: 0.72rem;
+  }
+
+  .toolkit-copy > span {
+    font-size: 0.37rem;
+  }
+
+  .toolkit-index {
+    display: none;
   }
 
   .experience-row {

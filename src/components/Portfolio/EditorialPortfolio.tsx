@@ -14,6 +14,21 @@ import {
 
 const resumePath = "/Krishang-Zinzuwadia-Resume.pdf";
 
+const toolRoles: Record<string, string> = {
+  TypeScript: "Language",
+  Python: "Language",
+  Rust: "Systems language",
+  Go: "Backend language",
+  "Next.js": "Web framework",
+  React: "Interface layer",
+  Tauri: "Desktop runtime",
+  FastAPI: "API framework",
+  LangGraph: "Agent orchestration",
+  Redis: "Cache and queues",
+  PostgreSQL: "Database",
+  Docker: "Infrastructure",
+};
+
 type RevealStyle = CSSProperties & { "--reveal-delay": string };
 
 const revealDelay = (delay: number): RevealStyle => ({
@@ -272,19 +287,43 @@ export default function EditorialPortfolio() {
               </ul>
             </article>
 
-            <div className="skills-grid skills-grid-compact">
-              <article data-reveal="up">
-                <span>SELECTED TOOLS</span>
-                <ul>
-                  {skills.featured.map((skill) => (
-                    <li key={skill}>
-                      <TechIcon className="skill-icon" name={skill} />
-                      <span>{skill}</span>
-                    </li>
-                  ))}
-                </ul>
-              </article>
-            </div>
+            <section
+              className="toolkit-panel"
+              data-reveal="up"
+              aria-labelledby="toolkit-title"
+            >
+              <header className="toolkit-header">
+                <div>
+                  <span>TOOLCHAIN</span>
+                  <h3 id="toolkit-title">Selected toolkit</h3>
+                </div>
+                <p>
+                  <strong>{skills.featured.length}</strong>
+                  <span>working set</span>
+                </p>
+              </header>
+
+              <ol className="toolkit-grid">
+                {skills.featured.map((skill, index) => (
+                  <li
+                    className="toolkit-item"
+                    key={skill}
+                    style={revealDelay(index * 35)}
+                  >
+                    <span className="toolkit-icon-shell">
+                      <TechIcon className="toolkit-icon" name={skill} />
+                    </span>
+                    <span className="toolkit-copy">
+                      <strong>{skill}</strong>
+                      <span>{toolRoles[skill]}</span>
+                    </span>
+                    <span className="toolkit-index" aria-hidden="true">
+                      {String(index + 1).padStart(2, "0")}
+                    </span>
+                  </li>
+                ))}
+              </ol>
+            </section>
           </div>
         </section>
 
