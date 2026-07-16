@@ -2,7 +2,6 @@
 
 import { useEffect, useRef, type CSSProperties } from "react";
 
-import SceneShell from "@/components/Portfolio/SceneShell";
 import TechIcon from "@/components/Portfolio/TechIcon";
 import {
   achievements,
@@ -114,22 +113,22 @@ export default function EditorialPortfolio() {
             <div className="hero-copy">
               <p className="eyebrow">
                 <span>01</span>
-                COMPUTER SCIENCE STUDENT · VIT
+                KRISHANG ZINZUWADIA · COMPUTER SCIENCE, VIT
               </p>
 
               <h1>
-                I build AI systems and <em>web products.</em>
+                I build AI agents and <em>full-stack software.</em>
               </h1>
 
               <p className="hero-lede">
-                I&apos;m Krishang Zinzuwadia, a computer science student at VIT.
-                I work on local AI agents, multi-agent systems, and web
-                platforms, and I compete in CTFs.
+                Recent work includes a desktop automation agent, a 27-agent
+                development system, and a recruitment platform used by 1,000+
+                applicants.
               </p>
 
               <div className="hero-actions">
                 <a className="button button-primary" href="#work">
-                  View projects <span aria-hidden="true">↓</span>
+                  Explore projects <span aria-hidden="true">↓</span>
                 </a>
                 <a
                   className="button button-quiet"
@@ -138,19 +137,44 @@ export default function EditorialPortfolio() {
                   Email me
                 </a>
               </div>
-
-              <div className="hero-footnote">
-                <span className="status-pulse" aria-hidden="true" />
-                <span>
-                  {identity.education} · {identity.school} ·{" "}
-                  {identity.graduation}
-                </span>
-              </div>
             </div>
 
-            <div className="hero-visual">
-              <SceneShell />
-            </div>
+            <aside
+              className="hero-profile"
+              data-reveal="right"
+              aria-label="Krishang at a glance"
+            >
+              <p>AT A GLANCE</p>
+              <dl>
+                <div>
+                  <dt>Education</dt>
+                  <dd>
+                    <strong>B.Tech CSE · VIT</strong>
+                    <span>Expected July 2028</span>
+                  </dd>
+                </div>
+                <div>
+                  <dt>Current work</dt>
+                  <dd>
+                    <strong>AI agents · full-stack systems</strong>
+                    <span>Desktop, web, and infrastructure</span>
+                  </dd>
+                </div>
+                <div>
+                  <dt>CTFTime</dt>
+                  <dd>
+                    <strong>1st in India · 7th globally</strong>
+                    <span>Team ranking · April 2026</span>
+                  </dd>
+                </div>
+                <div>
+                  <dt>Based in</dt>
+                  <dd>
+                    <strong>Vellore, India</strong>
+                  </dd>
+                </div>
+              </dl>
+            </aside>
           </div>
         </section>
 
