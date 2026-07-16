@@ -72,3 +72,5 @@ __MACOSX/
 *.blend2
 
 # Stage tracker: clean up and optimize .gitignore rules
+
+.vercel

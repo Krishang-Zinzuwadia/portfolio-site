@@ -33,9 +33,9 @@ export const metadata: Metadata = {
     siteName: "Krishang Zinzuwadia",
     images: [
       {
-        url: "/og.png",
-        width: 1200,
-        height: 630,
+        url: "/og.jpg",
+        width: 3840,
+        height: 2016,
         alt: "Krishang Zinzuwadia's interactive Macintosh Classic portfolio",
       },
     ],
@@ -45,7 +45,7 @@ export const metadata: Metadata = {
     title: "Krishang Zinzuwadia",
     description:
       "AI systems, full-stack engineering, and security—inside a working 3D Macintosh.",
-    images: ["/og.png"],
+    images: ["/og.jpg"],
   },
   robots: {
     index: true,
