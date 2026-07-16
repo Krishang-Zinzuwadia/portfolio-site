@@ -3,12 +3,12 @@
 import { useEffect, useRef, type CSSProperties } from "react";
 
 import SceneShell from "@/components/Portfolio/SceneShell";
+import TechIcon from "@/components/Portfolio/TechIcon";
 import {
   achievements,
   experience,
   identity,
   projects,
-  signalStats,
   skills,
 } from "@/data/portfolio";
 
@@ -92,9 +92,9 @@ export default function EditorialPortfolio() {
         </a>
 
         <nav className="primary-nav" aria-label="Primary navigation">
-          <a href="#work">Work</a>
-          <a href="#about">About</a>
-          <a href="#proof">Proof</a>
+          <a href="#work">Projects</a>
+          <a href="#experience">Experience</a>
+          <a href="#recognition">Recognition</a>
           <a href="#contact">Contact</a>
         </nav>
 
@@ -114,28 +114,28 @@ export default function EditorialPortfolio() {
             <div className="hero-copy">
               <p className="eyebrow">
                 <span>01</span>
-                AI SYSTEMS / FULL-STACK / SECURITY
+                COMPUTER SCIENCE STUDENT · VIT
               </p>
 
               <h1>
-                Building systems that move from <em>idea</em> to action.
+                I build AI systems and <em>web products.</em>
               </h1>
 
               <p className="hero-lede">
-                I&apos;m Krishang—an AI systems builder, full-stack engineer,
-                and cybersecurity competitor turning ambitious prompts into
-                autonomous software that works in the real world.
+                I&apos;m Krishang Zinzuwadia, a computer science student at VIT.
+                I work on local AI agents, multi-agent systems, and web
+                platforms, and I compete in CTFs.
               </p>
 
               <div className="hero-actions">
                 <a className="button button-primary" href="#work">
-                  Explore selected work <span aria-hidden="true">↓</span>
+                  View projects <span aria-hidden="true">↓</span>
                 </a>
                 <a
                   className="button button-quiet"
                   href={`mailto:${identity.email}`}
                 >
-                  Start a conversation
+                  Email me
                 </a>
               </div>
 
@@ -152,38 +152,20 @@ export default function EditorialPortfolio() {
               <SceneShell />
             </div>
           </div>
-
-          <div className="signal-strip" aria-label="Selected metrics">
-            {signalStats.map((stat, index) => (
-              <article
-                className="signal-stat"
-                data-reveal="up"
-                key={`${stat.value}-${stat.label}`}
-                style={revealDelay(index * 70)}
-              >
-                <span className="signal-index">0{index + 1}</span>
-                <strong>{stat.value}</strong>
-                <div>
-                  <p>{stat.label}</p>
-                  <span>{stat.note}</span>
-                </div>
-              </article>
-            ))}
-          </div>
         </section>
 
         <section className="work-section section-shell" id="work">
           <div className="section-heading" data-reveal="up">
             <p className="eyebrow">
               <span>02</span>
-              SELECTED BUILDS
+              PROJECTS
             </p>
             <h2>
-              Software with a <em>pulse.</em>
+              Selected <em>projects.</em>
             </h2>
             <p>
-              Three systems, each designed around a hard problem: autonomy,
-              coordination, or scale.
+              Three projects across desktop AI, multi-agent development, and
+              recruitment infrastructure.
             </p>
           </div>
 
@@ -219,21 +201,18 @@ export default function EditorialPortfolio() {
                   ))}
                 </ul>
 
-                <div className="project-metrics">
-                  {project.metrics.map((metric) => (
-                    <div key={`${metric.value}-${metric.label}`}>
-                      <strong>{metric.value}</strong>
-                      <span>{metric.label}</span>
-                    </div>
-                  ))}
-                </div>
-
                 <ul
                   className="project-tech"
                   aria-label={`${project.title} technologies`}
                 >
                   {project.stack.map((technology) => (
-                    <li key={technology}>{technology}</li>
+                    <li key={technology}>
+                      <TechIcon
+                        className="project-tech-icon"
+                        name={technology}
+                      />
+                      <span>{technology}</span>
+                    </li>
                   ))}
                 </ul>
               </article>
@@ -241,7 +220,7 @@ export default function EditorialPortfolio() {
           </div>
         </section>
 
-        <section className="about-section" id="about">
+        <section className="about-section" id="experience">
           <div className="about-inner section-shell">
             <div
               className="section-heading section-heading-light"
@@ -249,29 +228,29 @@ export default function EditorialPortfolio() {
             >
               <p className="eyebrow">
                 <span>03</span>
-                OPERATING PRINCIPLES
+                EXPERIENCE &amp; BACKGROUND
               </p>
               <h2>
-                Curious by default. <em>Rigorous</em> on delivery.
+                Experience and <em>background.</em>
               </h2>
             </div>
 
             <div className="about-grid">
               <div className="about-statement" data-reveal="left">
                 <p className="statement-lead">
-                  I work where AI research, product engineering, and adversarial
-                  thinking overlap.
+                  I&apos;m a computer science student at VIT and a member of
+                  ACM&apos;s technical team.
                 </p>
                 <p>
-                  That means understanding the whole system: the model and its
-                  tools, the runtime and its failure modes, the interface and
-                  the human who has to trust it. The result is software that
-                  feels imaginative without becoming fragile.
+                  My work spans model orchestration, desktop runtimes,
+                  databases, and web interfaces. I also compete in CTFs, which
+                  keeps security and failure modes part of how I think about
+                  software.
                 </p>
               </div>
 
               <aside className="education-card" data-reveal="right">
-                <span className="card-kicker">CURRENTLY</span>
+                <span className="card-kicker">EDUCATION</span>
                 <h3>{identity.school}</h3>
                 <p>{identity.education}</p>
                 <div>
@@ -297,28 +276,15 @@ export default function EditorialPortfolio() {
               </ul>
             </article>
 
-            <div className="skills-grid">
-              <article data-reveal="up" style={revealDelay(0)}>
-                <span>01 / LANGUAGES</span>
+            <div className="skills-grid skills-grid-compact">
+              <article data-reveal="up">
+                <span>SELECTED TOOLS</span>
                 <ul>
-                  {skills.languages.map((skill) => (
-                    <li key={skill}>{skill}</li>
-                  ))}
-                </ul>
-              </article>
-              <article data-reveal="up" style={revealDelay(90)}>
-                <span>02 / SYSTEMS & FRAMEWORKS</span>
-                <ul>
-                  {skills.systems.map((skill) => (
-                    <li key={skill}>{skill}</li>
-                  ))}
-                </ul>
-              </article>
-              <article data-reveal="up" style={revealDelay(180)}>
-                <span>03 / TOOLS & INFRA</span>
-                <ul>
-                  {skills.tools.map((skill) => (
-                    <li key={skill}>{skill}</li>
+                  {skills.featured.map((skill) => (
+                    <li key={skill}>
+                      <TechIcon className="skill-icon" name={skill} />
+                      <span>{skill}</span>
+                    </li>
                   ))}
                 </ul>
               </article>
@@ -326,14 +292,14 @@ export default function EditorialPortfolio() {
           </div>
         </section>
 
-        <section className="proof-section section-shell" id="proof">
+        <section className="proof-section section-shell" id="recognition">
           <div className="section-heading proof-heading" data-reveal="up">
             <p className="eyebrow">
               <span>04</span>
-              COMPETITIVE PROOF
+              RECOGNITION
             </p>
             <h2>
-              Measured under <em>pressure.</em>
+              Selected <em>results.</em>
             </h2>
             <a href={identity.ctftimeTeam} target="_blank" rel="noreferrer">
               View CTFTime team <span aria-hidden="true">↗</span>
@@ -365,12 +331,12 @@ export default function EditorialPortfolio() {
           <div className="contact-inner section-shell">
             <p className="eyebrow" data-reveal="up">
               <span>05</span>
-              OPEN CHANNEL
+              CONTACT
             </p>
 
             <div className="contact-grid">
               <h2 data-reveal="left">
-                Let&apos;s build what <em>should exist next.</em>
+                Get in <em>touch.</em>
               </h2>
               <div
                 className="contact-copy"
@@ -378,8 +344,7 @@ export default function EditorialPortfolio() {
                 style={revealDelay(110)}
               >
                 <p>
-                  Have an ambitious AI system, a hard engineering problem, or a
-                  security-shaped challenge? Send the signal.
+                  For project inquiries or technical collaborations, email me.
                 </p>
                 <a className="contact-email" href={`mailto:${identity.email}`}>
                   {identity.email} <span aria-hidden="true">↗</span>

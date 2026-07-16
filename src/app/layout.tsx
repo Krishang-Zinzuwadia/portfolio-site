@@ -1,16 +1,11 @@
 import type { Metadata, Viewport } from "next";
 import "./globals.css";
 
-const productionHost = process.env.VERCEL_PROJECT_PRODUCTION_URL;
-const siteUrl =
-  process.env.NEXT_PUBLIC_SITE_URL ??
-  (productionHost
-    ? `https://${productionHost}`
-    : "https://krishang-portfolio.vercel.app");
+const siteUrl = new URL("https://portfolio.krishang.dev");
 
 export const metadata: Metadata = {
-  metadataBase: new URL(siteUrl),
-  title: "Krishang Zinzuwadia — Interactive Macintosh Portfolio",
+  metadataBase: siteUrl,
+  title: "Krishang Zinzuwadia",
   description:
     "Explore Krishang Zinzuwadia's work in AI systems, full-stack engineering, and cybersecurity through an interactive 1990 Macintosh Classic.",
   applicationName: "Krishang Zinzuwadia Portfolio",
@@ -32,7 +27,7 @@ export const metadata: Metadata = {
     type: "website",
     locale: "en_IN",
     url: "/",
-    title: "Krishang Zinzuwadia — Interactive Macintosh Portfolio",
+    title: "Krishang Zinzuwadia",
     description:
       "A working System 7-inspired portfolio inside an original 3D Macintosh Classic.",
     siteName: "Krishang Zinzuwadia",
@@ -47,7 +42,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Krishang Zinzuwadia — Interactive Macintosh Portfolio",
+    title: "Krishang Zinzuwadia",
     description:
       "AI systems, full-stack engineering, and security—inside a working 3D Macintosh.",
     images: ["/og.png"],

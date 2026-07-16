@@ -517,13 +517,13 @@ em {
 }
 
 .work-section {
-  padding-top: clamp(7rem, 12vw, 12rem);
-  padding-bottom: clamp(7rem, 11vw, 11rem);
+  padding-top: clamp(6rem, 9vw, 9rem);
+  padding-bottom: clamp(6rem, 9vw, 9rem);
 }
 
 .section-heading {
   display: grid;
-  margin-bottom: clamp(3.5rem, 6vw, 6.5rem);
+  margin-bottom: clamp(3.5rem, 5vw, 5rem);
   grid-template-columns: minmax(14rem, 0.55fr) minmax(0, 1fr) minmax(
       14rem,
       0.42fr
@@ -538,7 +538,7 @@ em {
 
 .section-heading h2 {
   max-width: 10ch;
-  font-size: clamp(3.5rem, 6vw, 6.6rem);
+  font-size: clamp(3.2rem, 5vw, 5.4rem);
   font-weight: 520;
   letter-spacing: -0.07em;
   line-height: 0.93;
@@ -565,7 +565,7 @@ em {
   --project-accent: var(--acid);
   position: relative;
   display: flex;
-  min-height: 41rem;
+  min-height: 35rem;
   overflow: hidden;
   padding: clamp(1.5rem, 3vw, 3rem);
   border-radius: clamp(1.4rem, 2.2vw, 2.25rem);
@@ -575,7 +575,7 @@ em {
 }
 
 .project-card:first-child {
-  min-height: 46rem;
+  min-height: 38rem;
   grid-column: 1 / -1;
 }
 
@@ -636,14 +636,14 @@ em {
 
 .project-title-row {
   display: flex;
-  margin-top: clamp(3rem, 6vw, 6.5rem);
+  margin-top: clamp(3rem, 5vw, 4.5rem);
   align-items: flex-end;
   justify-content: space-between;
   gap: 2rem;
 }
 
 .project-card:first-child .project-title-row {
-  margin-top: clamp(4rem, 8vw, 8rem);
+  margin-top: clamp(4rem, 6vw, 5.5rem);
 }
 
 .project-title-row p {
@@ -656,14 +656,14 @@ em {
 }
 
 .project-title-row h3 {
-  font-size: clamp(3.1rem, 5.7vw, 6.4rem);
+  font-size: clamp(3.1rem, 5vw, 5.4rem);
   font-weight: 520;
   letter-spacing: -0.075em;
   line-height: 0.88;
 }
 
 .project-card:not(:first-child) .project-title-row h3 {
-  font-size: clamp(2.8rem, 4vw, 4.7rem);
+  font-size: clamp(2.8rem, 3.6vw, 4.1rem);
 }
 
 .project-title-row div > span {
@@ -796,20 +796,30 @@ em {
 
 .project-tech {
   display: flex;
-  margin-top: 1.25rem;
-  padding-top: 1.25rem;
+  margin-top: auto;
+  padding-top: 2rem;
   border-top: 1px solid rgba(255, 255, 255, 0.16);
   flex-wrap: wrap;
   gap: 0.45rem;
 }
 
 .project-tech li {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.38rem;
   padding: 0.46rem 0.62rem;
   border: 1px solid rgba(255, 255, 255, 0.2);
   border-radius: 999px;
   color: rgba(255, 253, 247, 0.75);
   font-family: var(--font-code);
   font-size: 0.56rem;
+}
+
+.project-tech-icon {
+  width: 0.78rem;
+  height: 0.78rem;
+  flex: 0 0 auto;
+  color: var(--project-accent);
 }
 
 .about-section {
@@ -825,8 +835,8 @@ em {
 }
 
 .about-inner {
-  padding-top: clamp(7rem, 12vw, 12rem);
-  padding-bottom: clamp(7rem, 10vw, 10rem);
+  padding-top: clamp(6rem, 9vw, 9rem);
+  padding-bottom: clamp(6rem, 9vw, 9rem);
 }
 
 .section-heading-light {
@@ -843,7 +853,7 @@ em {
 
 .about-grid {
   display: grid;
-  padding-top: clamp(3rem, 6vw, 6rem);
+  padding-top: clamp(3rem, 5vw, 4.5rem);
   border-top: 1px solid rgba(255, 255, 255, 0.18);
   grid-template-columns: minmax(0, 1.35fr) minmax(20rem, 0.65fr);
   gap: clamp(3rem, 9vw, 9rem);
@@ -855,7 +865,7 @@ em {
 
 .statement-lead {
   font-family: var(--font-display);
-  font-size: clamp(2.3rem, 4vw, 4.5rem);
+  font-size: clamp(2.2rem, 3.5vw, 3.8rem);
   letter-spacing: -0.03em;
   line-height: 1.02;
 }
@@ -870,7 +880,7 @@ em {
 
 .education-card {
   display: flex;
-  min-height: 23rem;
+  min-height: 18rem;
   padding: 1.6rem;
   border: 1px solid rgba(255, 255, 255, 0.24);
   border-radius: 1.6rem;
@@ -912,7 +922,7 @@ em {
 
 .experience-row {
   display: grid;
-  margin-top: clamp(5rem, 10vw, 9rem);
+  margin-top: clamp(4rem, 7vw, 6rem);
   padding-block: 2rem;
   border-top: 1px solid rgba(255, 255, 255, 0.2);
   border-bottom: 1px solid rgba(255, 255, 255, 0.2);
@@ -1002,6 +1012,9 @@ em {
 }
 
 .skills-grid li {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
   padding: 0.55rem 0.72rem;
   border: 1px solid rgba(255, 255, 255, 0.22);
   border-radius: 999px;
@@ -1009,9 +1022,32 @@ em {
   font-size: 0.78rem;
 }
 
+.skills-grid.skills-grid-compact {
+  grid-template-columns: 1fr;
+}
+
+.skills-grid.skills-grid-compact article {
+  display: grid;
+  min-height: 0;
+  grid-template-columns: minmax(10rem, 0.24fr) 1fr;
+  align-items: start;
+  gap: 2rem;
+}
+
+.skills-grid.skills-grid-compact ul {
+  margin-top: 0;
+}
+
+.skill-icon {
+  width: 1rem;
+  height: 1rem;
+  flex: 0 0 auto;
+  color: var(--acid);
+}
+
 .proof-section {
-  padding-top: clamp(7rem, 12vw, 12rem);
-  padding-bottom: clamp(7rem, 10vw, 10rem);
+  padding-top: clamp(6rem, 9vw, 9rem);
+  padding-bottom: clamp(6rem, 8vw, 8rem);
 }
 
 .proof-heading {
@@ -1037,7 +1073,7 @@ em {
 
 .achievement-list article {
   display: grid;
-  min-height: 7.8rem;
+  min-height: 6.8rem;
   padding: 1.2rem 0;
   border-bottom: 1px solid var(--line);
   grid-template-columns: 4rem 7rem 1fr auto;
@@ -1063,7 +1099,7 @@ em {
 
 .achievement-list article > strong {
   font-family: var(--font-display);
-  font-size: clamp(2.5rem, 4vw, 4.4rem);
+  font-size: clamp(2.3rem, 3.4vw, 3.7rem);
   font-weight: 400;
   line-height: 1;
 }
@@ -1111,8 +1147,8 @@ em {
 
 .contact-grid {
   display: grid;
-  min-height: 38rem;
-  padding-block: clamp(4rem, 8vw, 8rem);
+  min-height: 28rem;
+  padding-block: clamp(4rem, 6vw, 6rem);
   grid-template-columns: minmax(0, 1.25fr) minmax(20rem, 0.75fr);
   align-items: end;
   gap: clamp(3rem, 8vw, 8rem);
@@ -1120,7 +1156,7 @@ em {
 
 .contact-grid h2 {
   max-width: 9ch;
-  font-size: clamp(4rem, 8vw, 8.5rem);
+  font-size: clamp(4rem, 6.5vw, 6.8rem);
   font-weight: 520;
   letter-spacing: -0.08em;
   line-height: 0.86;
@@ -1665,7 +1701,7 @@ em {
   }
 
   .project-card:not(:first-child) {
-    min-height: 43rem;
+    min-height: 36rem;
   }
 }
 
@@ -1737,7 +1773,7 @@ em {
   .project-card,
   .project-card:first-child,
   .project-card:not(:first-child) {
-    min-height: 43rem;
+    min-height: 36rem;
   }
 
   .project-details {
@@ -1772,6 +1808,10 @@ em {
 
   .skills-grid ul {
     margin-top: 2rem;
+  }
+
+  .skills-grid.skills-grid-compact ul {
+    margin-top: 0;
   }
 
   .achievement-list article {
@@ -1911,6 +1951,14 @@ em {
 
   .statement-lead {
     font-size: 2.45rem;
+  }
+
+  .skills-grid.skills-grid-compact article {
+    grid-template-columns: 1fr;
+  }
+
+  .skills-grid.skills-grid-compact ul {
+    margin-top: 1.5rem;
   }
 
   .experience-row {

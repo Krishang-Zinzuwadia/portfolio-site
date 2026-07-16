@@ -42,26 +42,19 @@ export default function SceneShell() {
       ref={shellRef}
       className={`scene-shell${isReady ? " scene-is-ready" : ""}`}
       role="img"
-      aria-label="Interactive 3D model of Krishang's signal terminal"
+      aria-label="Interactive 3D model built for Krishang's portfolio"
     >
       <div className="scene-poster" aria-hidden="true" />
       <TerminalScene onReady={handleReady} active={isActive} />
 
       <div className="scene-label scene-label-top" aria-hidden="true">
-        <span>ORIGINAL BLENDER BUILD</span>
-        <span>GLB / REALTIME</span>
+        <span>INTERACTIVE 3D MODEL</span>
+        <span>WEBGL</span>
       </div>
 
       <div className="scene-label scene-label-bottom" aria-hidden="true">
         <span className="live-dot" />
-        POINTER-REACTIVE SYSTEM OBJECT
-      </div>
-
-      <div className="scene-coordinate scene-coordinate-a" aria-hidden="true">
-        AI / 27 AGENTS
-      </div>
-      <div className="scene-coordinate scene-coordinate-b" aria-hidden="true">
-        CTF / IND 01
+        MOVE YOUR POINTER TO EXPLORE
       </div>
     </div>
   );
