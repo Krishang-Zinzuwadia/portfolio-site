@@ -31,21 +31,12 @@ export const metadata: Metadata = {
     description:
       "A working System 7-inspired portfolio inside an original 3D Macintosh Classic.",
     siteName: "Krishang Zinzuwadia",
-    images: [
-      {
-        url: "/og.jpg",
-        width: 3840,
-        height: 2016,
-        alt: "Krishang Zinzuwadia's interactive Macintosh Classic portfolio",
-      },
-    ],
   },
   twitter: {
     card: "summary_large_image",
     title: "Krishang Zinzuwadia",
     description:
       "AI systems, full-stack engineering, and security—inside a working 3D Macintosh.",
-    images: ["/og.jpg"],
   },
   robots: {
     index: true,
