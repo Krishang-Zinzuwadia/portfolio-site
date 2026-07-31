@@ -9,6 +9,7 @@ export type MacSound =
   | "close"
   | "select"
   | "key"
+  | "alarm"
   | "error"
   | "trash"
   | "success";
@@ -229,6 +230,24 @@ function scheduleSound(context: AudioContext, sound: MacSound) {
       volume: 0.035,
       type: "square",
     });
+  } else if (sound === "alarm") {
+    [0, 0.26, 0.52].forEach((offset) => {
+      addTone(context, filter, {
+        frequency: 880,
+        endFrequency: 740,
+        start: now + offset,
+        duration: 0.16,
+        volume: 0.105,
+        type: "square",
+      });
+      addTone(context, filter, {
+        frequency: 440,
+        start: now + offset,
+        duration: 0.16,
+        volume: 0.055,
+        type: "triangle",
+      });
+    });
   } else if (sound === "error") {
     addTone(context, filter, {
       frequency: 196,
@@ -276,6 +295,8 @@ function scheduleSound(context: AudioContext, sound: MacSound) {
       ? 1700
       : sound === "trash"
         ? 550
+        : sound === "alarm"
+          ? 950
         : sound === "error"
           ? 450
           : 350;

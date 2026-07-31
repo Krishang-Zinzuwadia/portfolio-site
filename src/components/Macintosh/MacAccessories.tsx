@@ -1,12 +1,20 @@
 "use client";
 
-import { useEffect, useMemo, useState, type CSSProperties } from "react";
+import {
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+  type CSSProperties,
+  type KeyboardEvent,
+} from "react";
 import styles from "./MacAccessories.module.css";
 import type { MacSound } from "./useMacSounds";
 
 export type AccessoryId =
   | "aboutMac"
   | "alarmClock"
+  | "stopwatch"
   | "calculator"
   | "chooser"
   | "controlPanels"
@@ -20,6 +28,12 @@ export type AccessoryId =
 
 export type DesktopPattern = "sage" | "platinum" | "blue" | "graphite";
 
+export type AlarmSettings = {
+  enabled: boolean;
+  time: string;
+  label: string;
+};
+
 type MacAccessoriesProps = {
   id: AccessoryId;
   onSound?: (sound: MacSound) => void;
@@ -27,6 +41,8 @@ type MacAccessoriesProps = {
   onPatternChange: (pattern: DesktopPattern) => void;
   trashEmpty: boolean;
   onEmptyTrash: () => void;
+  alarmSettings: AlarmSettings;
+  onAlarmChange: (settings: AlarmSettings) => void;
 };
 
 const PATTERNS: Array<{ id: DesktopPattern; label: string }> = [
@@ -80,9 +96,17 @@ function AboutMacintosh() {
   );
 }
 
-function AlarmClock({ onSound }: Pick<MacAccessoriesProps, "onSound">) {
+function AlarmClock({
+  onSound,
+  alarmSettings,
+  onAlarmChange,
+}: Pick<
+  MacAccessoriesProps,
+  "onSound" | "alarmSettings" | "onAlarmChange"
+>) {
   const [now, setNow] = useState(() => new Date());
-  const [alarmEnabled, setAlarmEnabled] = useState(false);
+  const [draftTime, setDraftTime] = useState(alarmSettings.time);
+  const [draftLabel, setDraftLabel] = useState(alarmSettings.label);
 
   useEffect(() => {
     const timer = window.setInterval(() => setNow(new Date()), 1_000);
@@ -99,23 +123,185 @@ function AlarmClock({ onSound }: Pick<MacAccessoriesProps, "onSound">) {
     month: "short",
     day: "numeric",
   }).format(now);
+  const hourAngle = ((now.getHours() % 12) + now.getMinutes() / 60) * 30;
+  const minuteAngle = (now.getMinutes() + now.getSeconds() / 60) * 6;
+  const secondAngle = now.getSeconds() * 6;
+
+  const saveAlarm = () => {
+    onAlarmChange({
+      enabled: true,
+      time: draftTime || "07:30",
+      label: draftLabel.trim() || "Alarm",
+    });
+    onSound?.("success");
+  };
 
   return (
     <div className={styles.alarmClock}>
-      <p className={styles.eyebrow}>DESK ACCESSORY</p>
-      <output aria-label={`Current time ${time}`}>{time}</output>
-      <p>{date}</p>
-      <button
-        type="button"
-        aria-pressed={alarmEnabled}
-        onClick={() => {
-          setAlarmEnabled((enabled) => !enabled);
-          onSound?.(alarmEnabled ? "close" : "success");
-        }}
+      <div
+        className={styles.analogClock}
+        aria-hidden="true"
+        style={
+          {
+            "--hour-angle": `${hourAngle}deg`,
+            "--minute-angle": `${minuteAngle}deg`,
+            "--second-angle": `${secondAngle}deg`,
+          } as CSSProperties
+        }
       >
-        <span aria-hidden="true">{alarmEnabled ? "◉" : "○"}</span>
-        Alarm {alarmEnabled ? "set for 7:30 AM" : "is off"}
-      </button>
+        <i className={styles.hourHand} />
+        <i className={styles.minuteHand} />
+        <i className={styles.secondHand} />
+        <b />
+      </div>
+      <div className={styles.clockReadout}>
+        <p className={styles.eyebrow}>CLOCK &amp; ALARM</p>
+        <output aria-label={`Current time ${time}`}>{time}</output>
+        <p>{date}</p>
+      </div>
+      <div className={styles.alarmControls}>
+        <label>
+          <span>Alarm time</span>
+          <input
+            type="time"
+            value={draftTime}
+            onChange={(event) => setDraftTime(event.target.value)}
+          />
+        </label>
+        <label>
+          <span>Label</span>
+          <input
+            type="text"
+            maxLength={28}
+            value={draftLabel}
+            onChange={(event) => setDraftLabel(event.target.value)}
+          />
+        </label>
+        <div>
+          <button
+            type="button"
+            aria-pressed={alarmSettings.enabled}
+            onClick={saveAlarm}
+          >
+            <span aria-hidden="true">{alarmSettings.enabled ? "◉" : "○"}</span>
+            {alarmSettings.enabled ? "Update Alarm" : "Set Alarm"}
+          </button>
+          <button
+            type="button"
+            disabled={!alarmSettings.enabled}
+            onClick={() => {
+              onAlarmChange({ ...alarmSettings, enabled: false });
+              onSound?.("close");
+            }}
+          >
+            Turn Off
+          </button>
+          <button type="button" onClick={() => onSound?.("alarm")}>
+            Test Chime
+          </button>
+        </div>
+        <p role="status" aria-live="polite">
+          {alarmSettings.enabled
+            ? `${alarmSettings.label} · ${alarmSettings.time}`
+            : "No alarm scheduled"}
+        </p>
+      </div>
+    </div>
+  );
+}
+
+function formatStopwatch(milliseconds: number) {
+  const totalHundredths = Math.floor(milliseconds / 10);
+  const hundredths = totalHundredths % 100;
+  const totalSeconds = Math.floor(totalHundredths / 100);
+  const seconds = totalSeconds % 60;
+  const minutes = Math.floor(totalSeconds / 60);
+  return `${String(minutes).padStart(2, "0")}:${String(seconds).padStart(2, "0")}.${String(hundredths).padStart(2, "0")}`;
+}
+
+function Stopwatch({ onSound }: Pick<MacAccessoriesProps, "onSound">) {
+  const [elapsed, setElapsed] = useState(0);
+  const [running, setRunning] = useState(false);
+  const [laps, setLaps] = useState<number[]>([]);
+  const startedAtRef = useRef(0);
+
+  useEffect(() => {
+    if (!running) return;
+
+    let frame = 0;
+    const tick = () => {
+      setElapsed(performance.now() - startedAtRef.current);
+      frame = window.requestAnimationFrame(tick);
+    };
+    frame = window.requestAnimationFrame(tick);
+    return () => window.cancelAnimationFrame(frame);
+  }, [running]);
+
+  const toggleRunning = () => {
+    if (running) {
+      setRunning(false);
+      onSound?.("close");
+      return;
+    }
+
+    startedAtRef.current = performance.now() - elapsed;
+    setRunning(true);
+    onSound?.("success");
+  };
+
+  const reset = () => {
+    setRunning(false);
+    setElapsed(0);
+    setLaps([]);
+    onSound?.("menu");
+  };
+
+  return (
+    <div className={styles.stopwatch}>
+      <p className={styles.eyebrow}>PRECISION TIMER</p>
+      <div className={styles.stopwatchDial} aria-hidden="true">
+        <span
+          style={
+            {
+              "--stopwatch-angle": `${(elapsed / 1_000) * 6}deg`,
+            } as CSSProperties
+          }
+        />
+        <b />
+      </div>
+      <output aria-label={`Elapsed time ${formatStopwatch(elapsed)}`}>
+        {formatStopwatch(elapsed)}
+      </output>
+      <div className={styles.stopwatchButtons}>
+        <button type="button" onClick={toggleRunning}>
+          {running ? "Pause" : elapsed > 0 ? "Resume" : "Start"}
+        </button>
+        <button
+          type="button"
+          disabled={!running}
+          onClick={() => {
+            setLaps((current) => [elapsed, ...current].slice(0, 4));
+            onSound?.("key");
+          }}
+        >
+          Lap
+        </button>
+        <button type="button" disabled={elapsed === 0} onClick={reset}>
+          Reset
+        </button>
+      </div>
+      <ol className={styles.lapList} aria-label="Stopwatch laps">
+        {laps.length ? (
+          laps.map((lap, index) => (
+            <li key={`${lap}-${index}`}>
+              <span>Lap {laps.length - index}</span>
+              <time>{formatStopwatch(lap)}</time>
+            </li>
+          ))
+        ) : (
+          <li className={styles.noLaps}>Lap times appear here.</li>
+        )}
+      </ol>
     </div>
   );
 }
@@ -126,80 +312,182 @@ function calculate(left: number, right: number, operator: Operator) {
   if (operator === "+") return left + right;
   if (operator === "−") return left - right;
   if (operator === "×") return left * right;
-  return right === 0 ? 0 : left / right;
+  return right === 0 ? null : left / right;
+}
+
+function formatCalculatorValue(value: number) {
+  if (!Number.isFinite(value)) return "Error";
+  const rounded = Math.round(value * 100_000_000) / 100_000_000;
+  const rendered = String(rounded);
+  return rendered.length <= 11 ? rendered : rounded.toExponential(5).slice(0, 11);
 }
 
 function Calculator({ onSound }: Pick<MacAccessoriesProps, "onSound">) {
   const [display, setDisplay] = useState("0");
-  const [pending, setPending] = useState<{
-    value: number;
-    operator: Operator;
-  } | null>(null);
-  const [replaceDisplay, setReplaceDisplay] = useState(false);
+  const [storedValue, setStoredValue] = useState<number | null>(null);
+  const [operator, setOperatorState] = useState<Operator | null>(null);
+  const [waitingForOperand, setWaitingForOperand] = useState(false);
+  const calculatorRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const frame = window.requestAnimationFrame(() =>
+      calculatorRef.current?.focus({ preventScroll: true })
+    );
+    return () => window.cancelAnimationFrame(frame);
+  }, []);
 
   const pressDigit = (digit: string) => {
     onSound?.("key");
     setDisplay((current) =>
-      replaceDisplay || current === "0"
+      waitingForOperand || current === "0" || current === "Error"
         ? digit
-        : `${current}${digit}`.slice(0, 10)
+        : `${current}${digit}`.slice(0, 11)
     );
-    setReplaceDisplay(false);
+    setWaitingForOperand(false);
   };
 
-  const setOperator = (operator: Operator) => {
+  const inputDecimal = () => {
+    onSound?.("key");
+    if (waitingForOperand || display === "Error") {
+      setDisplay("0.");
+      setWaitingForOperand(false);
+      return;
+    }
+    if (!display.includes(".")) setDisplay(`${display}.`);
+  };
+
+  const clear = () => {
+    setDisplay("0");
+    setStoredValue(null);
+    setOperatorState(null);
+    setWaitingForOperand(false);
+    onSound?.("close");
+  };
+
+  const setOperator = (nextOperator: Operator | null) => {
     onSound?.("menu");
-    setPending({ value: Number(display), operator });
-    setReplaceDisplay(true);
-  };
+    const inputValue = Number(display);
 
-  const resolve = () => {
-    if (!pending) return;
-    const result = calculate(pending.value, Number(display), pending.operator);
-    setDisplay(String(Math.round(result * 100_000) / 100_000).slice(0, 10));
-    setPending(null);
-    setReplaceDisplay(true);
-    onSound?.("success");
+    if (!Number.isFinite(inputValue)) {
+      if (nextOperator === null) return;
+      setDisplay("0");
+      setStoredValue(0);
+      setOperatorState(nextOperator);
+      setWaitingForOperand(true);
+      return;
+    }
+
+    if (storedValue === null || operator === null || waitingForOperand) {
+      setStoredValue(inputValue);
+    } else {
+      const result = calculate(storedValue, inputValue, operator);
+      if (result === null) {
+        setDisplay("Error");
+        setStoredValue(null);
+        setOperatorState(null);
+        setWaitingForOperand(true);
+        onSound?.("error");
+        return;
+      }
+      setDisplay(formatCalculatorValue(result));
+      setStoredValue(nextOperator === null ? null : result);
+      onSound?.(nextOperator === null ? "success" : "menu");
+    }
+
+    setOperatorState(nextOperator);
+    setWaitingForOperand(true);
   };
 
   const buttons = [
+    "C",
+    "±",
+    "%",
+    "÷",
     "7",
     "8",
     "9",
-    "÷",
+    "×",
     "4",
     "5",
     "6",
-    "×",
+    "−",
     "1",
     "2",
     "3",
-    "−",
-    "0",
-    "C",
-    "=",
     "+",
+    "0",
+    ".",
+    "⌫",
+    "=",
   ];
 
+  const handleButton = (button: string) => {
+    if (/\d/.test(button)) pressDigit(button);
+    else if (button === "C") clear();
+    else if (button === ".") inputDecimal();
+    else if (button === "±") {
+      if (display !== "Error" && display !== "0") {
+        setDisplay((current) =>
+          current.startsWith("-") ? current.slice(1) : `-${current}`
+        );
+      }
+      onSound?.("key");
+    } else if (button === "%") {
+      const value = Number(display);
+      setDisplay(Number.isFinite(value) ? formatCalculatorValue(value / 100) : "Error");
+      setWaitingForOperand(true);
+      onSound?.("key");
+    } else if (button === "⌫") {
+      if (!waitingForOperand && display !== "Error") {
+        setDisplay((current) => (current.length > 1 ? current.slice(0, -1) : "0"));
+      }
+      onSound?.("key");
+    } else if (button === "=") setOperator(null);
+    else setOperator(button as Operator);
+  };
+
+  const handleKeyDown = (event: KeyboardEvent<HTMLDivElement>) => {
+    const keyboardMap: Record<string, string> = {
+      "/": "÷",
+      "*": "×",
+      "-": "−",
+      "+": "+",
+      Enter: "=",
+      "=": "=",
+      Escape: "C",
+      Backspace: "⌫",
+      "%": "%",
+      ".": ".",
+    };
+    const button = /\d/.test(event.key) ? event.key : keyboardMap[event.key];
+    if (!button) return;
+    event.preventDefault();
+    event.stopPropagation();
+    handleButton(button);
+  };
+
   return (
-    <div className={styles.calculator}>
-      <output aria-label={`Calculator display ${display}`}>{display}</output>
+    <div
+      ref={calculatorRef}
+      className={styles.calculator}
+      tabIndex={0}
+      onKeyDown={handleKeyDown}
+      aria-label="Calculator. Type numbers and operators or use the buttons."
+    >
+      <div className={styles.calculatorDisplay}>
+        <small>{operator ? `${storedValue ?? ""} ${operator}` : "READY"}</small>
+        <output aria-label={`Calculator display ${display}`} aria-live="polite">
+          {display}
+        </output>
+      </div>
       <div className={styles.calculatorKeys}>
         {buttons.map((button) => (
           <button
             key={button}
             type="button"
             className={button === "=" ? styles.defaultKey : undefined}
-            onClick={() => {
-              if (/\d/.test(button)) pressDigit(button);
-              else if (button === "C") {
-                setDisplay("0");
-                setPending(null);
-                setReplaceDisplay(false);
-                onSound?.("close");
-              } else if (button === "=") resolve();
-              else setOperator(button as Operator);
-            }}
+            data-operator={"÷×−+".includes(button) ? "true" : undefined}
+            onClick={() => handleButton(button)}
           >
             {button}
           </button>
@@ -486,6 +774,9 @@ function SecretAboutBox({ onSound }: Pick<MacAccessoriesProps, "onSound">) {
 function KeyboardShortcuts() {
   const shortcuts = [
     ["⌘ / Ctrl + 1–6", "Open a portfolio window"],
+    ["⌘ / Ctrl + 7", "Open Clock & Alarm"],
+    ["⌘ / Ctrl + 8", "Open Stopwatch"],
+    ["⌘ / Ctrl + 9", "Open Calculator"],
     ["⌘ / Ctrl + O", "Open the selected desktop icon"],
     ["⌘ / Ctrl + W", "Close the active window"],
     ["⌘ / Ctrl + ⇧ + A", "Open all portfolio windows"],
@@ -568,7 +859,15 @@ export default function MacAccessories(props: MacAccessoriesProps) {
     case "aboutMac":
       return <AboutMacintosh />;
     case "alarmClock":
-      return <AlarmClock onSound={props.onSound} />;
+      return (
+        <AlarmClock
+          onSound={props.onSound}
+          alarmSettings={props.alarmSettings}
+          onAlarmChange={props.onAlarmChange}
+        />
+      );
+    case "stopwatch":
+      return <Stopwatch onSound={props.onSound} />;
     case "calculator":
       return <Calculator onSound={props.onSound} />;
     case "chooser":

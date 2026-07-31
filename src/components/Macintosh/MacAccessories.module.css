@@ -124,12 +124,21 @@
 .alarmClock {
   display: grid;
   height: 100%;
-  text-align: center;
-  place-content: center;
-  gap: 8px;
+  grid-template-columns: 116px minmax(0, 1fr);
+  align-content: start;
+  gap: 10px 14px;
+  padding: 4px;
 }
 
-.alarmClock output {
+.clockReadout {
+  display: grid;
+  min-width: 0;
+  align-content: center;
+  text-align: left;
+  gap: 5px;
+}
+
+.clockReadout output {
   min-width: 12ch;
   padding: 9px 12px;
   border: 2px inset #aaa;
@@ -140,7 +149,112 @@
   letter-spacing: 0.04em;
 }
 
+.analogClock {
+  position: relative;
+  width: 108px;
+  height: 108px;
+  border: 3px solid #111;
+  border-radius: 50%;
+  background:
+    radial-gradient(circle at center, #111 0 2px, transparent 3px),
+    repeating-conic-gradient(from -1deg, #111 0 2deg, transparent 2deg 30deg),
+    #f5f2df;
+  box-shadow:
+    inset 2px 2px #fff,
+    inset -3px -3px #999,
+    2px 2px 0 rgba(17, 17, 17, 0.18);
+}
+
+.analogClock::after {
+  position: absolute;
+  content: "";
+  inset: 8px;
+  border-radius: 50%;
+  background: #f5f2df;
+}
+
+.analogClock i,
+.analogClock b {
+  position: absolute;
+  z-index: 1;
+  top: 50%;
+  left: 50%;
+  display: block;
+  transform-origin: 50% 100%;
+}
+
+.analogClock .hourHand {
+  width: 4px;
+  height: 27px;
+  background: #111;
+  transform: translate(-50%, -100%) rotate(var(--hour-angle));
+}
+
+.analogClock .minuteHand {
+  width: 3px;
+  height: 38px;
+  background: #111;
+  transform: translate(-50%, -100%) rotate(var(--minute-angle));
+}
+
+.analogClock .secondHand {
+  width: 1px;
+  height: 40px;
+  background: #cc3a32;
+  transform: translate(-50%, -100%) rotate(var(--second-angle));
+}
+
+.analogClock b {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #111;
+  transform: translate(-50%, -50%);
+}
+
+.alarmControls {
+  display: grid;
+  grid-column: 1 / -1;
+  padding: 8px;
+  border: 1px solid #111;
+  background: #ecebe2;
+  grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr);
+  gap: 7px 8px;
+}
+
+.alarmControls label {
+  display: grid;
+  min-width: 0;
+  text-align: left;
+  gap: 3px;
+}
+
+.alarmControls input {
+  width: 100%;
+  min-width: 0;
+  height: 25px;
+  padding: 2px 5px;
+  border: 2px inset #bbb;
+  background: #fff;
+  color: #111;
+  font: inherit;
+}
+
+.alarmControls > div {
+  display: flex;
+  grid-column: 1 / -1;
+  justify-content: center;
+  gap: 7px;
+}
+
+.alarmControls p {
+  grid-column: 1 / -1;
+  min-height: 1em;
+  text-align: center;
+}
+
 .alarmClock button,
+.stopwatch button,
 .puzzleCopy button,
 .secretBox button,
 .trashView > button {
@@ -155,6 +269,117 @@
   cursor: pointer;
 }
 
+.stopwatch {
+  display: grid;
+  height: 100%;
+  align-content: start;
+  justify-items: center;
+  gap: 8px;
+}
+
+.stopwatchDial {
+  position: relative;
+  width: 86px;
+  height: 86px;
+  border: 3px solid #111;
+  border-radius: 50%;
+  background:
+    repeating-conic-gradient(#111 0 1deg, transparent 1deg 30deg),
+    #f6f2df;
+  box-shadow:
+    inset 2px 2px #fff,
+    inset -3px -3px #999;
+}
+
+.stopwatchDial::before {
+  position: absolute;
+  top: -12px;
+  left: 50%;
+  width: 24px;
+  height: 10px;
+  border: 2px solid #111;
+  background: #d7d6cc;
+  content: "";
+  transform: translateX(-50%);
+}
+
+.stopwatchDial::after {
+  position: absolute;
+  content: "";
+  inset: 7px;
+  border-radius: 50%;
+  background: #f6f2df;
+}
+
+.stopwatchDial span {
+  position: absolute;
+  z-index: 1;
+  top: 50%;
+  left: calc(50% - 1px);
+  width: 2px;
+  height: 31px;
+  background: #c83831;
+  transform: translateY(-100%) rotate(var(--stopwatch-angle));
+  transform-origin: 50% 100%;
+}
+
+.stopwatchDial b {
+  position: absolute;
+  z-index: 2;
+  top: 50%;
+  left: 50%;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #111;
+  transform: translate(-50%, -50%);
+}
+
+.stopwatch > output {
+  min-width: 11ch;
+  padding: 7px 10px;
+  border: 2px inset #aaa;
+  background: #fff;
+  font: 400 27px/1 "KZ Chicago", monospace;
+  text-align: center;
+  letter-spacing: 0.04em;
+}
+
+.stopwatchButtons {
+  display: flex;
+  justify-content: center;
+  gap: 6px;
+}
+
+.stopwatch button:disabled {
+  color: #777;
+  cursor: default;
+}
+
+.lapList {
+  width: min(100%, 250px);
+  min-height: 36px;
+  max-height: 76px;
+  padding: 4px 7px;
+  overflow: auto;
+  border: 1px solid #111;
+  background: #f8f7ef;
+  list-style: none;
+}
+
+.lapList li {
+  display: flex;
+  justify-content: space-between;
+  padding-block: 2px;
+  border-bottom: 1px dotted #888;
+}
+
+.lapList .noLaps {
+  justify-content: center;
+  color: #666;
+  border: 0;
+}
+
 .calculator {
   display: grid;
   height: 100%;
@@ -162,17 +387,32 @@
   gap: 8px;
 }
 
-.calculator > output {
+.calculatorDisplay {
+  display: grid;
   min-height: 42px;
   padding: 6px 9px;
   overflow: hidden;
   border: 2px inset #aaa;
   background: #f8f8f1;
-  font:
-    400 28px/1 "KZ Chicago",
-    monospace;
   text-align: right;
   white-space: nowrap;
+}
+
+.calculatorDisplay small {
+  min-height: 10px;
+  color: #666;
+  font-size: 8px;
+  letter-spacing: 0.08em;
+}
+
+.calculatorDisplay output {
+  overflow: hidden;
+  font: 400 28px/1 "KZ Chicago", monospace;
+}
+
+.calculator:focus-visible {
+  outline: 1px dotted #111;
+  outline-offset: -2px;
 }
 
 .calculatorKeys {
@@ -202,6 +442,10 @@
 .calculatorKeys .defaultKey {
   outline: 2px solid #111;
   outline-offset: 1px;
+}
+
+.calculatorKeys button[data-operator="true"] {
+  background: #c8d8d4;
 }
 
 .chooser {
@@ -755,7 +999,37 @@
   .memoryPanel {
     font-size: 8px;
   }
-  .alarmClock output {
+  .alarmClock {
+    grid-template-columns: 84px minmax(0, 1fr);
+    gap: 7px;
+  }
+  .analogClock {
+    width: 80px;
+    height: 80px;
+  }
+  .analogClock .hourHand {
+    height: 20px;
+  }
+  .analogClock .minuteHand,
+  .analogClock .secondHand {
+    height: 29px;
+  }
+  .clockReadout output {
+    min-width: 0;
+    padding: 6px;
+    font-size: 18px;
+  }
+  .alarmControls {
+    padding: 5px;
+  }
+  .stopwatchDial {
+    width: 70px;
+    height: 70px;
+  }
+  .stopwatchDial span {
+    height: 25px;
+  }
+  .stopwatch > output {
     font-size: 22px;
   }
   .calculatorKeys button {

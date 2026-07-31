@@ -21,7 +21,11 @@ import {
   skills,
 } from "@/data/portfolio";
 import styles from "./MacDesktop.module.css";
-import type { AccessoryId, DesktopPattern } from "./MacAccessories";
+import type {
+  AccessoryId,
+  AlarmSettings,
+  DesktopPattern,
+} from "./MacAccessories";
 import type { MacSound } from "./useMacSounds";
 
 const MacAccessories = dynamic(() => import("./MacAccessories"), {
@@ -49,6 +53,16 @@ type IconKind =
   | "trophy"
   | "mail"
   | "document"
+  | "clock"
+  | "stopwatch"
+  | "calculator"
+  | "chooser"
+  | "control"
+  | "keyboard"
+  | "notepad"
+  | "puzzle"
+  | "scrapbook"
+  | "shortcuts"
   | "trash";
 
 type WindowDefinition = {
@@ -113,9 +127,24 @@ const DESKTOP_ICON_IDS: WindowId[] = [
   "resume",
 ];
 
+const DESKTOP_ACCESSORY_ICON_IDS: AccessoryId[] = [
+  "aboutMac",
+  "alarmClock",
+  "stopwatch",
+  "calculator",
+  "notePad",
+  "puzzle",
+  "scrapbook",
+  "chooser",
+  "controlPanels",
+  "keyCaps",
+  "shortcuts",
+];
+
 const ACCESSORY_IDS: AccessoryId[] = [
   "aboutMac",
   "alarmClock",
+  "stopwatch",
   "calculator",
   "chooser",
   "controlPanels",
@@ -144,6 +173,11 @@ const RESIZE_DIRECTIONS: ResizeDirection[] = [
 const WINDOW_MARGIN = 6;
 const MIN_WINDOW_WIDTH = 220;
 const MIN_WINDOW_HEIGHT = 132;
+const DEFAULT_ALARM_SETTINGS: AlarmSettings = {
+  enabled: false,
+  time: "07:30",
+  label: "Good morning",
+};
 
 type WindowProfile = {
   width: number;
@@ -218,6 +252,14 @@ const WINDOW_PROFILES: Record<WindowId, WindowProfile> = {
     maxHeight: 340,
     x: 0.24,
     y: 0.16,
+  },
+  stopwatch: {
+    width: 0.32,
+    height: 0.5,
+    maxWidth: 400,
+    maxHeight: 410,
+    x: 0.25,
+    y: 0.11,
   },
   calculator: {
     width: 0.28,
@@ -470,17 +512,26 @@ const WINDOW_DEFINITIONS: Record<WindowId, WindowDefinition> = {
     status: "System Software 7.5 · Portfolio Finder",
   },
   alarmClock: {
-    title: "Alarm Clock",
-    icon: "computer",
+    title: "Clock & Alarm",
+    icon: "clock",
     x: 116,
     y: 66,
-    width: 310,
-    height: 245,
-    status: "Desk accessory",
+    width: 390,
+    height: 340,
+    status: "Clock · alarm scheduled locally",
+  },
+  stopwatch: {
+    title: "Stopwatch",
+    icon: "stopwatch",
+    x: 128,
+    y: 54,
+    width: 350,
+    height: 360,
+    status: "Precision timer · lap memory",
   },
   calculator: {
     title: "Calculator",
-    icon: "computer",
+    icon: "calculator",
     x: 102,
     y: 42,
     width: 282,
@@ -489,7 +540,7 @@ const WINDOW_DEFINITIONS: Record<WindowId, WindowDefinition> = {
   },
   chooser: {
     title: "Chooser",
-    icon: "computer",
+    icon: "chooser",
     x: 64,
     y: 48,
     width: 420,
@@ -498,7 +549,7 @@ const WINDOW_DEFINITIONS: Record<WindowId, WindowDefinition> = {
   },
   controlPanels: {
     title: "Control Panels",
-    icon: "folder",
+    icon: "control",
     x: 58,
     y: 44,
     width: 430,
@@ -507,7 +558,7 @@ const WINDOW_DEFINITIONS: Record<WindowId, WindowDefinition> = {
   },
   keyCaps: {
     title: "Key Caps",
-    icon: "computer",
+    icon: "keyboard",
     x: 42,
     y: 38,
     width: 450,
@@ -516,7 +567,7 @@ const WINDOW_DEFINITIONS: Record<WindowId, WindowDefinition> = {
   },
   notePad: {
     title: "Note Pad",
-    icon: "document",
+    icon: "notepad",
     x: 82,
     y: 34,
     width: 360,
@@ -525,7 +576,7 @@ const WINDOW_DEFINITIONS: Record<WindowId, WindowDefinition> = {
   },
   puzzle: {
     title: "Puzzle",
-    icon: "computer",
+    icon: "puzzle",
     x: 52,
     y: 36,
     width: 430,
@@ -534,7 +585,7 @@ const WINDOW_DEFINITIONS: Record<WindowId, WindowDefinition> = {
   },
   scrapbook: {
     title: "Scrapbook",
-    icon: "document",
+    icon: "scrapbook",
     x: 62,
     y: 40,
     width: 420,
@@ -543,7 +594,7 @@ const WINDOW_DEFINITIONS: Record<WindowId, WindowDefinition> = {
   },
   shortcuts: {
     title: "Keyboard Shortcuts",
-    icon: "document",
+    icon: "shortcuts",
     x: 44,
     y: 34,
     width: 470,
@@ -707,6 +758,199 @@ function MacIcon({ kind }: { kind: IconKind }) {
           strokeWidth="2"
         />
         <path d="M8 14h31v3H8z" fill="#fff" opacity=".7" />
+      </svg>
+    );
+  }
+
+  if (kind === "clock") {
+    return (
+      <svg
+        className={styles.pixelIcon}
+        viewBox="0 0 48 48"
+        shapeRendering="crispEdges"
+        aria-hidden="true"
+      >
+        <path d="M12 8 7 14m29-6 5 6" stroke="#111" strokeWidth="3" />
+        <circle cx="24" cy="25" r="18" fill="#f4f1dd" stroke="#111" strokeWidth="2" />
+        <path d="M24 11v4m0 20v4M10 25h4m20 0h4" stroke="#111" strokeWidth="2" />
+        <path d="M24 25V16m0 9 8 5" fill="none" stroke="#111" strokeWidth="3" />
+        <path d="M13 40 9 45m26-5 4 5" stroke="#111" strokeWidth="3" />
+        <rect x="20" y="2" width="8" height="4" fill="#cfcec5" stroke="#111" strokeWidth="2" />
+      </svg>
+    );
+  }
+
+  if (kind === "stopwatch") {
+    return (
+      <svg
+        className={styles.pixelIcon}
+        viewBox="0 0 48 48"
+        shapeRendering="crispEdges"
+        aria-hidden="true"
+      >
+        <rect x="19" y="2" width="11" height="5" fill="#d6d5cd" stroke="#111" strokeWidth="2" />
+        <path d="M24 7v4m12 0 4 4" stroke="#111" strokeWidth="3" />
+        <circle cx="24" cy="28" r="17" fill="#eef2e5" stroke="#111" strokeWidth="2" />
+        <path d="M24 14v4m0 20v4M10 28h4m20 0h4" stroke="#111" strokeWidth="2" />
+        <path d="M24 28V18m0 10 7 7" fill="none" stroke="#c43b35" strokeWidth="2" />
+        <rect x="34" y="7" width="7" height="4" fill="#cfcec5" stroke="#111" strokeWidth="2" />
+      </svg>
+    );
+  }
+
+  if (kind === "calculator") {
+    return (
+      <svg
+        className={styles.pixelIcon}
+        viewBox="0 0 48 48"
+        shapeRendering="crispEdges"
+        aria-hidden="true"
+      >
+        <rect x="8" y="3" width="32" height="42" rx="2" fill="#d4d3ca" stroke="#111" strokeWidth="2" />
+        <rect x="12" y="8" width="24" height="9" fill="#dce9d8" stroke="#111" strokeWidth="2" />
+        <path d="M15 12h16" stroke="#53645b" strokeWidth="2" />
+        {[0, 1, 2].map((row) =>
+          [0, 1, 2, 3].map((column) => (
+            <rect
+              key={`${row}-${column}`}
+              x={12 + column * 6}
+              y={22 + row * 7}
+              width="4"
+              height="4"
+              fill={column === 3 ? "#9ebfba" : "#f4f2e8"}
+              stroke="#111"
+            />
+          ))
+        )}
+      </svg>
+    );
+  }
+
+  if (kind === "chooser") {
+    return (
+      <svg
+        className={styles.pixelIcon}
+        viewBox="0 0 48 48"
+        shapeRendering="crispEdges"
+        aria-hidden="true"
+      >
+        <path d="M12 5h24v15H12z" fill="#edf1e6" stroke="#111" strokeWidth="2" />
+        <path d="M16 9h16v7H16z" fill="#93bbb5" stroke="#111" />
+        <path d="M7 19h34v18H7z" fill="#d4d3ca" stroke="#111" strokeWidth="2" />
+        <path d="M13 31h22v13H13z" fill="#f5f1df" stroke="#111" strokeWidth="2" />
+        <path d="M17 35h14m-14 4h10" stroke="#777" strokeWidth="2" />
+        <rect x="34" y="23" width="3" height="3" fill="#5c958b" />
+      </svg>
+    );
+  }
+
+  if (kind === "control") {
+    return (
+      <svg
+        className={styles.pixelIcon}
+        viewBox="0 0 48 48"
+        shapeRendering="crispEdges"
+        aria-hidden="true"
+      >
+        <rect x="5" y="5" width="38" height="38" fill="#e3e1d7" stroke="#111" strokeWidth="2" />
+        <path d="M12 14h24M12 24h24M12 34h24" stroke="#111" strokeWidth="2" />
+        <rect x="17" y="10" width="7" height="8" fill="#7faea5" stroke="#111" strokeWidth="2" />
+        <rect x="29" y="20" width="7" height="8" fill="#d9ba68" stroke="#111" strokeWidth="2" />
+        <rect x="12" y="30" width="7" height="8" fill="#a89fd3" stroke="#111" strokeWidth="2" />
+      </svg>
+    );
+  }
+
+  if (kind === "keyboard") {
+    return (
+      <svg
+        className={styles.pixelIcon}
+        viewBox="0 0 48 48"
+        shapeRendering="crispEdges"
+        aria-hidden="true"
+      >
+        <path d="M4 14h40l-3 24H7z" fill="#dddcd3" stroke="#111" strokeWidth="2" />
+        {[0, 1, 2].map((row) =>
+          [0, 1, 2, 3, 4].map((column) => (
+            <rect
+              key={`${row}-${column}`}
+              x={9 + column * 6}
+              y={19 + row * 5}
+              width="4"
+              height="3"
+              fill="#faf8ee"
+              stroke="#777"
+            />
+          ))
+        )}
+        <rect x="15" y="34" width="18" height="3" fill="#faf8ee" stroke="#777" />
+      </svg>
+    );
+  }
+
+  if (kind === "notepad") {
+    return (
+      <svg
+        className={styles.pixelIcon}
+        viewBox="0 0 48 48"
+        shapeRendering="crispEdges"
+        aria-hidden="true"
+      >
+        <path d="M9 7h32v38H9z" fill="#fff2a8" stroke="#111" strokeWidth="2" />
+        <path d="M9 7h32v7H9z" fill="#d6c25f" stroke="#111" strokeWidth="2" />
+        <path d="M15 3v8m7-8v8m7-8v8m7-8v8" stroke="#111" strokeWidth="2" />
+        <path d="M15 21h20m-20 6h20m-20 6h16m-16 6h12" stroke="#766c41" strokeWidth="2" />
+      </svg>
+    );
+  }
+
+  if (kind === "puzzle") {
+    return (
+      <svg
+        className={styles.pixelIcon}
+        viewBox="0 0 48 48"
+        shapeRendering="crispEdges"
+        aria-hidden="true"
+      >
+        <rect x="5" y="5" width="38" height="38" fill="#c9c8bf" stroke="#111" strokeWidth="2" />
+        <path d="M8 8h15v15H8zm17 0h15v15H25zM8 25h15v15H8z" fill="#a9a1d8" stroke="#111" strokeWidth="2" />
+        <path d="M25 25h15v15H25z" fill="#f0eee3" stroke="#888" strokeDasharray="2 2" />
+        <path d="M15 12v7m-3-4h6m11-3 6 7m0-7-6 7m-17 12h7" stroke="#111" strokeWidth="2" />
+      </svg>
+    );
+  }
+
+  if (kind === "scrapbook") {
+    return (
+      <svg
+        className={styles.pixelIcon}
+        viewBox="0 0 48 48"
+        shapeRendering="crispEdges"
+        aria-hidden="true"
+      >
+        <path d="M8 4h33v40H8z" fill="#92775d" stroke="#111" strokeWidth="2" />
+        <path d="M14 4h27v40H14z" fill="#d8c7a5" stroke="#111" strokeWidth="2" />
+        <path d="M18 11h18v21H18z" fill="#f7f3e4" stroke="#111" strokeWidth="2" />
+        <circle cx="27" cy="19" r="5" fill="#86afa8" stroke="#111" />
+        <path d="m19 30 6-7 4 4 3-3 4 6" fill="#a9a1d8" stroke="#111" />
+        <path d="M6 11h5m-5 8h5m-5 8h5m-5 8h5" stroke="#111" strokeWidth="2" />
+      </svg>
+    );
+  }
+
+  if (kind === "shortcuts") {
+    return (
+      <svg
+        className={styles.pixelIcon}
+        viewBox="0 0 48 48"
+        shapeRendering="crispEdges"
+        aria-hidden="true"
+      >
+        <rect x="4" y="8" width="40" height="32" rx="3" fill="#d9d8cf" stroke="#111" strokeWidth="2" />
+        <rect x="9" y="14" width="14" height="19" fill="#f8f5e8" stroke="#111" strokeWidth="2" />
+        <rect x="26" y="14" width="13" height="19" fill="#a8c9c3" stroke="#111" strokeWidth="2" />
+        <text x="16" y="28" fontFamily="serif" fontSize="13" textAnchor="middle" fill="#111">⌘</text>
+        <text x="32.5" y="28" fontFamily="sans-serif" fontSize="13" fontWeight="bold" textAnchor="middle" fill="#111">?</text>
       </svg>
     );
   }
@@ -1118,6 +1362,9 @@ export default function MacDesktop({
   const [clock, setClock] = useState("--:--");
   const [pattern, setPattern] = useState<DesktopPattern>("sage");
   const [trashEmpty, setTrashEmpty] = useState(false);
+  const [alarmSettings, setAlarmSettings] = useState<AlarmSettings>(
+    DEFAULT_ALARM_SETTINGS
+  );
   const [toast, setToast] = useState<string | null>(null);
 
   const rootRef = useRef<HTMLDivElement>(null);
@@ -1130,6 +1377,7 @@ export default function MacDesktop({
   const toastTimerRef = useRef<number | null>(null);
   const initialLayoutFittedRef = useRef(false);
   const secretBufferRef = useRef("");
+  const lastAlarmMinuteRef = useRef<string | null>(null);
   const nextZ = useRef(20);
   const titlePrefix = useId();
 
@@ -1352,6 +1600,8 @@ export default function MacDesktop({
     setActiveMenu(null);
     setPattern("sage");
     setTrashEmpty(false);
+    setAlarmSettings(DEFAULT_ALARM_SETTINGS);
+    lastAlarmMinuteRef.current = null;
     setToast(null);
     window.requestAnimationFrame(() => windowRefs.current.welcome?.focus());
   }, [onSound]);
@@ -1373,6 +1623,34 @@ export default function MacDesktop({
     onSound?.("success");
     showToast("Secret about box unlocked");
   }, [onSound, openWindow, showToast]);
+
+  useEffect(() => {
+    if (!alarmSettings.enabled) {
+      lastAlarmMinuteRef.current = null;
+      return;
+    }
+
+    const checkAlarm = () => {
+      const now = new Date();
+      const currentTime = `${String(now.getHours()).padStart(2, "0")}:${String(now.getMinutes()).padStart(2, "0")}`;
+      const minuteKey = `${now.getFullYear()}-${now.getMonth()}-${now.getDate()}-${currentTime}`;
+      if (
+        currentTime !== alarmSettings.time ||
+        lastAlarmMinuteRef.current === minuteKey
+      ) {
+        return;
+      }
+
+      lastAlarmMinuteRef.current = minuteKey;
+      onSound?.("alarm");
+      showToast(`Alarm · ${alarmSettings.label}`);
+      openWindow("alarmClock");
+    };
+
+    checkAlarm();
+    const timer = window.setInterval(checkAlarm, 1_000);
+    return () => window.clearInterval(timer);
+  }, [alarmSettings, onSound, openWindow, showToast]);
 
   const toggleMenu = useCallback(
     (menu: MenuId) => {
@@ -1593,6 +1871,18 @@ export default function MacDesktop({
         return;
       }
 
+      const accessoryShortcut: Partial<Record<string, WindowId>> = {
+        "7": "alarmClock",
+        "8": "stopwatch",
+        "9": "calculator",
+      };
+      const shortcutTarget = accessoryShortcut[key];
+      if (shortcutTarget) {
+        event.preventDefault();
+        openWindow(shortcutTarget);
+        return;
+      }
+
       if (key === "o") {
         event.preventDefault();
         openWindow(selectedIcon ?? "welcome");
@@ -1687,6 +1977,8 @@ export default function MacDesktop({
               onPatternChange={setPattern}
               trashEmpty={trashEmpty}
               onEmptyTrash={emptyTrash}
+              alarmSettings={alarmSettings}
+              onAlarmChange={setAlarmSettings}
             />
           );
         }
@@ -1745,15 +2037,25 @@ export default function MacDesktop({
                 onSelect={() =>
                   performMenuAction(() => openWindow("alarmClock"))
                 }
+                shortcut="⌘7"
               >
-                Alarm Clock
+                Clock &amp; Alarm
               </MenuAction>
               <MenuAction
                 onSelect={() =>
                   performMenuAction(() => openWindow("calculator"))
                 }
+                shortcut="⌘9"
               >
                 Calculator
+              </MenuAction>
+              <MenuAction
+                onSelect={() =>
+                  performMenuAction(() => openWindow("stopwatch"))
+                }
+                shortcut="⌘8"
+              >
+                Stopwatch
               </MenuAction>
               <MenuAction
                 onSelect={() => performMenuAction(() => openWindow("chooser"))}
@@ -1947,8 +2249,8 @@ export default function MacDesktop({
         <button
           type="button"
           className={styles.clock}
-          aria-label={`Open Alarm Clock. Current time ${clock}`}
-          title="Alarm Clock"
+          aria-label={`Open Clock and Alarm. Current time ${clock}`}
+          title="Clock & Alarm"
           onClick={() => openWindow("alarmClock")}
         >
           <time>{clock}</time>
@@ -1964,6 +2266,49 @@ export default function MacDesktop({
             <button
               type="button"
               className={`${styles.desktopIcon}${selected ? ` ${styles.selectedIcon}` : ""}`}
+              key={id}
+              aria-label={`Open ${definition.title}`}
+              aria-pressed={selected}
+              data-open={windows[id].open ? "true" : undefined}
+              onClick={() => {
+                setSelectedIcon(id);
+                onSound?.("select");
+              }}
+              onDoubleClick={() => openWindow(id)}
+              onPointerUp={(event) => {
+                if (event.pointerType !== "mouse") openWindow(id);
+              }}
+              onKeyDown={(event) => {
+                if (event.key === "Enter") {
+                  event.preventDefault();
+                  openWindow(id);
+                }
+              }}
+            >
+              <span className={styles.iconArtwork}>
+                <MacIcon kind={definition.icon} />
+              </span>
+              <span className={styles.iconLabel}>{definition.title}</span>
+            </button>
+          );
+        })}
+      </nav>
+
+      <nav
+        className={styles.accessoryGrid}
+        aria-label="Desk accessories on the desktop"
+      >
+        {DESKTOP_ACCESSORY_ICON_IDS.map((id, index) => {
+          const definition = WINDOW_DEFINITIONS[id];
+          const selected = selectedIcon === id;
+
+          return (
+            <button
+              type="button"
+              className={`${styles.desktopIcon}${selected ? ` ${styles.selectedIcon}` : ""}`}
+              style={
+                { "--icon-delay": `${420 + index * 45}ms` } as CSSProperties
+              }
               key={id}
               aria-label={`Open ${definition.title}`}
               aria-pressed={selected}
@@ -2159,7 +2504,7 @@ export default function MacDesktop({
       ) : null}
 
       <p className={styles.desktopHint} aria-hidden="true">
-        Double-click an icon · Drag title bars · ⌘1–6 opens apps · ? shows
+        Double-click an icon · Drag title bars · ⌘1–9 opens apps · ? shows
         shortcuts
       </p>
       <p className={styles.touchHint} aria-hidden="true">
