@@ -1,0 +1,843 @@
+.eyebrow {
+  margin: 0;
+  font-family: "KZ Chicago", "Courier New", monospace;
+  font-size: 9px;
+  letter-spacing: 0.08em;
+}
+
+.aboutMac {
+  display: grid;
+  grid-template-columns: 68px minmax(0, 1fr);
+  align-items: center;
+  gap: 12px;
+}
+
+.aboutMac h3,
+.controlPanels h3,
+.puzzle h3,
+.scrapbook h3,
+.trashView h3 {
+  margin: 2px 0;
+  font-family: "KZ Chicago", "Courier New", monospace;
+  font-size: 18px;
+  font-weight: 400;
+}
+
+.aboutMac small {
+  padding-top: 9px;
+  border-top: 1px solid #111;
+  grid-column: 1 / -1;
+}
+
+.happyComputer {
+  position: relative;
+  display: grid;
+  width: 62px;
+  height: 68px;
+  border: 2px solid #111;
+  border-radius: 4px 4px 8px 8px;
+  background: #e3e1d6;
+  box-shadow: inset -5px -4px #aaa89f;
+  place-items: start center;
+}
+
+.happyComputer::after {
+  position: absolute;
+  right: 9px;
+  bottom: 7px;
+  left: 9px;
+  height: 4px;
+  border: 1px solid #111;
+  background: #c9c8be;
+  content: "";
+}
+
+.happyScreen {
+  display: grid;
+  width: 43px;
+  height: 34px;
+  margin-top: 8px;
+  border: 2px solid #111;
+  background: #fff;
+  font:
+    700 25px/1 Arial,
+    sans-serif;
+  transform: rotate(180deg);
+  place-items: center;
+}
+
+.memoryPanel {
+  display: grid;
+  margin: 3px 0 0;
+  border: 1px solid #111;
+  grid-column: 1 / -1;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.memoryPanel div {
+  display: flex;
+  min-width: 0;
+  padding: 6px;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.memoryPanel div + div {
+  border-left: 1px solid #111;
+}
+
+.memoryPanel dt {
+  font-weight: 700;
+}
+
+.memoryPanel dd {
+  margin: 0;
+}
+
+.memoryBars {
+  display: grid;
+  grid-column: 1 / -1;
+  gap: 5px;
+}
+
+.memoryBars span {
+  position: relative;
+  display: grid;
+  height: 18px;
+  padding: 1px 5px;
+  overflow: hidden;
+  border: 1px solid #111;
+  isolation: isolate;
+  align-items: center;
+}
+
+.memoryBars i {
+  position: absolute;
+  z-index: -1;
+  inset: 0 auto 0 0;
+  width: var(--memory);
+  background: repeating-linear-gradient(45deg, #111 0 2px, #fff 2px 4px);
+  opacity: 0.34;
+  animation: memory-fill 600ms steps(8, end) both;
+}
+
+.alarmClock {
+  display: grid;
+  height: 100%;
+  text-align: center;
+  place-content: center;
+  gap: 8px;
+}
+
+.alarmClock output {
+  min-width: 12ch;
+  padding: 9px 12px;
+  border: 2px inset #aaa;
+  background: #fff;
+  font:
+    400 clamp(22px, 4cqw, 38px) / 1 "KZ Chicago",
+    monospace;
+  letter-spacing: 0.04em;
+}
+
+.alarmClock button,
+.puzzleCopy button,
+.secretBox button,
+.trashView > button {
+  justify-self: center;
+  padding: 5px 10px;
+  border: 1px solid #111;
+  border-radius: 3px;
+  background: #dddcd2;
+  box-shadow:
+    inset 1px 1px #fff,
+    inset -1px -1px #888;
+  cursor: pointer;
+}
+
+.calculator {
+  display: grid;
+  height: 100%;
+  padding: 5px;
+  gap: 8px;
+}
+
+.calculator > output {
+  min-height: 42px;
+  padding: 6px 9px;
+  overflow: hidden;
+  border: 2px inset #aaa;
+  background: #f8f8f1;
+  font:
+    400 28px/1 "KZ Chicago",
+    monospace;
+  text-align: right;
+  white-space: nowrap;
+}
+
+.calculatorKeys {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 5px;
+}
+
+.calculatorKeys button {
+  min-height: 34px;
+  border: 1px solid #111;
+  border-radius: 3px;
+  background: #d7d6cc;
+  box-shadow:
+    inset 2px 2px #fff,
+    inset -2px -2px #85847d;
+  font-family: "KZ Chicago", monospace;
+  cursor: pointer;
+  transition: transform 70ms steps(1, end);
+}
+
+.calculatorKeys button:active {
+  box-shadow: inset 2px 2px #77766f;
+  transform: translate(1px, 1px);
+}
+
+.calculatorKeys .defaultKey {
+  outline: 2px solid #111;
+  outline-offset: 1px;
+}
+
+.chooser {
+  display: grid;
+  gap: 8px;
+}
+
+.chooserColumns {
+  display: grid;
+  min-height: 150px;
+  border: 1px solid #111;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+}
+
+.chooserColumns > div {
+  display: grid;
+  align-content: start;
+  gap: 4px;
+  padding: 8px;
+}
+
+.chooserColumns > div + div {
+  border-left: 1px solid #111;
+}
+
+.chooserColumns button {
+  padding: 5px;
+  border: 0;
+  background: transparent;
+  text-align: left;
+}
+
+.chooserColumns button[aria-pressed="true"] {
+  background: #111;
+  color: #fff;
+}
+
+.appleTalkZone span {
+  margin-top: 8px;
+  padding: 5px;
+  border: 1px dotted #111;
+}
+
+.appleTalkZone small {
+  margin-top: auto;
+}
+
+.controlPanels {
+  display: grid;
+  gap: 8px;
+}
+
+.patternGrid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.patternGrid button {
+  display: grid;
+  min-width: 0;
+  padding: 5px;
+  border: 1px solid transparent;
+  background: transparent;
+  font-size: 10px;
+  text-align: center;
+  cursor: pointer;
+  gap: 4px;
+}
+
+.patternGrid button[aria-pressed="true"] {
+  border-color: #111;
+  outline: 1px solid #fff;
+  background: #111;
+  color: #fff;
+}
+
+.patternGrid span {
+  display: block;
+  width: 100%;
+  aspect-ratio: 1.4;
+  border: 1px solid #111;
+}
+
+.patternGrid button[data-pattern="sage"] span {
+  background-color: #7f8a7d;
+  background-image: repeating-linear-gradient(
+    45deg,
+    #fff2 0 2px,
+    transparent 2px 4px
+  );
+}
+
+.patternGrid button[data-pattern="platinum"] span {
+  background: repeating-conic-gradient(#deded8 0 25%, #aaa 0 50%) 0 / 4px 4px;
+}
+
+.patternGrid button[data-pattern="blue"] span {
+  background: repeating-linear-gradient(135deg, #6d7894 0 2px, #98a2b7 2px 4px);
+}
+
+.patternGrid button[data-pattern="graphite"] span {
+  background: repeating-conic-gradient(#454545 0 25%, #777 0 50%) 0 / 4px 4px;
+}
+
+.controlHint {
+  padding: 6px;
+  border: 1px dotted #111;
+  background: #fff;
+}
+
+.keyCaps {
+  display: grid;
+  align-content: start;
+  gap: 10px;
+}
+
+.keyCaps output {
+  min-height: 28px;
+  padding: 6px;
+  overflow: hidden;
+  border: 1px solid #111;
+  background: #fff;
+  font-family: "KZ Chicago", monospace;
+  white-space: pre;
+}
+
+.keyboard {
+  display: grid;
+  padding: 8px;
+  border: 1px solid #111;
+  background: #b8b7ae;
+  gap: 3px;
+}
+
+.keyboard > div {
+  display: flex;
+  justify-content: center;
+  gap: 3px;
+}
+
+.keyboard button {
+  min-width: 25px;
+  min-height: 24px;
+  padding: 2px;
+  border: 1px solid #111;
+  border-radius: 2px;
+  background: #ebeae1;
+  box-shadow:
+    inset 1px 1px #fff,
+    1px 1px #555;
+  font-size: 9px;
+  cursor: pointer;
+}
+
+.keyboard .spaceKey {
+  width: 45%;
+  margin-left: auto;
+}
+
+.notePad {
+  display: grid;
+  height: 100%;
+  grid-template-rows: auto minmax(0, 1fr);
+}
+
+.notePad > span {
+  padding: 4px 8px;
+  border-bottom: 1px solid #111;
+  background: #d7d6cc;
+  font-family: "KZ Chicago", monospace;
+}
+
+.notePad textarea {
+  width: 100%;
+  min-height: 0;
+  padding: 11px 13px;
+  resize: none;
+  border: 0;
+  outline: 0;
+  background:
+    linear-gradient(
+      90deg,
+      transparent 28px,
+      #e59b9b 28px 29px,
+      transparent 29px
+    ),
+    repeating-linear-gradient(#fffdf3 0 20px, #b8c7dc 20px 21px);
+  color: #111;
+  font:
+    13px/21px "Courier New",
+    monospace;
+}
+
+.puzzle {
+  display: grid;
+  height: 100%;
+  grid-template-columns: minmax(140px, 0.9fr) minmax(140px, 1fr);
+  align-items: center;
+  gap: 14px;
+}
+
+.puzzleBoard {
+  display: grid;
+  aspect-ratio: 1;
+  padding: 6px;
+  border: 2px solid #111;
+  background: #8d8c85;
+  box-shadow:
+    inset 2px 2px #555,
+    inset -2px -2px #fff;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 4px;
+}
+
+.puzzleBoard button {
+  border: 1px solid #111;
+  background: #e4e3d9;
+  box-shadow:
+    inset 2px 2px #fff,
+    inset -2px -2px #85847d;
+  font:
+    400 clamp(16px, 3cqw, 25px) / 1 "KZ Chicago",
+    monospace;
+  cursor: pointer;
+  transition:
+    transform 120ms steps(2, end),
+    filter 120ms ease;
+}
+
+.puzzleBoard button:hover:not(:disabled) {
+  filter: brightness(1.08);
+  transform: scale(1.04);
+}
+
+.puzzleBoard .emptyTile {
+  border-color: transparent;
+  background: transparent;
+  box-shadow: none;
+}
+
+.puzzleCopy {
+  display: grid;
+  align-content: center;
+  gap: 5px;
+}
+
+.puzzleCopy button {
+  margin-top: 8px;
+  justify-self: start;
+}
+
+.scrapbook {
+  display: grid;
+  height: 100%;
+  grid-template-rows: minmax(0, 1fr) auto;
+  gap: 8px;
+}
+
+.scrapbook article {
+  display: grid;
+  min-height: 150px;
+  padding: 15px;
+  border: 1px solid #111;
+  background: #fffdf3;
+  box-shadow: 3px 3px #898880;
+  grid-template-columns: 70px minmax(0, 1fr);
+  align-items: center;
+  gap: 15px;
+  animation: clipping-in 260ms steps(4, end) both;
+}
+
+.scrapbook article > span {
+  font:
+    400 40px/1 "KZ Chicago",
+    monospace;
+  text-align: center;
+}
+
+.scrapbook > div {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+}
+
+.scrapbook > div button {
+  width: 32px;
+  height: 25px;
+  border: 1px solid #111;
+  background: #d7d6cc;
+}
+
+.secretBox {
+  position: relative;
+  display: grid;
+  height: 100%;
+  overflow: hidden;
+  background: #080808;
+  color: #fff;
+  text-align: center;
+  place-content: center;
+  gap: 4px;
+}
+
+.secretBox::before {
+  position: absolute;
+  inset: 0;
+  opacity: 0.18;
+  background: repeating-linear-gradient(
+    to bottom,
+    transparent 0 3px,
+    #fff 3px 4px
+  );
+  content: "";
+  pointer-events: none;
+}
+
+.secretHello {
+  color: #fff;
+  font:
+    italic 400 clamp(34px, 7cqw, 62px) / 0.9 Georgia,
+    serif;
+  letter-spacing: -0.07em;
+  animation: hello-wave 900ms cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.secretYear {
+  margin: 8px auto;
+  padding: 4px 11px;
+  background: linear-gradient(
+    90deg,
+    #55a7d9,
+    #7abf61,
+    #f5d24e,
+    #df5d4d,
+    #9d68a9
+  );
+  color: #111;
+  font-family: "KZ Chicago", monospace;
+}
+
+.secretCopy {
+  max-width: 42ch;
+  margin: 0 auto 8px;
+}
+
+.secretBox button {
+  background: #fff;
+}
+
+.secretBox small {
+  margin-top: 7px;
+  color: #aaa;
+}
+
+.shortcutSheet {
+  display: grid;
+  gap: 10px;
+}
+
+.shortcutSheet header {
+  display: grid;
+  padding-bottom: 9px;
+  border-bottom: 3px double #111;
+  grid-template-columns: 52px minmax(0, 1fr);
+  align-items: center;
+  gap: 10px;
+}
+
+.shortcutSheet header > span {
+  display: grid;
+  width: 48px;
+  aspect-ratio: 1;
+  border: 2px solid #111;
+  border-radius: 7px;
+  background: #fff;
+  box-shadow:
+    inset 2px 2px #d7d6cc,
+    2px 2px #777;
+  font:
+    400 26px/1 "KZ Chicago",
+    monospace;
+  place-items: center;
+}
+
+.shortcutSheet h3 {
+  margin: 2px 0;
+  font:
+    400 18px/1.1 "KZ Chicago",
+    monospace;
+}
+
+.shortcutSheet dl {
+  display: grid;
+  margin: 0;
+  border: 1px solid #111;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.shortcutSheet dl > div {
+  display: grid;
+  min-width: 0;
+  min-height: 46px;
+  padding: 6px 8px;
+  border-bottom: 1px dotted #888;
+  background: #fff;
+  align-content: center;
+  gap: 2px;
+}
+
+.shortcutSheet dl > div:nth-child(even) {
+  border-left: 1px solid #111;
+}
+
+.shortcutSheet dt {
+  font-family: "KZ Chicago", monospace;
+  font-size: 10px;
+}
+
+.shortcutSheet dd {
+  margin: 0;
+  font-size: 10px;
+}
+
+.shortcutSheet > small {
+  padding: 6px 8px;
+  border: 1px dotted #111;
+  background: #e8e7df;
+  text-align: center;
+}
+
+.trashView {
+  display: grid;
+  height: 100%;
+  align-content: start;
+  gap: 8px;
+}
+
+.trashView ul {
+  display: grid;
+  border: 1px solid #111;
+}
+
+.trashView li {
+  display: grid;
+  min-height: 32px;
+  padding: 5px 8px;
+  background: #fff;
+  grid-template-columns: 26px minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 7px;
+  animation: trash-item-in 260ms steps(3, end) both;
+}
+
+.trashView li + li {
+  border-top: 1px dotted #777;
+}
+
+.trashView > button {
+  justify-self: end;
+}
+
+.emptyTrashMessage {
+  display: grid;
+  height: 100%;
+  text-align: center;
+  place-content: center;
+}
+
+.emptyTrashMessage > span {
+  font-size: 46px;
+  animation: empty-trash-spin 520ms steps(6, end) both;
+}
+
+@keyframes memory-fill {
+  from {
+    width: 0;
+  }
+}
+
+@keyframes clipping-in {
+  from {
+    opacity: 0;
+    transform: translateX(10px) rotate(1deg);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0) rotate(0);
+  }
+}
+
+@keyframes hello-wave {
+  from {
+    opacity: 0;
+    transform: scale(1.35) rotate(-4deg);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) rotate(0);
+  }
+}
+
+@keyframes trash-item-in {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes empty-trash-spin {
+  from {
+    opacity: 0;
+    transform: rotate(-180deg) scale(0.6);
+  }
+  to {
+    opacity: 1;
+    transform: rotate(0) scale(1);
+  }
+}
+
+@container mac-desktop (max-width: 720px) {
+  .eyebrow {
+    font-size: 7px;
+  }
+  .aboutMac {
+    grid-template-columns: 52px minmax(0, 1fr);
+    gap: 8px;
+  }
+  .happyComputer {
+    width: 48px;
+    height: 53px;
+  }
+  .happyScreen {
+    width: 33px;
+    height: 26px;
+    margin-top: 6px;
+    font-size: 19px;
+  }
+  .aboutMac h3,
+  .controlPanels h3,
+  .puzzle h3,
+  .scrapbook h3,
+  .trashView h3 {
+    font-size: 13px;
+  }
+  .memoryPanel {
+    font-size: 8px;
+  }
+  .alarmClock output {
+    font-size: 22px;
+  }
+  .calculatorKeys button {
+    min-height: 28px;
+  }
+  .keyboard {
+    padding: 5px;
+  }
+  .keyboard button {
+    min-width: 19px;
+    min-height: 20px;
+    font-size: 7px;
+  }
+  .patternGrid {
+    gap: 4px;
+  }
+  .patternGrid button {
+    padding: 3px;
+    font-size: 7px;
+  }
+  .scrapbook article {
+    min-height: 112px;
+    padding: 9px;
+    grid-template-columns: 48px minmax(0, 1fr);
+    gap: 8px;
+  }
+  .scrapbook article > span {
+    font-size: 28px;
+  }
+  .shortcutSheet h3 {
+    font-size: 13px;
+  }
+  .shortcutSheet dl > div {
+    min-height: 38px;
+    padding: 4px 6px;
+  }
+  .shortcutSheet dt,
+  .shortcutSheet dd {
+    font-size: 8px;
+  }
+}
+
+@container mac-desktop (max-width: 390px) {
+  .patternGrid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .chooserColumns {
+    grid-template-columns: 1fr;
+  }
+  .chooserColumns > div + div {
+    border-top: 1px solid #111;
+    border-left: 0;
+  }
+  .puzzle {
+    grid-template-columns: 1fr;
+  }
+  .shortcutSheet dl {
+    grid-template-columns: 1fr;
+  }
+  .shortcutSheet dl > div:nth-child(even) {
+    border-left: 0;
+  }
+  .puzzleBoard {
+    width: min(100%, 150px);
+    justify-self: center;
+  }
+  .puzzleCopy {
+    text-align: center;
+  }
+  .puzzleCopy button {
+    justify-self: center;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .memoryBars i,
+  .puzzleBoard button,
+  .scrapbook article,
+  .secretHello,
+  .trashView li,
+  .emptyTrashMessage > span {
+    animation: none;
+    transition: none;
+  }
+}

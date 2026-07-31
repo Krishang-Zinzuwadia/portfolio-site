@@ -2,7 +2,16 @@
 
 import { useCallback, useEffect, useRef, useSyncExternalStore } from "react";
 
-export type MacSound = "startup" | "menu" | "open" | "close";
+export type MacSound =
+  | "startup"
+  | "menu"
+  | "open"
+  | "close"
+  | "select"
+  | "key"
+  | "error"
+  | "trash"
+  | "success";
 
 const MUTE_STORAGE_KEY = "krishang-mac-sound-muted";
 const MUTE_CHANGE_EVENT = "krishang-mac-sound-change";
@@ -85,6 +94,57 @@ function addTone(
   });
 }
 
+function addNoise(
+  context: AudioContext,
+  output: AudioNode,
+  options: {
+    start: number;
+    duration: number;
+    volume: number;
+    frequency: number;
+  }
+) {
+  const frameCount = Math.max(
+    1,
+    Math.floor(context.sampleRate * options.duration)
+  );
+  const buffer = context.createBuffer(1, frameCount, context.sampleRate);
+  const samples = buffer.getChannelData(0);
+
+  // A tiny deterministic noise burst keeps the effect consistent and avoids
+  // downloading audio samples for short Finder interactions.
+  let seed = 19;
+  for (let index = 0; index < samples.length; index += 1) {
+    seed = (seed * 16807) % 2147483647;
+    samples[index] = (seed / 1073741823.5 - 1) * (1 - index / samples.length);
+  }
+
+  const source = context.createBufferSource();
+  const bandpass = context.createBiquadFilter();
+  const envelope = context.createGain();
+  const end = options.start + options.duration;
+  source.buffer = buffer;
+  bandpass.type = "bandpass";
+  bandpass.frequency.setValueAtTime(options.frequency, options.start);
+  bandpass.Q.value = 0.7;
+  envelope.gain.setValueAtTime(options.volume, options.start);
+  envelope.gain.exponentialRampToValueAtTime(0.0001, end);
+  source.connect(bandpass);
+  bandpass.connect(envelope);
+  envelope.connect(output);
+  source.start(options.start);
+  source.stop(end);
+  source.addEventListener(
+    "ended",
+    () => {
+      source.disconnect();
+      bandpass.disconnect();
+      envelope.disconnect();
+    },
+    { once: true }
+  );
+}
+
 function primeAudioContext(context: AudioContext) {
   const source = context.createBufferSource();
   source.buffer = context.createBuffer(1, 1, context.sampleRate);
@@ -108,8 +168,8 @@ function scheduleSound(context: AudioContext, sound: MacSound) {
   const filter = context.createBiquadFilter();
   const master = context.createGain();
   filter.type = "lowpass";
-  filter.frequency.setValueAtTime(sound === "startup" ? 3100 : 2400, now);
-  master.gain.value = 0.88;
+  filter.frequency.setValueAtTime(sound === "startup" ? 3100 : 2600, now);
+  master.gain.value = 0.82;
   filter.connect(master);
   master.connect(context.destination);
 
@@ -142,7 +202,7 @@ function scheduleSound(context: AudioContext, sound: MacSound) {
       volume: 0.1,
       type: "triangle",
     });
-  } else {
+  } else if (sound === "menu") {
     addTone(context, filter, {
       frequency: 740,
       endFrequency: 610,
@@ -151,9 +211,74 @@ function scheduleSound(context: AudioContext, sound: MacSound) {
       volume: 0.065,
       type: "square",
     });
+  } else if (sound === "select") {
+    addTone(context, filter, {
+      frequency: 520,
+      endFrequency: 690,
+      start: now,
+      duration: 0.055,
+      volume: 0.055,
+      type: "square",
+    });
+  } else if (sound === "key") {
+    addTone(context, filter, {
+      frequency: 440,
+      endFrequency: 390,
+      start: now,
+      duration: 0.028,
+      volume: 0.035,
+      type: "square",
+    });
+  } else if (sound === "error") {
+    addTone(context, filter, {
+      frequency: 196,
+      start: now,
+      duration: 0.11,
+      volume: 0.11,
+      type: "square",
+    });
+    addTone(context, filter, {
+      frequency: 147,
+      start: now + 0.12,
+      duration: 0.14,
+      volume: 0.105,
+      type: "square",
+    });
+  } else if (sound === "trash") {
+    addNoise(context, filter, {
+      start: now,
+      duration: 0.32,
+      volume: 0.14,
+      frequency: 1350,
+    });
+    addTone(context, filter, {
+      frequency: 180,
+      endFrequency: 90,
+      start: now + 0.12,
+      duration: 0.22,
+      volume: 0.07,
+      type: "triangle",
+    });
+  } else {
+    [523.25, 659.25, 783.99].forEach((frequency, index) => {
+      addTone(context, filter, {
+        frequency,
+        start: now + index * 0.055,
+        duration: 0.24,
+        volume: 0.07,
+        type: "triangle",
+      });
+    });
   }
 
-  const cleanupDelay = sound === "startup" ? 1700 : 250;
+  const cleanupDelay =
+    sound === "startup"
+      ? 1700
+      : sound === "trash"
+        ? 550
+        : sound === "error"
+          ? 450
+          : 350;
   window.setTimeout(() => {
     filter.disconnect();
     master.disconnect();

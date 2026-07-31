@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import dynamic from "next/dynamic";
 import {
   type CSSProperties,
   useCallback,
@@ -8,13 +9,24 @@ import {
   useRef,
   useState,
 } from "react";
+import introImage from "../../../public/assets/intro/macintosh-entry-v3.webp";
 import {
   hasPortfolioEntryCompleted,
   markPortfolioEntryComplete,
 } from "../Portfolio/portfolioEntryState";
-import MacDesktop from "./MacDesktop";
 import styles from "./MacExperience.module.css";
 import { useMacSounds } from "./useMacSounds";
+
+const loadMacDesktop = () => import("./MacDesktop");
+const MacDesktop = dynamic(loadMacDesktop, {
+  ssr: false,
+  loading: () => (
+    <div className={styles.desktopLoading} aria-live="polite">
+      <span aria-hidden="true" />
+      Loading Finder…
+    </div>
+  ),
+});
 
 type BootPhase = "idle" | "powerOn" | "happyMac" | "welcome" | "ready";
 type IntroPhase = "cover" | "priming" | "zooming" | "complete";
@@ -25,7 +37,6 @@ type IntroMotionStyle = CSSProperties & {
 
 let hasBootedInThisPage = false;
 
-const INTRO_IMAGE = "/assets/intro/macintosh-entry-v2.png";
 const INTRO_IMAGE_WIDTH = 1672;
 const INTRO_IMAGE_HEIGHT = 941;
 const INTRO_DURATION = 1900;
@@ -217,13 +228,22 @@ export default function MacExperience() {
   }, [bootPhase]);
 
   const startMac = useCallback(() => {
+    void loadMacDesktop();
     playSound("startup");
     setBootPhase("powerOn");
   }, [playSound]);
 
   const restartMac = useCallback(() => {
+    void loadMacDesktop();
     playSound("startup");
     setBootPhase("powerOn");
+  }, [playSound]);
+
+  const shutdownMac = useCallback(() => {
+    playSound("close");
+    hasBootedInThisPage = false;
+    setBootPhase("idle");
+    window.requestAnimationFrame(() => screenRef.current?.focus());
   }, [playSound]);
 
   const beginIntro = useCallback(() => {
@@ -363,7 +383,11 @@ export default function MacExperience() {
             }
           >
             {bootPhase === "ready" ? (
-              <MacDesktop onRestart={restartMac} onSound={playSound} />
+              <MacDesktop
+                onRestart={restartMac}
+                onShutdown={shutdownMac}
+                onSound={playSound}
+              />
             ) : (
               <div className={styles.startup} data-phase={bootPhase}>
                 {bootPhase === "idle" ? (
@@ -445,12 +469,12 @@ export default function MacExperience() {
 
           <div className={styles.introPhotoLayer} aria-hidden="true">
             <Image
-              src={INTRO_IMAGE}
+              src={introImage}
               alt=""
               fill
+              unoptimized
               loading="eager"
               fetchPriority="high"
-              quality={90}
               sizes="100vw"
               className={styles.introPhoto}
               onLoad={() => setIntroImageReady(true)}
@@ -460,13 +484,13 @@ export default function MacExperience() {
 
           <div className={styles.screenFlight} aria-hidden="true">
             <Image
-              src={INTRO_IMAGE}
+              src={introImage}
               alt=""
               width={INTRO_IMAGE_WIDTH}
               height={INTRO_IMAGE_HEIGHT}
+              unoptimized
               loading="eager"
               fetchPriority="low"
-              quality={90}
               className={styles.screenFlightImage}
             />
           </div>

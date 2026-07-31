@@ -46,7 +46,34 @@
     sans-serif;
   user-select: none;
   -webkit-font-smoothing: none;
-  animation: desktop-pattern-drift 18s linear infinite;
+}
+
+.desktop[data-pattern="platinum"] {
+  --desktop: #b9b9b2;
+  background-image: repeating-conic-gradient(
+    rgba(255, 255, 255, 0.16) 0 25%,
+    rgba(36, 36, 34, 0.08) 0 50%
+  );
+  background-size: 4px 4px;
+}
+
+.desktop[data-pattern="blue"] {
+  --desktop: #737f9b;
+  background-image: repeating-linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.12) 0 2px,
+    transparent 2px 4px
+  );
+  background-size: 6px 6px;
+}
+
+.desktop[data-pattern="graphite"] {
+  --desktop: #565854;
+  background-image: repeating-conic-gradient(
+    rgba(255, 255, 255, 0.1) 0 25%,
+    rgba(0, 0, 0, 0.1) 0 50%
+  );
+  background-size: 4px 4px;
 }
 
 .desktop *,
@@ -147,7 +174,9 @@
   display: grid;
   width: max-content;
   min-width: 184px;
+  max-height: calc(100cqh - 31px);
   padding: 3px 0;
+  overflow-y: auto;
   border: 1px solid var(--black);
   background: #fff;
   box-shadow: 2px 2px 0 var(--black);
@@ -168,6 +197,13 @@
   text-align: left;
   grid-template-columns: 1fr auto;
   gap: 24px;
+}
+
+.menuDropdown kbd {
+  color: inherit;
+  font: inherit;
+  font-size: 10px;
+  letter-spacing: -0.02em;
 }
 
 .menuDropdown button:disabled {
@@ -211,6 +247,26 @@
   transition:
     filter 180ms ease,
     transform 220ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.trashIcon {
+  appearance: none;
+  position: absolute;
+  z-index: 1;
+  right: 18px;
+  bottom: 20px;
+  display: grid;
+  width: 78px;
+  min-width: 0;
+  padding: 0;
+  border: 0;
+  color: var(--black);
+  background: transparent;
+  cursor: default;
+  place-items: center;
+  gap: 3px;
+  animation: desktop-icon-enter 440ms 420ms cubic-bezier(0.16, 1, 0.3, 1) both;
+  transition: transform 220ms cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .desktopIcon:nth-child(1) {
@@ -278,7 +334,12 @@
 .selectedIcon .iconArtwork {
   filter: contrast(0.58) brightness(1.35)
     drop-shadow(1px 1px 0 rgba(255, 255, 255, 0.35));
-  animation: selected-icon-pulse 760ms steps(2, end) infinite;
+  animation: selected-icon-pulse 280ms steps(2, end) 2;
+}
+
+.desktopIcon[data-open="true"] .iconArtwork,
+.trashIcon[data-open="true"] .iconArtwork {
+  animation: icon-open-wiggle 380ms cubic-bezier(0.16, 1, 0.3, 1) both;
 }
 
 .selectedIcon .iconLabel {
@@ -293,12 +354,25 @@
     transform: translateY(-3px);
   }
 
+  .trashIcon:hover {
+    transform: translateY(-3px);
+  }
+
   .desktopIcon:hover .iconArtwork {
     filter: drop-shadow(2px 4px 0 rgba(16, 16, 16, 0.22));
     transform: rotate(-2deg) scale(1.05);
   }
 
+  .trashIcon:hover .iconArtwork {
+    filter: drop-shadow(2px 4px 0 rgba(16, 16, 16, 0.22));
+    transform: rotate(3deg) scale(1.05);
+  }
+
   .desktopIcon:active {
+    transform: translateY(0) scale(0.96);
+  }
+
+  .trashIcon:active {
     transform: translateY(0) scale(0.96);
   }
 }
@@ -326,8 +400,13 @@
     box-shadow 90ms steps(2, end),
     outline-color 90ms steps(2, end);
   grid-template-rows: 25px minmax(0, 1fr) 18px;
-  will-change: transform, width, height;
+  contain: layout paint style;
   animation: window-appear 360ms cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.window[data-closing="true"] {
+  pointer-events: none;
+  animation: window-close 180ms cubic-bezier(0.6, 0, 1, 0.5) both;
 }
 
 .windowBody > * {
@@ -360,6 +439,43 @@
 .window[data-interaction] {
   outline-color: var(--black);
   transition: none;
+  will-change: transform, width, height;
+}
+
+.accessoryLoading {
+  display: grid;
+  min-height: 100%;
+  color: #444;
+  font-family: "KZ Chicago", monospace;
+  place-items: center;
+}
+
+.systemToast {
+  position: absolute;
+  z-index: 1200;
+  bottom: 16px;
+  left: 50%;
+  display: flex;
+  max-width: min(78%, 430px);
+  min-height: 32px;
+  padding: 6px 10px;
+  border: 1px solid #111;
+  background: #f8f8f1;
+  box-shadow: 2px 2px 0 #111;
+  font-family: "KZ Chicago", monospace;
+  transform: translateX(-50%);
+  align-items: center;
+  gap: 8px;
+  animation: system-toast-in 260ms cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.systemToast span {
+  display: grid;
+  width: 20px;
+  height: 20px;
+  background: #111;
+  color: #fff;
+  place-items: center;
 }
 
 .window[data-interaction="move"] .titleBar {
@@ -982,6 +1098,8 @@
   box-shadow:
     inset 1px 1px #fff,
     2px 2px 0 #b7b6ae;
+  content-visibility: auto;
+  contain-intrinsic-size: auto 180px;
 }
 
 .projectCard header {
@@ -1084,6 +1202,8 @@
   grid-template-columns: 27px minmax(0, 1fr) auto;
   align-items: center;
   gap: 9px;
+  content-visibility: auto;
+  contain-intrinsic-size: auto 56px;
 }
 
 .achievementList time {
@@ -1191,17 +1311,11 @@
   }
 }
 
-@keyframes desktop-pattern-drift {
-  from {
-    background-position:
-      0 0,
-      2px 2px;
-  }
-
+@keyframes window-close {
   to {
-    background-position:
-      16px 8px,
-      18px 10px;
+    opacity: 0;
+    clip-path: inset(48% 49% 48% 49%);
+    filter: brightness(1.35);
   }
 }
 
@@ -1246,6 +1360,26 @@
 @keyframes selected-icon-pulse {
   50% {
     transform: translateY(-1px);
+  }
+}
+
+@keyframes icon-open-wiggle {
+  35% {
+    transform: translateY(-5px) rotate(-4deg) scale(1.07);
+  }
+  70% {
+    transform: translateY(1px) rotate(2deg) scale(0.98);
+  }
+}
+
+@keyframes system-toast-in {
+  from {
+    opacity: 0;
+    transform: translate(-50%, 9px) scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, 0) scale(1);
   }
 }
 
@@ -1309,6 +1443,10 @@
     padding-left: 12px;
   }
 
+  .menuDropdown kbd {
+    font-size: 8px;
+  }
+
   .iconGrid {
     top: 31px;
     right: 7px;
@@ -1317,6 +1455,13 @@
   }
 
   .desktopIcon {
+    width: 62px;
+    gap: 0;
+  }
+
+  .trashIcon {
+    right: 7px;
+    bottom: 8px;
     width: 62px;
     gap: 0;
   }
@@ -1719,8 +1864,11 @@
   .menuBar,
   .menuDropdown,
   .desktopIcon,
+  .trashIcon,
   .selectedIcon .iconArtwork,
-  .windowBody > * {
+  .windowBody > *,
+  .systemToast,
+  .window[data-closing="true"] {
     opacity: 1;
     animation: none;
     transition: none;

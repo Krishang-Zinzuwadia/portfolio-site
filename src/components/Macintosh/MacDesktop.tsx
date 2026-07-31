@@ -1,5 +1,6 @@
 "use client";
 
+import dynamic from "next/dynamic";
 import {
   useCallback,
   useEffect,
@@ -20,7 +21,14 @@ import {
   skills,
 } from "@/data/portfolio";
 import styles from "./MacDesktop.module.css";
+import type { AccessoryId, DesktopPattern } from "./MacAccessories";
 import type { MacSound } from "./useMacSounds";
+
+const MacAccessories = dynamic(() => import("./MacAccessories"), {
+  loading: () => (
+    <div className={styles.accessoryLoading}>Opening desk accessory…</div>
+  ),
+});
 
 const RESUME_PATH = "/Krishang-Zinzuwadia-Resume.pdf";
 
@@ -30,7 +38,8 @@ type WindowId =
   | "projects"
   | "achievements"
   | "contact"
-  | "resume";
+  | "resume"
+  | AccessoryId;
 
 type MenuId = "apple" | "file" | "view" | "special";
 type IconKind =
@@ -39,7 +48,8 @@ type IconKind =
   | "project"
   | "trophy"
   | "mail"
-  | "document";
+  | "document"
+  | "trash";
 
 type WindowDefinition = {
   title: string;
@@ -90,10 +100,11 @@ type WindowStyle = CSSProperties & {
 
 type MacDesktopProps = {
   onRestart?: () => void;
+  onShutdown?: () => void;
   onSound?: (sound: MacSound) => void;
 };
 
-const WINDOW_IDS: WindowId[] = [
+const DESKTOP_ICON_IDS: WindowId[] = [
   "welcome",
   "about",
   "projects",
@@ -101,6 +112,23 @@ const WINDOW_IDS: WindowId[] = [
   "contact",
   "resume",
 ];
+
+const ACCESSORY_IDS: AccessoryId[] = [
+  "aboutMac",
+  "alarmClock",
+  "calculator",
+  "chooser",
+  "controlPanels",
+  "keyCaps",
+  "notePad",
+  "puzzle",
+  "scrapbook",
+  "shortcuts",
+  "secret",
+  "trash",
+];
+
+const WINDOW_IDS: WindowId[] = [...DESKTOP_ICON_IDS, ...ACCESSORY_IDS];
 
 const RESIZE_DIRECTIONS: ResizeDirection[] = [
   "n",
@@ -116,6 +144,162 @@ const RESIZE_DIRECTIONS: ResizeDirection[] = [
 const WINDOW_MARGIN = 6;
 const MIN_WINDOW_WIDTH = 220;
 const MIN_WINDOW_HEIGHT = 132;
+
+type WindowProfile = {
+  width: number;
+  height: number;
+  maxWidth: number;
+  maxHeight: number;
+  x: number;
+  y: number;
+};
+
+const WINDOW_PROFILES: Record<WindowId, WindowProfile> = {
+  welcome: {
+    width: 0.65,
+    height: 0.54,
+    maxWidth: 840,
+    maxHeight: 450,
+    x: 0.025,
+    y: 0.025,
+  },
+  about: {
+    width: 0.72,
+    height: 0.78,
+    maxWidth: 920,
+    maxHeight: 630,
+    x: 0.035,
+    y: 0.035,
+  },
+  projects: {
+    width: 0.76,
+    height: 0.84,
+    maxWidth: 980,
+    maxHeight: 680,
+    x: 0.02,
+    y: 0.02,
+  },
+  achievements: {
+    width: 0.7,
+    height: 0.76,
+    maxWidth: 900,
+    maxHeight: 610,
+    x: 0.04,
+    y: 0.04,
+  },
+  contact: {
+    width: 0.56,
+    height: 0.57,
+    maxWidth: 700,
+    maxHeight: 460,
+    x: 0.1,
+    y: 0.08,
+  },
+  resume: {
+    width: 0.66,
+    height: 0.7,
+    maxWidth: 820,
+    maxHeight: 560,
+    x: 0.07,
+    y: 0.055,
+  },
+  aboutMac: {
+    width: 0.43,
+    height: 0.53,
+    maxWidth: 520,
+    maxHeight: 410,
+    x: 0.15,
+    y: 0.12,
+  },
+  alarmClock: {
+    width: 0.32,
+    height: 0.42,
+    maxWidth: 400,
+    maxHeight: 340,
+    x: 0.24,
+    y: 0.16,
+  },
+  calculator: {
+    width: 0.28,
+    height: 0.5,
+    maxWidth: 330,
+    maxHeight: 410,
+    x: 0.2,
+    y: 0.1,
+  },
+  chooser: {
+    width: 0.46,
+    height: 0.48,
+    maxWidth: 570,
+    maxHeight: 390,
+    x: 0.13,
+    y: 0.13,
+  },
+  controlPanels: {
+    width: 0.48,
+    height: 0.5,
+    maxWidth: 600,
+    maxHeight: 410,
+    x: 0.12,
+    y: 0.11,
+  },
+  keyCaps: {
+    width: 0.52,
+    height: 0.53,
+    maxWidth: 650,
+    maxHeight: 430,
+    x: 0.1,
+    y: 0.1,
+  },
+  notePad: {
+    width: 0.42,
+    height: 0.62,
+    maxWidth: 520,
+    maxHeight: 510,
+    x: 0.16,
+    y: 0.07,
+  },
+  puzzle: {
+    width: 0.48,
+    height: 0.58,
+    maxWidth: 600,
+    maxHeight: 470,
+    x: 0.12,
+    y: 0.08,
+  },
+  scrapbook: {
+    width: 0.46,
+    height: 0.55,
+    maxWidth: 570,
+    maxHeight: 450,
+    x: 0.14,
+    y: 0.09,
+  },
+  shortcuts: {
+    width: 0.54,
+    height: 0.67,
+    maxWidth: 680,
+    maxHeight: 540,
+    x: 0.1,
+    y: 0.065,
+  },
+  secret: {
+    width: 0.52,
+    height: 0.58,
+    maxWidth: 650,
+    maxHeight: 470,
+    x: 0.11,
+    y: 0.08,
+  },
+  trash: {
+    width: 0.42,
+    height: 0.5,
+    maxWidth: 520,
+    maxHeight: 410,
+    x: 0.16,
+    y: 0.12,
+  },
+};
 
 type WorkArea = {
   left: number;
@@ -191,6 +375,36 @@ function resizeWindowBounds(
   };
 }
 
+function getResponsiveWindowBounds(id: WindowId, area: WorkArea): WindowBounds {
+  const profile = WINDOW_PROFILES[id];
+  const availableWidth = Math.max(1, area.right - area.left);
+  const availableHeight = Math.max(1, area.bottom - area.top);
+  const width = Math.min(
+    availableWidth,
+    Math.max(
+      Math.min(MIN_WINDOW_WIDTH, availableWidth),
+      Math.min(profile.maxWidth, availableWidth * profile.width)
+    )
+  );
+  const height = Math.min(
+    availableHeight,
+    Math.max(
+      Math.min(MIN_WINDOW_HEIGHT, availableHeight),
+      Math.min(profile.maxHeight, availableHeight * profile.height)
+    )
+  );
+
+  return clampWindowBounds(
+    {
+      x: area.left + availableWidth * profile.x,
+      y: area.top + availableHeight * profile.y,
+      width,
+      height,
+    },
+    area
+  );
+}
+
 const WINDOW_DEFINITIONS: Record<WindowId, WindowDefinition> = {
   welcome: {
     title: "Welcome",
@@ -246,18 +460,133 @@ const WINDOW_DEFINITIONS: Record<WindowId, WindowDefinition> = {
     height: 278,
     status: "PDF document",
   },
+  aboutMac: {
+    title: "About This Macintosh",
+    icon: "computer",
+    x: 78,
+    y: 52,
+    width: 390,
+    height: 290,
+    status: "System Software 7.5 · Portfolio Finder",
+  },
+  alarmClock: {
+    title: "Alarm Clock",
+    icon: "computer",
+    x: 116,
+    y: 66,
+    width: 310,
+    height: 245,
+    status: "Desk accessory",
+  },
+  calculator: {
+    title: "Calculator",
+    icon: "computer",
+    x: 102,
+    y: 42,
+    width: 282,
+    height: 318,
+    status: "Desk accessory",
+  },
+  chooser: {
+    title: "Chooser",
+    icon: "computer",
+    x: 64,
+    y: 48,
+    width: 420,
+    height: 285,
+    status: "AppleTalk ready",
+  },
+  controlPanels: {
+    title: "Control Panels",
+    icon: "folder",
+    x: 58,
+    y: 44,
+    width: 430,
+    height: 300,
+    status: "Desktop pattern",
+  },
+  keyCaps: {
+    title: "Key Caps",
+    icon: "computer",
+    x: 42,
+    y: 38,
+    width: 450,
+    height: 305,
+    status: "Chicago · 12 point",
+  },
+  notePad: {
+    title: "Note Pad",
+    icon: "document",
+    x: 82,
+    y: 34,
+    width: 360,
+    height: 330,
+    status: "1 page",
+  },
+  puzzle: {
+    title: "Puzzle",
+    icon: "computer",
+    x: 52,
+    y: 36,
+    width: 430,
+    height: 320,
+    status: "Desk accessory",
+  },
+  scrapbook: {
+    title: "Scrapbook",
+    icon: "document",
+    x: 62,
+    y: 40,
+    width: 420,
+    height: 310,
+    status: "3 portfolio clippings",
+  },
+  shortcuts: {
+    title: "Keyboard Shortcuts",
+    icon: "document",
+    x: 44,
+    y: 34,
+    width: 470,
+    height: 360,
+    status: "Finder quick keys",
+  },
+  secret: {
+    title: "Secret About Box",
+    icon: "computer",
+    x: 50,
+    y: 38,
+    width: 450,
+    height: 320,
+    status: "Hello from 1984",
+  },
+  trash: {
+    title: "Trash",
+    icon: "trash",
+    x: 78,
+    y: 48,
+    width: 380,
+    height: 290,
+    status: "3 items · 42K on disk",
+  },
 };
 
-function createInitialWindows(): Record<WindowId, DesktopWindowState> {
+function createInitialWindows(
+  area?: WorkArea
+): Record<WindowId, DesktopWindowState> {
   return WINDOW_IDS.reduce(
     (state, id, index) => {
       const definition = WINDOW_DEFINITIONS[id];
+      const bounds = area
+        ? getResponsiveWindowBounds(id, area)
+        : {
+            x: definition.x,
+            y: definition.y,
+            width: definition.width,
+            height: definition.height,
+          };
       state[id] = {
         open: id === "welcome",
-        x: definition.x,
-        y: definition.y,
-        width: definition.width,
-        height: definition.height,
+        ...bounds,
         z: index + 2,
         maximized: false,
       };
@@ -382,6 +711,36 @@ function MacIcon({ kind }: { kind: IconKind }) {
     );
   }
 
+  if (kind === "trash") {
+    return (
+      <svg
+        className={styles.pixelIcon}
+        viewBox="0 0 48 48"
+        shapeRendering="crispEdges"
+        aria-hidden="true"
+      >
+        <path
+          d="M11 13h27l-3 31H14z"
+          fill="#e8e7df"
+          stroke="#111"
+          strokeWidth="2"
+        />
+        <path
+          d="M8 9h33v6H8zM16 4h17v5H16z"
+          fill="#cac9c0"
+          stroke="#111"
+          strokeWidth="2"
+        />
+        <path
+          d="M19 19v18m6-18v18m6-18v18"
+          fill="none"
+          stroke="#777"
+          strokeWidth="2"
+        />
+      </svg>
+    );
+  }
+
   return (
     <svg
       className={styles.pixelIcon}
@@ -414,14 +773,17 @@ function MenuAction({
   children,
   onSelect,
   disabled = false,
+  shortcut,
 }: {
   children: ReactNode;
   onSelect: () => void;
   disabled?: boolean;
+  shortcut?: string;
 }) {
   return (
     <button type="button" disabled={disabled} onClick={onSelect}>
       <span>{children}</span>
+      {shortcut ? <kbd>{shortcut}</kbd> : null}
     </button>
   );
 }
@@ -739,14 +1101,24 @@ function ResumeView() {
   );
 }
 
-export default function MacDesktop({ onRestart, onSound }: MacDesktopProps) {
+export default function MacDesktop({
+  onRestart,
+  onShutdown,
+  onSound,
+}: MacDesktopProps) {
   const [windows, setWindows] = useState(createInitialWindows);
   const [activeWindow, setActiveWindow] = useState<WindowId | null>("welcome");
   const [selectedIcon, setSelectedIcon] = useState<WindowId | null>("welcome");
   const [activeMenu, setActiveMenu] = useState<MenuId | null>(null);
+  const [closingWindows, setClosingWindows] = useState<
+    Partial<Record<WindowId, boolean>>
+  >({});
   const [activeInteraction, setActiveInteraction] =
     useState<ActiveInteraction | null>(null);
   const [clock, setClock] = useState("--:--");
+  const [pattern, setPattern] = useState<DesktopPattern>("sage");
+  const [trashEmpty, setTrashEmpty] = useState(false);
+  const [toast, setToast] = useState<string | null>(null);
 
   const rootRef = useRef<HTMLDivElement>(null);
   const menuBarRef = useRef<HTMLElement | null>(null);
@@ -754,6 +1126,10 @@ export default function MacDesktop({ onRestart, onSound }: MacDesktopProps) {
   const operationRef = useRef<PointerOperation | null>(null);
   const pendingPointerRef = useRef<{ x: number; y: number } | null>(null);
   const interactionFrameRef = useRef<number | null>(null);
+  const closingTimersRef = useRef<Partial<Record<WindowId, number>>>({});
+  const toastTimerRef = useRef<number | null>(null);
+  const initialLayoutFittedRef = useRef(false);
+  const secretBufferRef = useRef("");
   const nextZ = useRef(20);
   const titlePrefix = useId();
 
@@ -777,7 +1153,7 @@ export default function MacDesktop({ onRestart, onSound }: MacDesktopProps) {
     const root = rootRef.current;
     if (!root || typeof ResizeObserver === "undefined") return;
 
-    const observer = new ResizeObserver(() => {
+    const fitWindowsToDesktop = () => {
       if (root.clientWidth <= 390) {
         const operation = operationRef.current;
         if (
@@ -798,6 +1174,11 @@ export default function MacDesktop({ onRestart, onSound }: MacDesktopProps) {
 
       const area = getWorkArea(root, menuBarRef.current);
       setWindows((current) => {
+        if (!initialLayoutFittedRef.current) {
+          initialLayoutFittedRef.current = true;
+          return createInitialWindows(area);
+        }
+
         let changed = false;
         const next = { ...current };
 
@@ -817,8 +1198,10 @@ export default function MacDesktop({ onRestart, onSound }: MacDesktopProps) {
 
         return changed ? next : current;
       });
-    });
+    };
 
+    fitWindowsToDesktop();
+    const observer = new ResizeObserver(fitWindowsToDesktop);
     observer.observe(root);
     return () => observer.disconnect();
   }, []);
@@ -828,9 +1211,26 @@ export default function MacDesktop({ onRestart, onSound }: MacDesktopProps) {
       if (interactionFrameRef.current !== null) {
         window.cancelAnimationFrame(interactionFrameRef.current);
       }
+      Object.values(closingTimersRef.current).forEach((timer) => {
+        if (timer !== undefined) window.clearTimeout(timer);
+      });
+      if (toastTimerRef.current !== null) {
+        window.clearTimeout(toastTimerRef.current);
+      }
     },
     []
   );
+
+  const showToast = useCallback((message: string) => {
+    setToast(message);
+    if (toastTimerRef.current !== null) {
+      window.clearTimeout(toastTimerRef.current);
+    }
+    toastTimerRef.current = window.setTimeout(() => {
+      setToast(null);
+      toastTimerRef.current = null;
+    }, 2_600);
+  }, []);
 
   const focusWindow = useCallback(
     (id: WindowId) => {
@@ -849,6 +1249,13 @@ export default function MacDesktop({ onRestart, onSound }: MacDesktopProps) {
 
   const openWindow = useCallback(
     (id: WindowId) => {
+      const closingTimer = closingTimersRef.current[id];
+      if (closingTimer !== undefined) {
+        window.clearTimeout(closingTimer);
+        delete closingTimersRef.current[id];
+        setClosingWindows((current) => ({ ...current, [id]: false }));
+      }
+
       if (windows[id].open) {
         focusWindow(id);
         setSelectedIcon(id);
@@ -874,40 +1281,45 @@ export default function MacDesktop({ onRestart, onSound }: MacDesktopProps) {
 
   const closeWindow = useCallback(
     (id: WindowId) => {
+      if (!windows[id].open || closingWindows[id]) return;
       onSound?.("close");
       const wasActive = activeWindow === id;
       const nextActive = WINDOW_IDS.filter(
         (candidate) => candidate !== id && windows[candidate].open
       ).sort((left, right) => windows[right].z - windows[left].z)[0];
 
-      setWindows((current) => ({
-        ...current,
-        [id]: { ...current[id], open: false },
-      }));
+      setClosingWindows((current) => ({ ...current, [id]: true }));
       if (wasActive) setActiveWindow(nextActive ?? null);
+      if (wasActive) setSelectedIcon(nextActive ?? null);
       setActiveMenu(null);
-      window.requestAnimationFrame(() => {
+      closingTimersRef.current[id] = window.setTimeout(() => {
+        setWindows((current) => ({
+          ...current,
+          [id]: { ...current[id], open: false },
+        }));
+        setClosingWindows((current) => ({ ...current, [id]: false }));
+        delete closingTimersRef.current[id];
         if (wasActive && nextActive) {
           windowRefs.current[nextActive]?.focus();
         } else if (wasActive) {
           rootRef.current?.focus();
         }
-      });
+      }, 180);
     },
-    [activeWindow, onSound, windows]
+    [activeWindow, closingWindows, onSound, windows]
   );
 
   const openAllWindows = useCallback(() => {
-    if (WINDOW_IDS.some((id) => !windows[id].open)) onSound?.("open");
+    if (DESKTOP_ICON_IDS.some((id) => !windows[id].open)) onSound?.("open");
     const firstZ = nextZ.current + 1;
-    nextZ.current += WINDOW_IDS.length;
+    nextZ.current += DESKTOP_ICON_IDS.length;
     setWindows((current) =>
-      WINDOW_IDS.reduce(
+      DESKTOP_ICON_IDS.reduce(
         (next, id, index) => {
           next[id] = { ...current[id], open: true, z: firstZ + index };
           return next;
         },
-        {} as Record<WindowId, DesktopWindowState>
+        { ...current }
       )
     );
     setActiveWindow("resume");
@@ -925,13 +1337,42 @@ export default function MacDesktop({ onRestart, onSound }: MacDesktopProps) {
       window.cancelAnimationFrame(interactionFrameRef.current);
       interactionFrameRef.current = null;
     }
+    Object.values(closingTimersRef.current).forEach((timer) => {
+      if (timer !== undefined) window.clearTimeout(timer);
+    });
+    closingTimersRef.current = {};
+    setClosingWindows({});
     setActiveInteraction(null);
-    setWindows(createInitialWindows());
+    const root = rootRef.current;
+    const area = root ? getWorkArea(root, menuBarRef.current) : undefined;
+    initialLayoutFittedRef.current = Boolean(area);
+    setWindows(createInitialWindows(area));
     setActiveWindow("welcome");
     setSelectedIcon("welcome");
     setActiveMenu(null);
+    setPattern("sage");
+    setTrashEmpty(false);
+    setToast(null);
     window.requestAnimationFrame(() => windowRefs.current.welcome?.focus());
   }, [onSound]);
+
+  const emptyTrash = useCallback(() => {
+    if (trashEmpty) {
+      onSound?.("error");
+      showToast("The Trash is already empty.");
+      return;
+    }
+
+    setTrashEmpty(true);
+    onSound?.("trash");
+    showToast("Trash emptied · 42K recovered");
+  }, [onSound, showToast, trashEmpty]);
+
+  const revealSecret = useCallback(() => {
+    openWindow("secret");
+    onSound?.("success");
+    showToast("Secret about box unlocked");
+  }, [onSound, openWindow, showToast]);
 
   const toggleMenu = useCallback(
     (menu: MenuId) => {
@@ -1119,10 +1560,99 @@ export default function MacDesktop({ onRestart, onSound }: MacDesktopProps) {
   };
 
   const handleDesktopKeyDown = (event: ReactKeyboardEvent<HTMLDivElement>) => {
-    if ((event.metaKey || event.ctrlKey) && event.key.toLowerCase() === "w") {
+    const target = event.target as HTMLElement;
+    const isTypingTarget =
+      target instanceof HTMLInputElement ||
+      target instanceof HTMLTextAreaElement ||
+      target.isContentEditable;
+    const primaryModifier = event.metaKey || event.ctrlKey;
+    const key = event.key.toLowerCase();
+
+    if (primaryModifier && event.altKey && event.key === "Escape") {
       event.preventDefault();
-      if (activeWindow) closeWindow(activeWindow);
+      onSound?.("error");
+      showToast("Force Quit: no frozen applications found");
       return;
+    }
+
+    if (primaryModifier && event.shiftKey && event.key === "Backspace") {
+      event.preventDefault();
+      emptyTrash();
+      return;
+    }
+
+    if (primaryModifier) {
+      const portfolioIndex = Number(key) - 1;
+      if (
+        Number.isInteger(portfolioIndex) &&
+        portfolioIndex >= 0 &&
+        portfolioIndex < DESKTOP_ICON_IDS.length
+      ) {
+        event.preventDefault();
+        openWindow(DESKTOP_ICON_IDS[portfolioIndex]);
+        return;
+      }
+
+      if (key === "o") {
+        event.preventDefault();
+        openWindow(selectedIcon ?? "welcome");
+        return;
+      }
+      if (key === "w") {
+        event.preventDefault();
+        if (activeWindow) closeWindow(activeWindow);
+        return;
+      }
+      if (key === "a" && event.shiftKey) {
+        event.preventDefault();
+        openAllWindows();
+        return;
+      }
+      if (key === "k") {
+        event.preventDefault();
+        openWindow("controlPanels");
+        return;
+      }
+      if (key === "t") {
+        event.preventDefault();
+        openWindow("trash");
+        return;
+      }
+      if (key === ".") {
+        event.preventDefault();
+        setActiveMenu(null);
+        return;
+      }
+    }
+
+    if (
+      !isTypingTarget &&
+      (event.key === "?" ||
+        (event.key === "/" && event.shiftKey) ||
+        event.key === "F1")
+    ) {
+      event.preventDefault();
+      openWindow("shortcuts");
+      return;
+    }
+
+    if (
+      !isTypingTarget &&
+      !primaryModifier &&
+      !event.altKey &&
+      event.key.length === 1
+    ) {
+      secretBufferRef.current =
+        `${secretBufferRef.current}${event.key.toLowerCase()}`.slice(-12);
+      if (
+        secretBufferRef.current.endsWith("hello") ||
+        secretBufferRef.current.endsWith("1984")
+      ) {
+        event.preventDefault();
+        secretBufferRef.current = "";
+        revealSecret();
+        return;
+      }
     }
 
     if (event.key !== "Escape") return;
@@ -1147,6 +1677,20 @@ export default function MacDesktop({ onRestart, onSound }: MacDesktopProps) {
         return <ContactView />;
       case "resume":
         return <ResumeView />;
+      default:
+        if (ACCESSORY_IDS.includes(id as AccessoryId)) {
+          return (
+            <MacAccessories
+              id={id as AccessoryId}
+              onSound={onSound}
+              pattern={pattern}
+              onPatternChange={setPattern}
+              trashEmpty={trashEmpty}
+              onEmptyTrash={emptyTrash}
+            />
+          );
+        }
+        return null;
     }
   };
 
@@ -1157,6 +1701,7 @@ export default function MacDesktop({ onRestart, onSound }: MacDesktopProps) {
       tabIndex={-1}
       role="region"
       aria-label={`${identity.name} interactive portfolio desktop`}
+      data-pattern={pattern}
       onKeyDown={handleDesktopKeyDown}
       onPointerDown={() => setActiveMenu(null)}
     >
@@ -1170,10 +1715,17 @@ export default function MacDesktop({ onRestart, onSound }: MacDesktopProps) {
           <button
             type="button"
             className={styles.appleMenuButton}
-            aria-label="Portfolio menu"
+            aria-label="Apple menu"
             aria-haspopup="true"
             aria-expanded={activeMenu === "apple"}
-            onClick={() => toggleMenu("apple")}
+            onClick={(event) => {
+              if (event.altKey) {
+                revealSecret();
+                setActiveMenu(null);
+                return;
+              }
+              toggleMenu("apple");
+            }}
           >
             <AppleMark />
           </button>
@@ -1184,16 +1736,75 @@ export default function MacDesktop({ onRestart, onSound }: MacDesktopProps) {
               aria-label="Portfolio actions"
             >
               <MenuAction
-                onSelect={() => performMenuAction(() => openWindow("about"))}
+                onSelect={() => performMenuAction(() => openWindow("aboutMac"))}
               >
-                About This Portfolio…
+                About This Macintosh…
+              </MenuAction>
+              <span className={styles.menuDivider} role="separator" />
+              <MenuAction
+                onSelect={() =>
+                  performMenuAction(() => openWindow("alarmClock"))
+                }
+              >
+                Alarm Clock
               </MenuAction>
               <MenuAction
+                onSelect={() =>
+                  performMenuAction(() => openWindow("calculator"))
+                }
+              >
+                Calculator
+              </MenuAction>
+              <MenuAction
+                onSelect={() => performMenuAction(() => openWindow("chooser"))}
+              >
+                Chooser
+              </MenuAction>
+              <MenuAction
+                onSelect={() =>
+                  performMenuAction(() => openWindow("controlPanels"))
+                }
+                shortcut="⌘K"
+              >
+                Control Panels
+              </MenuAction>
+              <MenuAction
+                onSelect={() => performMenuAction(() => openWindow("keyCaps"))}
+              >
+                Key Caps
+              </MenuAction>
+              <MenuAction
+                onSelect={() => performMenuAction(() => openWindow("notePad"))}
+              >
+                Note Pad
+              </MenuAction>
+              <MenuAction
+                onSelect={() => performMenuAction(() => openWindow("puzzle"))}
+              >
+                Puzzle
+              </MenuAction>
+              <MenuAction
+                onSelect={() =>
+                  performMenuAction(() => openWindow("scrapbook"))
+                }
+              >
+                Scrapbook
+              </MenuAction>
+              <MenuAction
+                onSelect={() =>
+                  performMenuAction(() => openWindow("shortcuts"))
+                }
+                shortcut="?"
+              >
+                Keyboard Shortcuts…
+              </MenuAction>
+              <span className={styles.menuDivider} role="separator" />
+              <MenuAction
                 onSelect={() => performMenuAction(() => openWindow("welcome"))}
+                shortcut="⌘1"
               >
                 Welcome
               </MenuAction>
-              <span className={styles.menuDivider} role="separator" />
               <MenuAction
                 onSelect={() => performMenuAction(() => openWindow("contact"))}
               >
@@ -1224,6 +1835,7 @@ export default function MacDesktop({ onRestart, onSound }: MacDesktopProps) {
                 onSelect={() =>
                   performMenuAction(() => openWindow(selectedIcon ?? "welcome"))
                 }
+                shortcut="⌘O"
               >
                 Open Selected
               </MenuAction>
@@ -1239,6 +1851,7 @@ export default function MacDesktop({ onRestart, onSound }: MacDesktopProps) {
                   activeWindow &&
                   performMenuAction(() => closeWindow(activeWindow))
                 }
+                shortcut="⌘W"
               >
                 Close Window
               </MenuAction>
@@ -1273,7 +1886,10 @@ export default function MacDesktop({ onRestart, onSound }: MacDesktopProps) {
               >
                 Achievements
               </MenuAction>
-              <MenuAction onSelect={() => performMenuAction(openAllWindows)}>
+              <MenuAction
+                onSelect={() => performMenuAction(openAllWindows)}
+                shortcut="⌘⇧A"
+              >
                 Open All Windows
               </MenuAction>
             </div>
@@ -1296,6 +1912,20 @@ export default function MacDesktop({ onRestart, onSound }: MacDesktopProps) {
               aria-label="Special actions"
             >
               <MenuAction
+                onSelect={() => performMenuAction(() => openWindow("trash"))}
+                shortcut="⌘T"
+              >
+                Open Trash
+              </MenuAction>
+              <MenuAction
+                disabled={trashEmpty}
+                onSelect={() => performMenuAction(emptyTrash)}
+                shortcut="⌘⇧⌫"
+              >
+                Empty Trash…
+              </MenuAction>
+              <span className={styles.menuDivider} role="separator" />
+              <MenuAction
                 onSelect={() => performMenuAction(() => openWindow("contact"))}
               >
                 Contact Krishang…
@@ -1305,15 +1935,28 @@ export default function MacDesktop({ onRestart, onSound }: MacDesktopProps) {
               >
                 Restart…
               </MenuAction>
+              <MenuAction
+                onSelect={() => performMenuAction(onShutdown ?? resetDesktop)}
+              >
+                Shut Down…
+              </MenuAction>
             </div>
           ) : null}
         </div>
 
-        <time className={styles.clock}>{clock}</time>
+        <button
+          type="button"
+          className={styles.clock}
+          aria-label={`Open Alarm Clock. Current time ${clock}`}
+          title="Alarm Clock"
+          onClick={() => openWindow("alarmClock")}
+        >
+          <time>{clock}</time>
+        </button>
       </nav>
 
       <nav className={styles.iconGrid} aria-label="Portfolio desktop items">
-        {WINDOW_IDS.map((id) => {
+        {DESKTOP_ICON_IDS.map((id) => {
           const definition = WINDOW_DEFINITIONS[id];
           const selected = selectedIcon === id;
 
@@ -1324,7 +1967,11 @@ export default function MacDesktop({ onRestart, onSound }: MacDesktopProps) {
               key={id}
               aria-label={`Open ${definition.title}`}
               aria-pressed={selected}
-              onClick={() => setSelectedIcon(id)}
+              data-open={windows[id].open ? "true" : undefined}
+              onClick={() => {
+                setSelectedIcon(id);
+                onSound?.("select");
+              }}
               onDoubleClick={() => openWindow(id)}
               onPointerUp={(event) => {
                 if (event.pointerType !== "mouse") openWindow(id);
@@ -1345,6 +1992,34 @@ export default function MacDesktop({ onRestart, onSound }: MacDesktopProps) {
         })}
       </nav>
 
+      <button
+        type="button"
+        className={`${styles.trashIcon}${selectedIcon === "trash" ? ` ${styles.selectedIcon}` : ""}`}
+        aria-label="Open Trash"
+        aria-pressed={selectedIcon === "trash"}
+        data-empty={trashEmpty ? "true" : "false"}
+        data-open={windows.trash.open ? "true" : undefined}
+        onClick={() => {
+          setSelectedIcon("trash");
+          onSound?.("select");
+        }}
+        onDoubleClick={() => openWindow("trash")}
+        onPointerUp={(event) => {
+          if (event.pointerType !== "mouse") openWindow("trash");
+        }}
+        onKeyDown={(event) => {
+          if (event.key === "Enter") {
+            event.preventDefault();
+            openWindow("trash");
+          }
+        }}
+      >
+        <span className={styles.iconArtwork}>
+          <MacIcon kind="trash" />
+        </span>
+        <span className={styles.iconLabel}>Trash</span>
+      </button>
+
       {WINDOW_IDS.map((id) => {
         const state = windows[id];
         const definition = WINDOW_DEFINITIONS[id];
@@ -1359,6 +2034,7 @@ export default function MacDesktop({ onRestart, onSound }: MacDesktopProps) {
         };
         const active = activeWindow === id;
         const interacting = activeInteraction?.id === id;
+        const closing = Boolean(closingWindows[id]);
         const titleId = `${titlePrefix}-${id}-title`;
 
         return (
@@ -1375,6 +2051,7 @@ export default function MacDesktop({ onRestart, onSound }: MacDesktopProps) {
             style={windowStyle}
             data-interaction={interacting ? activeInteraction.mode : undefined}
             data-maximized={state.maximized ? "true" : undefined}
+            data-closing={closing ? "true" : undefined}
             onPointerDown={(event) => {
               event.stopPropagation();
               if (!active) focusWindow(id);
@@ -1434,7 +2111,13 @@ export default function MacDesktop({ onRestart, onSound }: MacDesktopProps) {
             <div className={styles.windowBody}>{renderWindowContent(id)}</div>
 
             <footer className={styles.statusBar}>
-              <span>{definition.status}</span>
+              <span>
+                {id === "trash"
+                  ? trashEmpty
+                    ? "Trash is empty"
+                    : definition.status
+                  : definition.status}
+              </span>
               <button
                 type="button"
                 className={styles.resizeBox}
@@ -1468,12 +2151,19 @@ export default function MacDesktop({ onRestart, onSound }: MacDesktopProps) {
         );
       })}
 
+      {toast ? (
+        <div className={styles.systemToast} role="status" aria-live="polite">
+          <span aria-hidden="true">⌘</span>
+          {toast}
+        </div>
+      ) : null}
+
       <p className={styles.desktopHint} aria-hidden="true">
-        Double-click an icon · Drag title bars · Use the corner grip to resize ·
-        Esc closes
+        Double-click an icon · Drag title bars · ⌘1–6 opens apps · ? shows
+        shortcuts
       </p>
       <p className={styles.touchHint} aria-hidden="true">
-        Tap an icon · Drag title bars · Drag the corner grip to resize
+        Tap an icon · Drag title bars · Apple menu opens desk accessories
       </p>
     </div>
   );
