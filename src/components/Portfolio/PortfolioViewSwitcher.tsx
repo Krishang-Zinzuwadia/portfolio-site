@@ -17,8 +17,8 @@ interface PortfolioViewSwitcherProps {
 }
 
 const viewRoutes: Record<PortfolioView, string> = {
-  immersive: "/",
-  editorial: "/editorial",
+  immersive: "/mac",
+  editorial: "/",
 };
 
 const viewLabels: Record<PortfolioView, string> = {

@@ -1,47 +1,14 @@
 import type { Metadata, Viewport } from "next";
+
+import { SITE_NAME, SITE_URL } from "@/lib/site";
+
 import "./globals.css";
 
-const siteUrl = new URL("https://portfolio.krishang.dev");
-
 export const metadata: Metadata = {
-  metadataBase: siteUrl,
-  title: "Krishang Zinzuwadia",
-  description:
-    "Explore Krishang Zinzuwadia's work in AI systems, full-stack engineering, and cybersecurity through an interactive 1990 Macintosh Classic.",
-  applicationName: "Krishang Zinzuwadia Portfolio",
-  alternates: { canonical: "/" },
-  authors: [{ name: "Krishang Zinzuwadia" }],
-  creator: "Krishang Zinzuwadia",
-  keywords: [
-    "Krishang Zinzuwadia",
-    "AI systems",
-    "autonomous agents",
-    "full-stack engineer",
-    "cybersecurity",
-    "CTF",
-    "Next.js",
-    "Rust",
-    "Tauri",
-  ],
-  openGraph: {
-    type: "website",
-    locale: "en_IN",
-    url: "/",
-    title: "Krishang Zinzuwadia",
-    description:
-      "A working System 7-inspired portfolio inside an original 3D Macintosh Classic.",
-    siteName: "Krishang Zinzuwadia",
-  },
-  twitter: {
-    card: "summary_large_image",
-    title: "Krishang Zinzuwadia",
-    description:
-      "AI systems, full-stack engineering, and security—inside a working 3D Macintosh.",
-  },
-  robots: {
-    index: true,
-    follow: true,
-  },
+  metadataBase: SITE_URL,
+  applicationName: `${SITE_NAME} Portfolio`,
+  authors: [{ name: SITE_NAME, url: SITE_URL }],
+  creator: SITE_NAME,
 };
 
 export const viewport: Viewport = {
