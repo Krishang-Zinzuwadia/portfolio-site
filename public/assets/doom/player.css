@@ -1,0 +1,287 @@
+:root {
+  color-scheme: dark;
+  font-family: Chicago, Monaco, "Courier New", monospace;
+  background: #050505;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#doom-shell,
+#dos-player {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  overflow: hidden;
+}
+
+body {
+  background: #050505;
+  color: #f1ead7;
+}
+
+button,
+a {
+  font: inherit;
+}
+
+#doom-shell {
+  position: relative;
+  isolation: isolate;
+  background:
+    radial-gradient(circle at 50% 40%, #362a20 0, #17110d 40%, #050505 78%),
+    #050505;
+}
+
+#launcher {
+  position: absolute;
+  z-index: 3;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  padding: clamp(18px, 4vw, 42px);
+  text-align: center;
+}
+
+.launcher-grain {
+  position: absolute;
+  z-index: -1;
+  inset: 0;
+  opacity: 0.2;
+  pointer-events: none;
+  background:
+    repeating-linear-gradient(
+      0deg,
+      transparent 0,
+      transparent 2px,
+      rgba(255, 255, 255, 0.08) 2px,
+      rgba(255, 255, 255, 0.08) 3px
+    ),
+    repeating-linear-gradient(
+      90deg,
+      transparent 0,
+      transparent 17px,
+      rgba(220, 92, 35, 0.08) 17px,
+      rgba(220, 92, 35, 0.08) 18px
+    );
+}
+
+.release-stamp {
+  margin: 0 0 8px;
+  color: #ffbd74;
+  font-size: clamp(9px, 1.8vw, 12px);
+  font-weight: 700;
+  letter-spacing: 0.16em;
+}
+
+#doom-title {
+  margin: 0;
+  color: #e4572e;
+  font-family: Impact, Haettenschweiler, "Arial Narrow Bold", sans-serif;
+  font-size: clamp(68px, 22vw, 154px);
+  font-stretch: condensed;
+  letter-spacing: -0.075em;
+  line-height: 0.75;
+  text-shadow:
+    0 2px 0 #ffb15f,
+    0 5px 0 #9e2819,
+    0 8px 0 #45110d,
+    0 14px 24px rgba(0, 0, 0, 0.72);
+  transform: scaleX(0.92);
+}
+
+.episode {
+  margin: 17px 0 20px;
+  color: #ded3bd;
+  font-size: clamp(10px, 2.2vw, 14px);
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+#launch-doom,
+#retry-doom {
+  display: inline-flex;
+  min-height: 42px;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  border: 2px solid #e9d6ae;
+  background: #17120f;
+  box-shadow:
+    4px 4px 0 #090706,
+    inset 0 0 0 1px #6d3b25;
+  color: #fff5df;
+  cursor: pointer;
+  font-size: clamp(11px, 2.2vw, 14px);
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  padding: 9px 18px;
+  text-transform: uppercase;
+}
+
+#launch-doom:disabled {
+  cursor: wait;
+  opacity: 0.55;
+}
+
+#launch-doom:not(:disabled):hover,
+#launch-doom:not(:disabled):focus-visible,
+#retry-doom:hover,
+#retry-doom:focus-visible {
+  border-color: #ffad4d;
+  background: #4b2016;
+  outline: 2px solid #050505;
+  outline-offset: 2px;
+}
+
+.prompt {
+  color: #ff8a42;
+}
+
+.authenticity {
+  margin: 18px 0 0;
+  color: #aa9d89;
+  font-size: clamp(9px, 1.7vw, 11px);
+}
+
+.authenticity strong {
+  color: #ded3bd;
+}
+
+.legal {
+  margin: 7px 0 0;
+  color: #766d61;
+  font-size: clamp(8px, 1.5vw, 10px);
+}
+
+.legal a {
+  margin-left: 6px;
+  color: #b9a88e;
+  text-underline-offset: 2px;
+}
+
+#dos-player {
+  position: absolute;
+  z-index: 1;
+  inset: 0;
+  display: none;
+  background: #000;
+  image-rendering: pixelated;
+}
+
+#dos-player canvas {
+  image-rendering: pixelated !important;
+}
+
+body[data-state="starting"] #launcher,
+body[data-state="running"] #launcher,
+body[data-state="paused"] #launcher {
+  display: none;
+}
+
+body[data-state="starting"] #dos-player,
+body[data-state="running"] #dos-player,
+body[data-state="paused"] #dos-player {
+  display: block;
+}
+
+#pause-card {
+  position: absolute;
+  z-index: 5;
+  inset: 0;
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  background: rgba(0, 0, 0, 0.7);
+  color: #f2e6ca;
+  pointer-events: none;
+  text-align: center;
+}
+
+#pause-card strong {
+  color: #ef6237;
+  font-size: clamp(18px, 5vw, 30px);
+  letter-spacing: 0.12em;
+}
+
+#pause-card span {
+  font-size: clamp(9px, 2vw, 12px);
+}
+
+body[data-state="paused"] #pause-card {
+  display: flex;
+}
+
+#fatal-error {
+  position: absolute;
+  z-index: 7;
+  inset: 0;
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  padding: 28px;
+  background: #160a08;
+  color: #f2e6ca;
+  text-align: center;
+}
+
+#fatal-error strong {
+  color: #ff6c43;
+  font-size: clamp(16px, 4vw, 26px);
+}
+
+#fatal-error span {
+  max-width: 480px;
+  color: #c2b4a0;
+  font-size: 11px;
+}
+
+body[data-state="error"] #launcher,
+body[data-state="error"] #dos-player {
+  display: none;
+}
+
+body[data-state="error"] #fatal-error {
+  display: flex;
+}
+
+@media (max-height: 360px) {
+  .release-stamp,
+  .authenticity,
+  .legal {
+    display: none;
+  }
+
+  .episode {
+    margin: 12px 0;
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  body[data-state="ready"] #doom-title {
+    animation: doom-arrival 360ms cubic-bezier(0.16, 1, 0.3, 1) both;
+  }
+
+  @keyframes doom-arrival {
+    from {
+      opacity: 0;
+      transform: scaleX(0.92) scale(1.12);
+    }
+
+    to {
+      opacity: 1;
+      transform: scaleX(0.92) scale(1);
+    }
+  }
+}

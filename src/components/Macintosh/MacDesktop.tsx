@@ -34,6 +34,16 @@ const MacAccessories = dynamic(() => import("./MacAccessories"), {
   ),
 });
 
+const DoomGame = dynamic(() => import("./DoomGame"), {
+  ssr: false,
+  loading: () => (
+    <div className={styles.gameLoading} role="status">
+      <span aria-hidden="true">▦</span>
+      Loading DOOM…
+    </div>
+  ),
+});
+
 const RESUME_PATH = "/Krishang-Zinzuwadia-Resume.pdf";
 
 type WindowId =
@@ -43,7 +53,10 @@ type WindowId =
   | "achievements"
   | "contact"
   | "resume"
+  | "doom"
   | AccessoryId;
+
+type DesktopTrayId = AccessoryId | "doom";
 
 type MenuId = "apple" | "file" | "view" | "special";
 type IconKind =
@@ -63,6 +76,7 @@ type IconKind =
   | "puzzle"
   | "scrapbook"
   | "shortcuts"
+  | "doom"
   | "trash";
 
 type WindowDefinition = {
@@ -113,6 +127,7 @@ type WindowStyle = CSSProperties & {
 };
 
 type MacDesktopProps = {
+  muted?: boolean;
   onRestart?: () => void;
   onShutdown?: () => void;
   onSound?: (sound: MacSound) => void;
@@ -127,7 +142,8 @@ const DESKTOP_ICON_IDS: WindowId[] = [
   "resume",
 ];
 
-const DESKTOP_ACCESSORY_ICON_IDS: AccessoryId[] = [
+const DESKTOP_ACCESSORY_ICON_IDS: DesktopTrayId[] = [
+  "doom",
   "aboutMac",
   "alarmClock",
   "stopwatch",
@@ -157,7 +173,7 @@ const ACCESSORY_IDS: AccessoryId[] = [
   "trash",
 ];
 
-const WINDOW_IDS: WindowId[] = [...DESKTOP_ICON_IDS, ...ACCESSORY_IDS];
+const WINDOW_IDS: WindowId[] = [...DESKTOP_ICON_IDS, "doom", ...ACCESSORY_IDS];
 
 const RESIZE_DIRECTIONS: ResizeDirection[] = [
   "n",
@@ -236,6 +252,14 @@ const WINDOW_PROFILES: Record<WindowId, WindowProfile> = {
     maxHeight: 560,
     x: 0.07,
     y: 0.055,
+  },
+  doom: {
+    width: 0.8,
+    height: 0.86,
+    maxWidth: 940,
+    maxHeight: 660,
+    x: 0.035,
+    y: 0.025,
   },
   aboutMac: {
     width: 0.43,
@@ -501,6 +525,15 @@ const WINDOW_DEFINITIONS: Record<WindowId, WindowDefinition> = {
     width: 390,
     height: 278,
     status: "PDF document",
+  },
+  doom: {
+    title: "DOOM",
+    icon: "doom",
+    x: 22,
+    y: 32,
+    width: 640,
+    height: 438,
+    status: "Original DOOM Shareware v1.9 · Episode One",
   },
   aboutMac: {
     title: "About This Macintosh",
@@ -955,6 +988,33 @@ function MacIcon({ kind }: { kind: IconKind }) {
     );
   }
 
+  if (kind === "doom") {
+    return (
+      <svg
+        className={styles.pixelIcon}
+        viewBox="0 0 48 48"
+        shapeRendering="crispEdges"
+        aria-hidden="true"
+      >
+        <path d="M5 6h38v36H5z" fill="#181818" stroke="#111" strokeWidth="2" />
+        <path d="M8 9h32v8H8z" fill="#b63624" />
+        <path d="M8 17h32v4H8z" fill="#762116" />
+        <path
+          d="M11 12h5v15h-5zm7 0h5v15h-5zm7 0h5v15h-5zm7 0h5v15h-5z"
+          fill="#e9d29a"
+        />
+        <path d="M12 30h5v5h-5zm19 0h5v5h-5z" fill="#ef3d28" />
+        <path
+          d="m9 31 5-8 6 5 4-6 5 6 5-5 5 8v8H9z"
+          fill="#5e1712"
+          stroke="#111"
+          strokeWidth="2"
+        />
+        <path d="M19 35h10v3H19z" fill="#e9d29a" />
+      </svg>
+    );
+  }
+
   if (kind === "trash") {
     return (
       <svg
@@ -1346,6 +1406,7 @@ function ResumeView() {
 }
 
 export default function MacDesktop({
+  muted = false,
   onRestart,
   onShutdown,
   onSound,
@@ -1903,6 +1964,11 @@ export default function MacDesktop({
         openWindow("controlPanels");
         return;
       }
+      if (key === "d") {
+        event.preventDefault();
+        openWindow("doom");
+        return;
+      }
       if (key === "t") {
         event.preventDefault();
         openWindow("trash");
@@ -1967,6 +2033,14 @@ export default function MacDesktop({
         return <ContactView />;
       case "resume":
         return <ResumeView />;
+      case "doom":
+        return (
+          <DoomGame
+            isActive={activeWindow === "doom"}
+            muted={muted}
+            onSound={onSound}
+          />
+        );
       default:
         if (ACCESSORY_IDS.includes(id as AccessoryId)) {
           return (
@@ -2031,6 +2105,13 @@ export default function MacDesktop({
                 onSelect={() => performMenuAction(() => openWindow("aboutMac"))}
               >
                 About This Macintosh…
+              </MenuAction>
+              <span className={styles.menuDivider} role="separator" />
+              <MenuAction
+                onSelect={() => performMenuAction(() => openWindow("doom"))}
+                shortcut="⌘D"
+              >
+                DOOM
               </MenuAction>
               <span className={styles.menuDivider} role="separator" />
               <MenuAction
@@ -2296,7 +2377,7 @@ export default function MacDesktop({
 
       <nav
         className={styles.accessoryGrid}
-        aria-label="Desk accessories on the desktop"
+        aria-label="Applications and desk accessories on the desktop"
       >
         {DESKTOP_ACCESSORY_ICON_IDS.map((id, index) => {
           const definition = WINDOW_DEFINITIONS[id];
@@ -2384,7 +2465,7 @@ export default function MacDesktop({
 
         return (
           <section
-            className={`${styles.window}${active ? ` ${styles.activeWindow}` : ""}${state.maximized ? ` ${styles.maximizedWindow}` : ""}`}
+            className={`${styles.window}${id === "doom" ? ` ${styles.doomWindow}` : ""}${active ? ` ${styles.activeWindow}` : ""}${state.maximized ? ` ${styles.maximizedWindow}` : ""}`}
             key={id}
             ref={(element) => {
               windowRefs.current[id] = element;
@@ -2397,6 +2478,7 @@ export default function MacDesktop({
             data-interaction={interacting ? activeInteraction.mode : undefined}
             data-maximized={state.maximized ? "true" : undefined}
             data-closing={closing ? "true" : undefined}
+            data-window-id={id}
             onPointerDown={(event) => {
               event.stopPropagation();
               if (!active) focusWindow(id);
@@ -2453,7 +2535,11 @@ export default function MacDesktop({
               </button>
             </div>
 
-            <div className={styles.windowBody}>{renderWindowContent(id)}</div>
+            <div
+              className={`${styles.windowBody}${id === "doom" ? ` ${styles.doomWindowBody}` : ""}`}
+            >
+              {renderWindowContent(id)}
+            </div>
 
             <footer className={styles.statusBar}>
               <span>
