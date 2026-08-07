@@ -8,7 +8,7 @@ import styles from "@/components/Work/WorkPages.module.css";
 import { projects } from "@/data/portfolio";
 import { SITE_NAME, WORK_DESCRIPTION } from "@/lib/site";
 
-const title = `Selected Work | ${SITE_NAME}`;
+const title = `Projects | ${SITE_NAME}`;
 const description = WORK_DESCRIPTION;
 
 export const metadata: Metadata = {
@@ -28,7 +28,7 @@ export const metadata: Metadata = {
         width: 1200,
         height: 630,
         type: "image/jpeg",
-        alt: "Krishang Zinzuwadia — agent systems, local-first products, and developer tools.",
+        alt: "Portfolio cover for Krishang Zinzuwadia.",
       },
     ],
   },
@@ -41,7 +41,7 @@ export const metadata: Metadata = {
         url: "/twitter-image.jpg",
         width: 1200,
         height: 630,
-        alt: "Krishang Zinzuwadia — agent systems, local-first products, and developer tools.",
+        alt: "Portfolio cover for Krishang Zinzuwadia.",
       },
     ],
   },
@@ -56,18 +56,19 @@ export default function WorkPage() {
       <main id="main-content" className={styles.main}>
         <section className={styles.workHero} aria-labelledby="work-title">
           <aside className={styles.heroMargin} aria-label="About these pages">
-            <p>Working papers</p>
-            <p>Project notes, written in Vellore.</p>
+            <p>Seven projects</p>
+            <p>Built with TypeScript, Python, and Rust.</p>
           </aside>
 
           <div className={styles.heroCopy}>
-            <h1 id="work-title">Seven projects, without the résumé version.</h1>
+            <h1 id="work-title">The parts that don’t fit in a résumé.</h1>
             <p>
-              Each one gets a proper walkthrough: why it exists, what I built,
-              the calls I made, where it landed, and what you can inspect.
+              Each page covers what I worked on, how the pieces connect, the
+              trade-offs I made, what exists now, and any source code I can
+              share.
             </p>
             <a className={styles.textLink} href="#projects">
-              Start with the projects
+              Choose a project
             </a>
           </div>
         </section>
@@ -78,11 +79,11 @@ export default function WorkPage() {
           aria-labelledby="projects-title"
         >
           <header className={styles.contentsIntro}>
-            <p className={styles.sectionLabel}>Things I’ve built</p>
-            <h2 id="projects-title">The projects</h2>
+            <p className={styles.sectionLabel}>Projects</p>
+            <h2 id="projects-title">All seven</h2>
             <p>
-              These are the seven projects I’d want to talk through. Quark,
-              Scatterfield, and Aisle are the best place to start.
+              I’d start with Quark, Scatterfield, or Aisle. The other four cover
+              local agents, application review, and peer-to-peer messaging.
             </p>
           </header>
 
@@ -97,12 +98,12 @@ export default function WorkPage() {
           className={styles.readingNote}
           aria-labelledby="reading-note-title"
         >
-          <p className={styles.sectionLabel}>A note before you read</p>
-          <h2 id="reading-note-title">The public links come last.</h2>
+          <p className={styles.sectionLabel}>About the links</p>
+          <h2 id="reading-note-title">Public code is linked on each page.</h2>
           <p>
-            I keep the story readable, then list source links and limitations at
-            the end of each page. If a repository is private or a result still
-            needs live proof, I say so there.
+            Each project page ends with the repository, merged pull requests, or
+            event records I have. If the repository is private, the page says
+            so.
           </p>
         </aside>
       </main>

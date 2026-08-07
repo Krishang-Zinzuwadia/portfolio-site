@@ -36,7 +36,7 @@ export default function ProjectCaseStudy({
           <nav className={styles.breadcrumbs} aria-label="Breadcrumb">
             <ol>
               <li>
-                <Link href="/">Portfolio</Link>
+                <Link href="/">Home</Link>
               </li>
               <li>
                 <Link href="/work">Projects</Link>
@@ -66,8 +66,8 @@ export default function ProjectCaseStudy({
         </header>
 
         <div className={styles.readingLayout}>
-          <aside className={styles.caseMargin} aria-label="Project at a glance">
-            <p className={styles.marginHeading}>At a glance</p>
+          <aside className={styles.caseMargin} aria-label="Project summary">
+            <p className={styles.marginHeading}>Project facts</p>
             <p>{metricSentence}</p>
             <p>{project.stack.join(", ")}</p>
           </aside>
@@ -77,7 +77,7 @@ export default function ProjectCaseStudy({
               className={styles.essaySection}
               aria-labelledby="problem-title"
             >
-              <p className={styles.sectionLabel}>The problem</p>
+              <p className={styles.sectionLabel}>Why I made it</p>
               <h2 id="problem-title">{presentation.problemHeading}</h2>
               <p className={styles.bodyCopy}>{caseStudy.challenge}</p>
             </section>
@@ -86,8 +86,8 @@ export default function ProjectCaseStudy({
               className={styles.essaySection}
               aria-labelledby="part-title"
             >
-              <p className={styles.sectionLabel}>My part</p>
-              <h2 id="part-title">What I was responsible for.</h2>
+              <p className={styles.sectionLabel}>What I worked on</p>
+              <h2 id="part-title">The parts I owned</h2>
               <ul className={styles.proseList}>
                 {caseStudy.role.map((item) => (
                   <li key={item}>{item}</li>
@@ -99,8 +99,8 @@ export default function ProjectCaseStudy({
               className={styles.essaySection}
               aria-labelledby="works-title"
             >
-              <p className={styles.sectionLabel}>How it works</p>
-              <h2 id="works-title">The path through the product.</h2>
+              <p className={styles.sectionLabel}>How it is put together</p>
+              <h2 id="works-title">The pieces and what each one does</h2>
               <div className={styles.explanationList}>
                 {caseStudy.architecture.map((stage) => (
                   <article key={stage.title}>
@@ -115,8 +115,8 @@ export default function ProjectCaseStudy({
               className={styles.essaySection}
               aria-labelledby="calls-title"
             >
-              <p className={styles.sectionLabel}>The calls that mattered</p>
-              <h2 id="calls-title">Decisions that changed the build.</h2>
+              <p className={styles.sectionLabel}>Trade-offs</p>
+              <h2 id="calls-title">Choices I made while building it</h2>
               <div className={styles.decisionList}>
                 {caseStudy.decisions.map((decision) => (
                   <article key={decision.title}>
@@ -131,15 +131,15 @@ export default function ProjectCaseStudy({
               className={styles.essaySection}
               aria-labelledby="landed-title"
             >
-              <p className={styles.sectionLabel}>Where it landed</p>
-              <h2 id="landed-title">What the project delivered.</h2>
+              <p className={styles.sectionLabel}>What worked</p>
+              <h2 id="landed-title">What exists now</h2>
               <ul className={styles.outcomeList}>
                 {caseStudy.outcomes.map((outcome) => (
                   <li key={outcome}>{outcome}</li>
                 ))}
               </ul>
               <p className={styles.stackLine}>
-                <strong>Built with</strong> {project.stack.join(", ")}.
+                <strong>Stack:</strong> {project.stack.join(", ")}.
               </p>
             </section>
 
@@ -147,8 +147,8 @@ export default function ProjectCaseStudy({
               className={styles.essaySection}
               aria-labelledby="source-title"
             >
-              <p className={styles.sectionLabel}>Source and caveats</p>
-              <h2 id="source-title">What you can inspect.</h2>
+              <p className={styles.sectionLabel}>Links and limitations</p>
+              <h2 id="source-title">Code, docs, and known limits</h2>
               <p className={styles.bodyCopy}>{caseStudy.evidenceNote}</p>
 
               {caseStudy.evidence.length > 0 ? (
@@ -158,14 +158,14 @@ export default function ProjectCaseStudy({
                       <a href={item.href} target="_blank" rel="noreferrer">
                         <strong>{item.label}</strong>
                         <span>{item.description}</span>
-                        <small>Open the public link</small>
+                        <small>Open link</small>
                       </a>
                     </li>
                   ))}
                 </ul>
               ) : (
                 <p className={styles.noSource}>
-                  There is not a public source link for this project.
+                  There isn’t a public link for this project.
                 </p>
               )}
             </section>
@@ -174,11 +174,11 @@ export default function ProjectCaseStudy({
 
         <nav className={styles.projectPagination} aria-label="Other projects">
           <Link href={`/work/${previousProject.slug}`}>
-            <span>Previous project</span>
+            <span>Previous</span>
             <strong>{previousProject.title}</strong>
           </Link>
           <Link href={`/work/${nextProject.slug}`}>
-            <span>Next project</span>
+            <span>Next</span>
             <strong>{nextProject.title}</strong>
           </Link>
         </nav>

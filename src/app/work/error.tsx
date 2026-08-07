@@ -14,10 +14,10 @@ export default function WorkError({
       <section className={styles.note} aria-labelledby="work-error-title">
         <p className={styles.code}>500</p>
         <h1 className={styles.title} id="work-error-title">
-          That didn’t load.
+          This project page failed to load.
         </h1>
         <p className={styles.message}>
-          Try once more. If it still breaks, email me.
+          Try it again, or return to the project list.
         </p>
         <div className={styles.actions}>
           <button
@@ -25,10 +25,10 @@ export default function WorkError({
             type="button"
             onClick={() => unstable_retry()}
           >
-            Try again
+            Reload page
           </button>
           <Link className={styles.action} href="/work">
-            See all projects
+            Go to all projects
           </Link>
         </div>
       </section>

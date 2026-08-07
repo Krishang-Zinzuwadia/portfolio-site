@@ -8,66 +8,71 @@ export type ProjectPresentation = {
 export const projectPresentation: { [slug: string]: ProjectPresentation } = {
   quark: {
     initial: "Q",
-    hook: "One narrow interruption, with no ambient authority.",
+    hook: "Sometimes the agent just needs to phone me.",
     summary:
-      "When a coding agent reaches a decision it cannot make, Quark opens one guarded line to the operator: ask, call, confirm, and resume.",
-    problemHeading: "A human answer should not become a permission slip.",
+      "Quark calls the person who started a coding task when the repository can't answer a decision. It reads the choice back and returns it only to the checkpoint that asked.",
+    problemHeading:
+      "The reply should answer one question, not unlock anything else.",
   },
   scatterfield: {
     initial: "Sf",
-    hook: "The useful version starts before sign-in.",
+    hook: "I wanted the canvas to work with the Wi-Fi off.",
     summary:
-      "A canvas for notes, links, images, and files that starts in IndexedDB, works offline, and adds cloud sync when it is configured.",
-    problemHeading: "The canvas should open before the network does.",
+      "Scatterfield keeps notes, links, images, and files on an infinite canvas backed by IndexedDB. Cloud sync, an Expo capture app, and a Tauri desktop app are optional additions.",
+    problemHeading: "My own notes shouldn't wait for a network request.",
   },
   aisle: {
     initial: "Ai",
-    hook: "An install button should mean the source checked out.",
+    hook: "Finding a public skill is easy. Deciding whether it should install isn't.",
     summary:
-      "A public marketplace for Agent Skills that keeps every install tied to an exact source, revision, license, and artifact.",
-    problemHeading: "Public is not the same as ready to install.",
+      "Aisle indexes public Agent Skills without copying them. A listing becomes installable only when its source, revision, license, and files all check out.",
+    problemHeading:
+      "A public repository can still be incomplete or out of date.",
   },
   helios: {
     initial: "He",
-    hook: "Small models do better when the job is unambiguous.",
+    hook: "I split repository jobs up before giving them to small local models.",
     summary:
-      "A local runtime that turns repository work into typed tasks, schedules specialist models, limits their tools, and checks their output.",
-    problemHeading: "Small local models need a very clear job.",
+      "Helios turns repository work into typed tasks, runs them in dependency order, and gives each local model only the tools it needs. A separate critic checks the result.",
+    problemHeading: "A small model needs a small, specific job.",
   },
   atlas: {
     initial: "At",
-    hook: "The action loop ends only when the screen agrees.",
+    hook: "It looks at the screen again after every action.",
     summary:
-      "A desktop agent that reads the screen, plans locally, performs an action, and checks whether it worked.",
-    problemHeading: "Clicking is easy. Knowing what to click is the product.",
+      "Atlas reads the desktop with LLaVA and PaddleOCR, chooses an action with Mistral, and uses PyAutoGUI to carry it out locally. Then it checks what changed.",
+    problemHeading:
+      "A click means nothing if the agent can't tell what happened next.",
   },
   ocs: {
     initial: "OCS",
-    hook: "A review surface built for the people doing the reviewing.",
+    hook: "The reviewer app mattered just as much as the database.",
     summary:
-      "The application and interview platform used by 1,000+ applicants and 50+ interviewers. I worked on its query path, reviewer workspace, and admin tooling inside a 50+ person team.",
+      "OCS was used by 1,000+ applicants and 50+ interviewers. On a team of more than 50 people, I worked on the queries, browser-style reviewer app, and admin tools.",
     problemHeading:
-      "Reviewing 1,000 applications cannot feel like tab management.",
+      "Reviewers needed to move between candidates without losing their place.",
   },
   hermes: {
     initial: "Hr",
-    hook: "Delivery is not complete when send() returns.",
+    hook: "A message isn't sent if it disappears on the other side.",
     summary:
-      "A Rust terminal messenger with peer discovery, relay fallback, persistent chats, and delivery acknowledged only after the recipient stores it.",
-    problemHeading: "P2P chat is mostly edge cases.",
+      "Hermes is a Rust terminal messenger with peer discovery, relay fallback, saved chats, and a persistent queue. The recipient acknowledges a message after writing it to storage.",
+    problemHeading:
+      "Peer-to-peer chat gets difficult as soon as someone goes offline.",
   },
 };
 
 export const labDescriptions: { [title: string]: string } = {
   "Sticker Cabinet":
-    "Pulls WhatsApp stickers over ADB, removes perceptual duplicates, sorts them with a local model, and rebuilds valid packs.",
-  Zephyr: "Hold a key, speak, and get text on Linux.",
+    "I use this to pull WhatsApp stickers over ADB, remove near-duplicates, sort them locally, and rebuild the packs.",
+  Zephyr:
+    "Hold a key and speak; Zephyr types the result into the Linux app you're using.",
   "Right Click Clear Folder":
-    "Adds Clear Folder to Windows Explorer, with confirmation and protected-path checks.",
+    "Adds a Clear Folder option to Windows Explorer, with a confirmation dialog and checks for protected paths.",
   Spirit:
-    "A Windows voice-assistant experiment using Sarvam speech, a PyQt overlay, shortcuts, and pywinauto.",
+    "My Windows voice-assistant experiment, using Sarvam speech, a PyQt overlay, shortcuts, and pywinauto.",
   "Better Terminal":
-    "A Bash helper for ANSI, 256-color, and true-color prompt text, including gradients and completions.",
+    "A small Bash helper for colored terminal text, gradients, and shell completions.",
 };
 
 export function getProjectPresentation(slug: string) {

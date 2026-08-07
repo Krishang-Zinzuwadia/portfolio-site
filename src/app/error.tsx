@@ -14,10 +14,11 @@ export default function ErrorPage({
       <section className={styles.note} aria-labelledby="error-title">
         <p className={styles.code}>500</p>
         <h1 className={styles.title} id="error-title">
-          That didn’t load.
+          This page crashed.
         </h1>
         <p className={styles.message}>
-          Try once more. If it still breaks, email me.
+          Try loading it again. If the problem keeps happening, send me the
+          error reference below.
         </p>
         <div className={styles.actions}>
           <button
@@ -25,13 +26,11 @@ export default function ErrorPage({
             type="button"
             onClick={() => unstable_retry()}
           >
-            Try again
+            Reload page
           </button>
         </div>
         {error.digest ? (
-          <small className={styles.reference}>
-            Error reference: {error.digest}
-          </small>
+          <small className={styles.reference}>Reference: {error.digest}</small>
         ) : null}
       </section>
     </main>

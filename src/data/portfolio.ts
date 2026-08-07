@@ -43,7 +43,7 @@ export type OpenSourceContribution = {
 
 export const identity = {
   name: "Krishang Zinzuwadia",
-  role: "Computer Science Student · AI, Web, and Security",
+  role: "Computer science student building AI tools, web apps, and security projects",
   email: "krishangzinzuwadia@gmail.com",
   linkedin: "https://www.linkedin.com/in/krishang-zinzuwadia/",
   github: "https://github.com/Krishang-Zinzuwadia",
@@ -55,10 +55,10 @@ export const identity = {
 };
 
 export const signalStats = [
-  { value: "1st", label: "India · CTFTime team rank", note: "Apr 2026" },
-  { value: "7th", label: "Global · CTFTime team rank", note: "Apr 2026" },
-  { value: "7", label: "typed MCP tools in Quark", note: "Aug 2026" },
-  { value: "100 ms", label: "median OCS query latency", note: "Sep 2025" },
+  { value: "1st", label: "CTFTime team rank in India", note: "Apr 2026" },
+  { value: "7th", label: "CTFTime team rank worldwide", note: "Apr 2026" },
+  { value: "7", label: "MCP tools in Quark", note: "Aug 2026" },
+  { value: "100 ms", label: "median query time in OCS", note: "Sep 2025" },
 ];
 
 const establishedProjects: Project[] = [
@@ -66,13 +66,13 @@ const establishedProjects: Project[] = [
     slug: "atlas",
     title: "Atlas",
     fullTitle: "Autonomous Task Learning & Action System",
-    subtitle: "Local desktop automation agent",
-    recognition: "DevSoc Hack · 2nd place",
+    subtitle: "A desktop agent that runs locally",
+    recognition: "2nd place at DevSoc Hack",
     summary:
-      "A privacy-first desktop agent that turns natural-language requests into verified on-screen actions through a local perception and planning loop.",
+      "Atlas takes a plain-language request, reads the screen, chooses an action, and uses PyAutoGUI to carry it out. It runs on the user's machine and checks the screen again afterward.",
     details: [
-      "Built a perceive, understand, plan, act, and verify loop with LLaVA, Mistral, PaddleOCR, and PyAutoGUI.",
-      "Engineered a Rust and Tauri runtime alongside a FastAPI and WebSocket backend.",
+      "I built the screen-reading and action loop with LLaVA, Mistral, PaddleOCR, and PyAutoGUI.",
+      "The desktop app uses Rust and Tauri, with FastAPI and WebSockets connecting it to the agent services.",
     ],
     stack: [
       "Python",
@@ -87,171 +87,173 @@ const establishedProjects: Project[] = [
     ],
     metrics: [
       { value: "2nd", label: "DevSoc Hack" },
-      { value: "Local", label: "desktop execution" },
+      { value: "Local", label: "runs on the user's computer" },
     ],
     caseStudy: {
-      challengeHeading: "Turning a request into a verified desktop action.",
+      challengeHeading:
+        "The agent needs to know whether its click actually worked.",
       challenge:
-        "Desktop automation has to connect an imprecise human request to exact interface actions. Atlas was built to keep that loop local while giving the agent enough visual context to inspect the screen, decide what to do, perform the action, and check the result.",
+        "People describe desktop tasks loosely, but the computer still needs an exact click or keystroke. Atlas reads the current screen, works out the next action, performs it, and then looks again to see what changed. That entire process stays on the user's machine.",
       role: [
-        "Architected the local agent and its perception-to-action loop.",
-        "Built the Rust-based runtime for isolated task execution and cross-process coordination.",
-        "Connected the planning stack to PyAutoGUI for desktop control and Tauri for the native interface.",
+        "I designed the local agent and the loop between screen reading and desktop control.",
+        "I built the Rust runtime that isolates tasks and coordinates the different processes.",
+        "I connected the model stack to PyAutoGUI, then put the desktop interface in Tauri.",
       ],
       architecture: [
         {
-          title: "Perceive",
+          title: "Reading the screen",
           description:
-            "The vision pipeline reads the current desktop state with LLaVA and PaddleOCR.",
+            "LLaVA and PaddleOCR read what's visible before Atlas decides what to do.",
         },
         {
-          title: "Understand",
+          title: "Matching the request",
           description:
-            "The system combines the request with the visible interface state before choosing a route forward.",
+            "The agent compares the user's request with the text and controls it can currently see.",
         },
         {
-          title: "Plan",
+          title: "Choosing the next action",
           description:
-            "Mistral participates in the planning layer, while the browser agent can use MCP for browser-specific work.",
+            "Mistral helps choose the next step. Browser-specific tasks can go through the MCP agent.",
         },
         {
-          title: "Act",
+          title: "Using the desktop",
           description:
-            "PyAutoGUI carries out desktop actions through the isolated runtime.",
+            "PyAutoGUI handles the mouse and keyboard from the isolated Rust runtime.",
         },
         {
-          title: "Verify",
+          title: "Looking again",
           description:
-            "The loop observes the interface again so execution is followed by a state check.",
+            "Atlas reads the screen after the action instead of assuming it succeeded.",
         },
       ],
       decisions: [
         {
-          title: "Keep execution local",
+          title: "Run it on the user's machine",
           description:
-            "Atlas was designed as a privacy-first local agent rather than a remote-control service.",
+            "Atlas does its desktop work locally. It isn't a remote-control service.",
         },
         {
-          title: "Separate interface and agent services",
+          title: "Split the app from the agent services",
           description:
-            "A Tauri v2 and Next.js frontend communicates with a FastAPI backend over WebSockets, while Rust handles the desktop runtime.",
+            "The Tauri v2 and Next.js app talks to FastAPI over WebSockets, while Rust owns desktop execution.",
         },
         {
-          title: "Use a closed action loop",
+          title: "Check after every action",
           description:
-            "Perception and verification sit on both sides of planning and action instead of treating a generated plan as the finish line.",
+            "A generated plan isn't treated as success. Atlas reads the result on screen before moving on.",
         },
       ],
       outcomes: [
-        "Placed second at DevSoc Hack.",
-        "Delivered a native desktop interface, a browser-focused MCP agent, and a Flutter companion in the public project architecture.",
-        "Kept desktop execution local while coordinating vision, planning, and action components.",
+        "Atlas placed second at DevSoc Hack.",
+        "The public project includes a native desktop app, a browser MCP agent, and a Flutter companion.",
+        "Desktop actions remain local while the vision and planning services coordinate around them.",
       ],
       evidence: [
         {
-          label: "Atlas public repository",
+          label: "Atlas on GitHub",
           href: "https://github.com/Krishang-Zinzuwadia/ATLAS",
           description:
-            "Source, setup notes, and the current system architecture on GitHub.",
+            "The source code, setup instructions, and a description of the current design.",
         },
       ],
       evidenceNote:
-        "The résumé and award notes list different months, so this page deliberately does not assert an Atlas date.",
+        "My résumé and the award notes give different months for Atlas, so I've left the date off this page.",
     },
   },
   {
     slug: "labyrinth",
     title: "Labyrinth",
     fullTitle: "Labyrinth",
-    subtitle: "Multi-agent software delivery system",
+    subtitle: "A 27-agent app builder",
     date: "Feb 2026",
     recognition: "B3 Hack · 2nd place",
     summary:
-      "A 27-agent system that turns a product brief into a deployed application.",
+      "Labyrinth splits a product brief among 27 specialist agents, compares competing technical approaches, and sends the finished app through an automated cloud deployment pipeline.",
     details: [
-      "Orchestrated 27 role-specific agents with LangGraph across Tauri, Bun, Next.js, and FastAPI.",
-      "Built Multiverse View to compare architecture options and automated the deployment pipeline.",
+      "I coordinated 27 role-specific agents with LangGraph across Tauri, Bun, Next.js, and FastAPI.",
+      "I also built Multiverse View for comparing architecture options and wired up automated cloud deployment.",
     ],
     stack: ["LangGraph", "Tauri 2.0", "Bun", "Next.js", "FastAPI", "Python"],
     metrics: [
-      { value: "27", label: "role-specific agents" },
-      { value: "Automated", label: "deployment pipeline" },
+      { value: "27", label: "specialist agents" },
+      { value: "Automated", label: "cloud deployment" },
     ],
     caseStudy: {
-      challengeHeading: "Keeping 27 agents on one delivery path.",
+      challengeHeading:
+        "Twenty-seven agents can disagree in twenty-seven different ways.",
       challenge:
-        "Turning a short product request into running software requires many connected decisions: architecture, implementation, review, integration, and deployment. Labyrinth explored whether those responsibilities could be divided across specialized agents without losing the end-to-end delivery thread.",
+        "A short product brief leaves a lot undecided. Labyrinth tested whether separate agents could own architecture, coding, review, integration, and deployment without producing a pile of disconnected output.",
       role: [
-        "Built the autonomous multi-agent studio and its cross-stack delivery flow.",
-        "Orchestrated 27 specialized agents with LangGraph.",
-        "Engineered Multiverse View for parallel architecture comparison and connected the result to automated deployment.",
+        "I built the multi-agent studio across the desktop app, web app, API, and LangGraph code.",
+        "I set up 27 specialist roles in LangGraph.",
+        "I built Multiverse View so competing architectures could be compared before the app moved to automated deployment.",
       ],
       architecture: [
         {
-          title: "Brief",
+          title: "The brief",
           description:
-            "A natural-language product request establishes the software the system needs to deliver.",
+            "The run starts with a plain-language description of the app to build.",
         },
         {
-          title: "Specialize",
+          title: "The agent team",
           description:
-            "Twenty-seven role-specific agents divide the work under LangGraph orchestration.",
+            "LangGraph assigns the work to 27 agents with separate roles.",
         },
         {
-          title: "Compare",
+          title: "Competing approaches",
           description:
-            "Multiverse View keeps parallel architecture options visible for A/B comparison.",
+            "Multiverse View puts alternative architectures next to each other for A/B comparison.",
         },
         {
-          title: "Build",
+          title: "The app stack",
           description:
-            "Tauri, Bun, Next.js, and FastAPI form the application and orchestration stack.",
+            "The system itself is built with Tauri, Bun, Next.js, FastAPI, and Python.",
         },
         {
-          title: "Deploy",
+          title: "Cloud deployment",
           description:
-            "The delivery path ends in an automated cloud deployment pipeline.",
+            "The resulting app can continue into an automated cloud deployment pipeline.",
         },
       ],
       decisions: [
         {
-          title: "Assign explicit agent roles",
+          title: "Give every agent a specific job",
           description:
-            "The system uses 27 specialized agents rather than asking one general agent to own the entire delivery process.",
+            "Labyrinth divides the app among 27 specialists instead of handing the whole brief to one general agent.",
         },
         {
-          title: "Preserve competing architectures",
+          title: "Compare before committing",
           description:
-            "Multiverse View makes parallel approaches comparable before the system commits to a delivery path.",
+            "Multiverse View keeps alternative designs available long enough to compare them side by side.",
         },
         {
-          title: "Treat deployment as part of delivery",
+          title: "Include deployment in the run",
           description:
-            "The workflow includes a zero-touch cloud deployment pipeline instead of stopping at generated source code.",
+            "The system doesn't stop after generating source code; it can also deploy the app to the cloud without a manual step.",
         },
       ],
       outcomes: [
         "Placed second at B3 Hack.",
-        "Coordinated 27 specialized agents in one software-delivery system.",
-        "Connected product generation to an automated deployment pipeline.",
+        "Ran 27 specialist agents as one app-building system.",
+        "Connected generated applications to an automated cloud deployment pipeline.",
       ],
       evidence: [],
       evidenceNote:
-        "The scope and results here come from Krishang's résumé; no public Labyrinth repository is linked yet.",
+        "These details come from my résumé. I don't have a public Labyrinth repository to link here yet.",
     },
   },
   {
     slug: "ocs",
     title: "OCS Recruitment Platform",
     fullTitle: "OCS Recruitment Platform",
-    subtitle: "Application review and interview platform",
+    subtitle: "Applications, reviews, and interviews in one app",
     date: "Sep 2025",
     recognition: "1,000+ applicants · 50+ interviewers",
     summary:
-      "A recruitment platform built with a 50+ person team to manage application review, interviews, and administration for 1,000+ applicants.",
+      "OCS handled applications and interviews for 1,000+ applicants and 50+ interviewers. I built parts of the reviewer and admin tools and worked on the database and cache with a team of more than 50 people.",
     details: [
-      "Optimized the CockroachDB schema and Redis caching; median query latency reached 100 ms.",
-      "Built a browser-based reviewer workspace and an App Router admin dashboard with Server Actions and PostHog.",
+      "I worked on the CockroachDB schema and Redis cache. Median query time reached 100 ms.",
+      "I built the browser-style reviewer app and a Next.js App Router admin dashboard using Server Actions and PostHog.",
     ],
     stack: [
       "Next.js 16",
@@ -263,69 +265,70 @@ const establishedProjects: Project[] = [
     ],
     metrics: [
       { value: "1,000+", label: "applicants" },
-      { value: "100 ms", label: "median queries" },
+      { value: "100 ms", label: "median query time" },
     ],
     caseStudy: {
-      challengeHeading: "Making high-volume review fast and workable.",
+      challengeHeading:
+        "Reviewing 1,000+ applications shouldn't mean juggling tabs all day.",
       challenge:
-        "The platform had to keep application review, interviews, and administration workable for more than 1,000 applicants and more than 50 interviewers. That meant the data path and the reviewer interface both had to support a high-volume recruitment workflow.",
+        "More than 50 interviewers used OCS to review over 1,000 applicants. The pages had to stay quick, but the bigger usability problem was helping reviewers move between candidates and tasks without losing their place.",
       role: [
-        "Collaborated within a 50-plus-person team on the applications portal.",
-        "Optimized the CockroachDB schema and Redis caching path.",
-        "Built the browser-like reviewer workspace and an App Router administration dashboard with Server Actions, Prisma, and PostHog.",
+        "I worked on the applications portal as part of a team of more than 50 people.",
+        "I tuned the CockroachDB schema and Redis cache.",
+        "I built the browser-style reviewer app and the App Router admin dashboard with Server Actions, Prisma, and PostHog.",
       ],
       architecture: [
         {
-          title: "Apply",
+          title: "Applications",
           description:
-            "The applications portal collects and organizes the candidate workflow for more than 1,000 applicants.",
+            "The portal collected and organized submissions from more than 1,000 applicants.",
         },
         {
-          title: "Review",
+          title: "Reviewer tabs",
           description:
-            "A React and Tailwind workspace recreates browser-style tabs and multitasking for more than 50 interviewers.",
+            "The React and Tailwind reviewer app used browser-style tabs so more than 50 interviewers could move between candidates.",
         },
         {
-          title: "Administer",
+          title: "Admin tools",
           description:
-            "A Next.js 16 App Router dashboard uses Server Actions and Prisma for administrative workflows.",
+            "The admin dashboard used Next.js 16 App Router, Server Actions, and Prisma.",
         },
         {
-          title: "Serve",
+          title: "Database and cache",
           description:
-            "CockroachDB stores application data while Redis supports the optimized query path.",
+            "CockroachDB stored the application data, with Redis taking repeat work off the main query path.",
         },
         {
-          title: "Observe",
+          title: "Product analytics",
           description:
-            "PostHog telemetry records product usage so the team can monitor workflows.",
+            "PostHog recorded how people used the app so the team could find rough spots.",
         },
       ],
       decisions: [
         {
-          title: "Design around reviewer context",
+          title: "Make the reviewer app feel like a browser",
           description:
-            "The reviewer surface uses tabs and browser-like multitasking to keep several application tasks within one workspace.",
+            "Tabs let interviewers keep several candidates open without bouncing between separate pages.",
         },
         {
-          title: "Optimize the shared data path",
+          title: "Fix the queries everyone used",
           description:
-            "Schema work and Redis caching targeted the query path used across the recruitment workflow.",
+            "The schema and Redis changes focused on the queries used throughout recruitment.",
         },
         {
-          title: "Keep administration in the same web stack",
+          title: "Use the same stack for admin",
           description:
-            "The admin dashboard uses App Router, Server Actions, and Prisma rather than introducing a separate administration application.",
+            "The admin dashboard stayed in the App Router app with Server Actions and Prisma instead of becoming a separate product.",
         },
       ],
       outcomes: [
-        "Supported a recruitment workflow for more than 1,000 applicants and more than 50 interviewers.",
-        "Reached a measured median query latency of 100 milliseconds after schema and caching work.",
-        "Shipped as part of a 50-plus-person team.",
+        "The platform was used for more than 1,000 applicants and more than 50 interviewers.",
+        "Median query time measured 100 milliseconds after the schema and cache changes.",
+        "I made these changes as part of a team of more than 50 people.",
       ],
       evidence: [],
       evidenceNote:
-        "The scope and measurements here come from Krishang's résumé; no public OCS repository is linked.",
+        "The usage numbers and timing come from my résumé. The OCS repository isn't public, so there isn't a source link here.",
     },
   },
 ];
@@ -334,15 +337,15 @@ const newProjects: Project[] = [
   {
     slug: "quark",
     title: "Quark",
-    fullTitle: "Quark — Human Decision Line for Coding Agents",
-    subtitle: "Human-in-the-loop agent infrastructure",
+    fullTitle: "Quark — Phone Questions for Coding Agents",
+    subtitle: "A phone check-in when a coding agent gets stuck",
     date: "Aug 2026",
-    recognition: "Private R&D · simulator-proven P0",
+    recognition: "Private R&D · P0 proven in the simulator",
     summary:
-      "A guarded phone-call escalation path for coding agents that need a real human decision before they can continue.",
+      "Quark lets a coding agent call the person who started the task when it reaches a choice the repository can't answer. It asks one fixed question, reads the answer back, and returns that answer to the same checkpoint.",
     details: [
-      "Built the authenticated MCP, Fastify API, durable request store, operator UI, simulator, and telephony adapters as one typed checkpoint flow.",
-      "Separated human intent from execution authority so a confirmed answer never bypasses Codex permissions or expands the task boundary.",
+      "I built the MCP server, Fastify API, SQLite request store, operator app, browser simulator, and phone-provider adapters.",
+      "A confirmed answer settles the question. It doesn't change Codex permissions or widen the original task.",
     ],
     stack: [
       "TypeScript",
@@ -356,84 +359,84 @@ const newProjects: Project[] = [
     ],
     metrics: [
       { value: "7", label: "typed MCP tools" },
-      { value: "24", label: "voice-contract cases" },
+      { value: "24", label: "voice contract cases" },
     ],
     caseStudy: {
       challengeHeading:
-        "Let an agent ask for judgment without giving it more power.",
+        "The agent needs an answer, not a new set of permissions.",
       challenge:
-        "Long-running coding work eventually reaches choices the repository cannot answer. Quark creates one narrow line back to the operator while keeping the existing permissions, task scope, and destructive-action boundaries intact.",
+        "Long coding tasks eventually hit a choice that only the person who asked for the work can make. Quark lets the agent pause and ask by phone. The reply applies only to that checkpoint and can't approve destructive, financial, production, security-sensitive, or external actions.",
       role: [
-        "Defined the product contract, safety policy, privacy boundary, and exact checkpoint semantics.",
-        "Built the Fastify API, authenticated MCP surface, SQLite persistence, React operator console, and browser call simulator.",
-        "Implemented Twilio and Exotel provider adapters plus the isolated Sarvam voice bridge and versioned evaluation harness.",
+        "I wrote the product rules, safety policy, privacy rules, and checkpoint behaviour.",
+        "I built the Fastify API, authenticated MCP server, SQLite storage, React operator app, and browser call simulator.",
+        "I added Twilio and Exotel adapters, an isolated Sarvam voice bridge, and a versioned evaluation suite.",
       ],
       architecture: [
         {
-          title: "Escalate",
+          title: "The question",
           description:
-            "Codex submits one bounded question tied to the task and exact checkpoint it cannot resolve.",
+            "Codex sends one fixed-choice question with the ID of the task checkpoint that needs it.",
         },
         {
-          title: "Authenticate",
+          title: "Request checks",
           description:
-            "Scoped keys, request identity, origin checks, expiry, and policy gates decide whether the request may proceed.",
+            "Keys, request IDs, origin checks, expiry, and policy rules are checked before a call can start.",
         },
         {
-          title: "Call",
+          title: "The call",
           description:
-            "The simulator or a telephony adapter presents the decision without exposing credentials or unrelated project context.",
+            "The browser simulator or phone provider reads the choices without sending credentials or unrelated project details.",
         },
         {
-          title: "Confirm",
+          title: "Read-back",
           description:
-            "The selected option is read back and only becomes a structured result after explicit confirmation.",
+            "Quark reads the selected answer back. It isn't recorded until the person confirms it.",
         },
         {
-          title: "Resume",
+          title: "Back to Codex",
           description:
-            "Codex validates the checkpoint, retrieves the typed result, and acknowledges it idempotently before continuing.",
+            "Codex checks the checkpoint ID, retrieves the typed answer, and acknowledges it once before continuing.",
         },
       ],
       decisions: [
         {
-          title: "Keep intent separate from authority",
+          title: "An answer isn't permission",
           description:
-            "A phone answer records a decision; it never authorizes financial, destructive, security-critical, production, or external actions.",
+            "A phone reply can answer the question, but it can't approve money, deletion, security-sensitive changes, production changes, or outside actions.",
         },
         {
-          title: "Bind every result to one checkpoint",
+          title: "Every answer belongs to one checkpoint",
           description:
-            "Expiry, supersession, disputes, and exact checkpoint matching prevent a stale answer from being reused elsewhere.",
+            "Expiry, replacement, disputes, and exact ID matching stop an old reply from being reused for another decision.",
         },
         {
-          title: "Minimize sensitive data",
+          title: "Keep private data out of logs",
           description:
-            "Phone numbers, briefs, transcripts, and results are encrypted at rest, while MCP and logs exclude raw transcript text.",
+            "Phone numbers, briefs, transcripts, and answers are encrypted at rest. Raw transcript text isn't returned through MCP or written to logs.",
         },
       ],
       outcomes: [
-        "Completed the deterministic local loop across MCP, API, operator UI, simulator, confirmation, and acknowledgement.",
-        "Kept all software and provider boundaries under automated contract, API, and browser coverage.",
-        "Documented the remaining live-provider proof honestly instead of presenting a simulator pass as production telephony evidence.",
+        "The full local simulator path works, from the MCP request through the call and confirmation to Codex acknowledging the answer.",
+        "Contract, API, and browser tests cover the application code and the phone-provider adapters.",
+        "A simulator pass isn't presented as proof that the real phone chain works.",
       ],
       evidence: [],
       evidenceNote:
-        "The repository is private, so no source link is published here. The simulator-backed software path and provider contracts are implemented; the authoritative Exotel-to-Sarvam-to-Quark live proof remains an explicit open release gate.",
+        "The repository is private, so I can't link the source. The simulator path and provider contracts are implemented. A real Exotel-to-Sarvam-to-Quark call is still required before release.",
     },
   },
   {
     slug: "scatterfield",
     title: "Scatterfield",
     fullTitle: "Scatterfield",
-    subtitle: "Local-first spatial workspace",
+    subtitle: "An offline-first canvas for notes and files",
     date: "Aug 2026",
-    recognition: "Web · mobile · desktop",
+    recognition: "Web, mobile, and desktop",
     summary:
-      "A local-first infinite canvas for notes, links, images, and files that stays useful offline and moves across web, mobile, and desktop.",
+      "Scatterfield is an infinite canvas for notes, links, images, and files. The web app works from IndexedDB when you're offline, with an Expo capture app and a Tauri desktop version alongside it.",
     details: [
-      "Built an Excalidraw-like workspace backed by IndexedDB, with cloud metadata in D1 and file versions in R2.",
-      "Extended the same product into an Expo capture client and a Tauri shell with native file access and deep links.",
+      "I built the Excalidraw-like canvas on IndexedDB, then added D1 for metadata and R2 for versioned files.",
+      "I made an Expo app for quick capture and a Tauri desktop app with native file access and deep links.",
     ],
     stack: [
       "TypeScript",
@@ -446,92 +449,91 @@ const newProjects: Project[] = [
       "Cloudflare R2",
     ],
     metrics: [
-      { value: "3", label: "client surfaces" },
+      { value: "3", label: "apps" },
       { value: "8 MiB", label: "resumable chunks" },
     ],
     caseStudy: {
       challengeHeading:
-        "Make a spatial workspace useful before the network arrives.",
+        "The canvas should still be there when the Wi-Fi isn't.",
       challenge:
-        "A canvas full of personal material should open quickly, accept new work offline, and reconcile large files safely later. Scatterfield treats local data as the primary interaction surface while keeping cross-device sync and native access available when configured.",
+        "I didn't want a personal canvas to wait for sign-in or a network request before showing my own notes. Scatterfield saves the main web app to IndexedDB first. Cloud sync and native file access are useful additions, but the canvas doesn't depend on them.",
       role: [
-        "Designed and built the local-first web canvas, persistence model, and offline interaction path.",
-        "Implemented the Cloudflare Worker, D1 metadata, R2 object storage, multipart transfer, hashing, quotas, and cleanup boundaries.",
-        "Built the Expo mobile client and Tauri desktop shell around the same workspace model.",
+        "I designed and built the web canvas, its IndexedDB storage, and the offline behaviour.",
+        "I wrote the Cloudflare Worker and the D1 and R2 code for file versions, multipart uploads, hashes, quotas, and cleanup.",
+        "I built the Expo mobile app and Tauri desktop app around the same data model.",
       ],
       architecture: [
         {
-          title: "Capture",
+          title: "Adding something",
           description:
-            "Notes, links, images, and files enter through the canvas, compact mobile capture, or a native desktop file picker.",
+            "Notes, links, images, and files can come from the canvas, the smaller mobile app, or the desktop file picker.",
         },
         {
-          title: "Work locally",
+          title: "IndexedDB first",
           description:
-            "IndexedDB keeps the web workspace available offline without waiting for an account or remote round trip.",
+            "The web app reads and writes IndexedDB, so it opens offline and doesn't require an account for basic use.",
         },
         {
-          title: "Reserve",
+          title: "Before an upload",
           description:
-            "The cloud path reserves quota and records transfer state before accepting file bodies.",
+            "The cloud service checks quota and records the upload before accepting the file body.",
         },
         {
-          title: "Transfer",
-          description:
-            "Large files upload in resumable multipart chunks and are checked against SHA-256 content hashes.",
+          title: "Large files",
+          description: "Uploads use resumable chunks and SHA-256 hashes.",
         },
         {
-          title: "Reconcile",
+          title: "After an interruption",
           description:
-            "Version metadata and stale-session cleanup make interrupted transfers and later cross-device access explicit.",
+            "Version records and stale-session cleanup let interrupted uploads resume or be removed cleanly.",
         },
       ],
       decisions: [
         {
-          title: "Local data is the fast path",
+          title: "Don't make the cloud mandatory",
           description:
-            "The canvas remains functional with IndexedDB alone; cloud bindings add availability without becoming a prerequisite for basic use.",
+            "IndexedDB is enough for the canvas to work. Cloud configuration adds sync, not permission to use the app.",
         },
         {
-          title: "Share the product model, not every interface",
+          title: "Give each app a different job",
           description:
-            "Mobile emphasizes capture and retrieval, desktop adds native access, and the web client keeps the full spatial workspace.",
+            "Mobile is for quick capture, desktop adds native file access, and the web app keeps the full canvas.",
         },
         {
-          title: "Make file transfer recoverable",
+          title: "Assume uploads will be interrupted",
           description:
-            "Chunking, quota reservations, hashes, versions, and stale-session cleanup turn uploads into an inspectable state machine.",
+            "Chunks, quota reservations, hashes, file versions, and cleanup make it possible to recover from a failed upload.",
         },
       ],
       outcomes: [
-        "Delivered one repository with a substantial web application, Expo mobile client, Tauri desktop shell, and Cloudflare data path.",
-        "Kept the primary workspace usable offline while supporting resumable cloud-backed file versions.",
-        "Added focused tests across the web, mobile, transfer, and desktop boundaries.",
+        "The repository contains the full web app, an Expo client, a Tauri app, and the Cloudflare code.",
+        "The main canvas works offline, while configured accounts can upload resumable file versions.",
+        "Tests cover the web and mobile apps, uploads, and desktop integration.",
       ],
       evidence: [
         {
-          label: "Scatterfield public repository",
+          label: "Scatterfield on GitHub",
           href: "https://github.com/Krishang-Zinzuwadia/scatterfield",
           description:
-            "Source, product contract, platform-specific setup, migrations, and tests.",
+            "The source code, setup for each app, database migrations, product notes, and tests.",
         },
       ],
       evidenceNote:
-        "The repository is public and the local clients and cloud contracts are implemented. GitHub does not currently expose a hosted demo, screenshots, or a CI workflow, so the case study does not claim a public production deployment.",
+        "The source for all three apps is public, but there isn't a hosted demo, screenshot set, or GitHub Actions run to point to. I don't claim a public production deployment.",
     },
   },
   {
     slug: "aisle",
     title: "Aisle",
-    fullTitle: "Aisle — Public Agent Skills Marketplace",
-    subtitle: "Verified public-skill discovery and installation",
+    fullTitle: "Aisle — A Marketplace for Public Agent Skills",
+    subtitle: "Find public skills and install an exact revision",
     date: "Jul 2026",
-    recognition: "32 merged PRs · public marketplace",
+    recognition: "32 merged PRs · live public marketplace",
     summary:
-      "A marketplace for finding public Agent Skills, assembling a stack, and producing one deterministic install command without copying or inventing the underlying skills.",
+      "Aisle indexes public Agent Skills and helps people combine them into one install command. It points to exact upstream sources and revisions instead of copying the skills or making new ones.",
     details: [
-      "Shipped catalog ingestion, provenance and trust gates, package assembly, shell-safe installation plans, documentation, and marketplace UX.",
-      "Removed an N+1 package-resolution path and cut a measured packages navigation from 27.9 seconds to about 3.1 seconds.",
+      "Across 32 merged PRs, I worked on catalog imports, source checks, package building, shell-safe install commands, docs, and the marketplace UI.",
+      "I removed an N+1 package query that made one page take 27.9 seconds. The same measured route dropped to about 3.1 seconds.",
     ],
     stack: [
       "TypeScript",
@@ -544,97 +546,97 @@ const newProjects: Project[] = [
     ],
     metrics: [
       { value: "32", label: "merged PRs" },
-      { value: "89%", label: "measured navigation gain" },
+      { value: "89%", label: "faster measured page load" },
     ],
     caseStudy: {
       challengeHeading:
-        "Build discovery without pretending that public means safe.",
+        "A public repository isn't automatically ready to install.",
       challenge:
-        "Agent Skills are spread across mutable repositories and registries with uneven metadata. Aisle needed to discover what exists while refusing to turn an unresolved source, drifting revision, missing license, or incomplete artifact into an installable result.",
+        "Agent Skills live in repositories and registries that can change at any time, and their metadata is inconsistent. Aisle can list a skill it found without enabling its install button. Missing source details, a changed revision, an absent license, or an incomplete artifact keeps it unavailable.",
       role: [
-        "Authored 32 merged pull requests spanning the marketplace foundation, catalog connectors, provenance rules, package publication, installation UX, and documentation.",
-        "Built fail-closed eligibility and source-coverage semantics so discovery records remain visible without becoming selectable prematurely.",
-        "Diagnosed and repaired production navigation stalls through batched resolution, client reuse, bounded caching, and restrained prefetching.",
+        "I wrote 32 merged pull requests across the marketplace base, catalog connectors, source rules, packages, installation UI, and docs.",
+        "I made incomplete listings visible but not selectable until their source, revision, license, artifact, inventory, and trust checks pass.",
+        "I traced the slow packages page to sequential database reads, then fixed it with batched queries, reused clients, limited caching, and less prefetching.",
       ],
       architecture: [
         {
-          title: "Discover",
+          title: "Public sources",
           description:
-            "Bounded connectors inspect configured public registries and GitHub inventories independently.",
+            "Separate connectors check the configured public registries and GitHub inventories.",
         },
         {
-          title: "Hydrate",
+          title: "Temporary checkout",
           description:
-            "Exact public repository paths and revisions are fetched transiently for validation and fingerprinting.",
+            "Aisle fetches the exact repository path and revision temporarily so it can validate and fingerprint the skill.",
         },
         {
-          title: "Qualify",
+          title: "Install eligibility",
           description:
-            "Source, revision, artifact, license, inventory, and trust evidence decide whether a record is actionable.",
+            "The source, revision, artifact, license, inventory, and trust checks decide whether the listing can be installed.",
         },
         {
-          title: "Assemble",
+          title: "Packages",
           description:
-            "Packages pin eligible catalog revisions and fail transactionally when one member drifts.",
+            "A package pins each eligible listing to a catalog revision. If one has changed, the whole package update fails.",
         },
         {
-          title: "Install",
+          title: "The command",
           description:
-            "The planner converts a server-resolved selection into deterministic argv operations and shell-safe commands.",
+            "The server resolves the selection into exact argv operations and shell-safe commands.",
         },
       ],
       decisions: [
         {
-          title: "Fail closed at the product boundary",
+          title: "Don't enable incomplete listings",
           description:
-            "Coverage-only and unresolved records can explain what was observed, but they cannot enter selection, packages, or installation.",
+            "A partial or unresolved listing can explain what Aisle found, but it can't be selected, packaged, or installed.",
         },
         {
-          title: "Store evidence, not copied skills",
+          title: "Store references, not copies",
           description:
-            "Aisle persists public source metadata, immutable references, hashes, fingerprints, and audit results—not skill bodies or repackaged trees.",
+            "Aisle stores source metadata, immutable references, hashes, fingerprints, and audit results. It doesn't save skill bodies or repackage repository trees.",
         },
         {
-          title: "Measure the real navigation path",
+          title: "Profile the page people were waiting on",
           description:
-            "Production timing exposed roughly 164 sequential reads behind one packages view; batching and cache boundaries addressed that path directly.",
+            "Production timing found roughly 164 sequential reads behind the packages page. Batching and a small cache fixed that specific path.",
         },
       ],
       outcomes: [
-        "Shipped a public marketplace and deterministic stack-building flow through a sequence of merged production pull requests.",
-        "Reduced the measured packages navigation by about 89 percent in the July 2026 production pass.",
-        "Made upstream drift visible and blocking instead of silently publishing stale packages.",
+        "The public marketplace and its package builder went live through a series of merged production pull requests.",
+        "In the July 2026 measurement, the packages page became about 89 percent faster.",
+        "When an upstream source changes unexpectedly, Aisle blocks the stale package instead of publishing it quietly.",
       ],
       evidence: [
         {
-          label: "Aisle public repository",
+          label: "Aisle on GitHub",
           href: "https://github.com/desync-organization/aisle",
           description:
-            "Marketplace source, architecture contracts, catalog policy, tests, and operational documentation.",
+            "The marketplace source, catalog rules, tests, technical notes, and operating docs.",
         },
         {
-          label: "Navigation performance pull request",
+          label: "The packages-page fix",
           href: "https://github.com/desync-organization/aisle/pull/53",
           description:
-            "The measured N+1 diagnosis, implementation, and validation details.",
+            "The N+1 diagnosis, the code change, and the before-and-after timings.",
         },
       ],
       evidenceNote:
-        "The repository and deployed marketplace are public. The performance figure is a July 2026 measurement, not a permanent SLO; current scheduled catalog runs may fail deliberately when upstream revisions or inventories drift.",
+        "The repository and marketplace are public. The speed figure comes from a July 2026 measurement, not a permanent guarantee. Scheduled catalog runs are supposed to fail when an upstream revision or inventory changes unexpectedly.",
     },
   },
   {
     slug: "helios",
     title: "Helios",
-    fullTitle: "Helios — Local-First Software Maintenance Runtime",
-    subtitle: "Local specialist orchestration for repository work",
+    fullTitle: "Helios — Local Models for Repository Work",
+    subtitle: "A local runtime for specialist coding models",
     date: "Jul 2026",
-    recognition: "Three-person build · runtime owner",
+    recognition: "Three-person project · I owned the local runtime",
     summary:
-      "The local execution runtime behind a software-maintenance agency: typed plans, DAG scheduling, specialist models, guarded tools, and critic gates around repository work.",
+      "Helios breaks repository work into typed tasks and assigns them to small local models. I owned the Python runtime: planning, dependency scheduling, model loading, limited file tools, and the critic that checks results.",
     details: [
-      "Owned the Python planner, scheduler, specialists, local-model lifecycle, workspace tools, critic, and runtime-safety lane.",
-      "Built a separate site-generation branch with tagged specialists and a live execution-plan interface connected to the Next.js operator console.",
+      "My part of the three-person project covered the planner, scheduler, specialists, model loading and unloading, repository tools, critic, and runtime safety.",
+      "I also built an unmerged site-generation branch with tagged specialists and a live plan view in the Next.js operator app.",
     ],
     stack: [
       "Python",
@@ -649,97 +651,96 @@ const newProjects: Project[] = [
     ],
     metrics: [
       { value: "Local", label: "model execution" },
-      { value: "3", label: "person team" },
+      { value: "3", label: "people on the team" },
     ],
     caseStudy: {
-      challengeHeading:
-        "Let small local models do useful repository work safely.",
+      challengeHeading: "Small local models need smaller, clearer jobs.",
       challenge:
-        "A local software-maintenance runtime has to divide work across constrained models, schedule dependencies, expose only the tools each role needs, and still leave credentials and final external mutations outside the model process.",
+        "A small model is much more useful when it gets a specific task, the few file tools it needs, and a clear expected result. Helios also keeps GitHub credentials and final outside changes away from the model process.",
       role: [
-        "Owned the documented Member 1 lane: planner, scheduler, experts, model management, workspace tools, critic, and runtime safety.",
-        "Implemented typed planning, dependency-aware execution, bounded local-model handoffs, VRAM lifecycle management, and credential-free write-back intents.",
-        "Built the unmerged site-generation extension and its live execution-plan UI as a four-commit feature branch with a successful preview deployment.",
+        "I owned the documented Member 1 work: planner, scheduler, experts, model management, repository tools, critic, and runtime safety.",
+        "I implemented typed plans, dependency scheduling, limited model handoffs, VRAM management, and requests for outside changes that contain no credentials.",
+        "I built the unmerged site-generation extension and live plan UI as a four-commit branch with a working preview.",
       ],
       architecture: [
         {
-          title: "Scope",
+          title: "The repository job",
           description:
-            "The operator console turns a repository request into a bounded runtime job without passing cloud credentials to a local model.",
+            "The operator app starts a clearly defined repository task without giving cloud credentials to a local model.",
         },
         {
-          title: "Plan",
+          title: "Typed tasks",
           description:
-            "Typed planning converts the request into explicit tasks, dependencies, specialists, expected artifacts, and review gates.",
+            "The planner records each task, its dependencies, assigned specialist, expected files, and review checks.",
         },
         {
-          title: "Schedule",
+          title: "Dependency order",
           description:
-            "The DAG scheduler dispatches ready work while respecting dependency order and local resource limits.",
+            "The DAG scheduler starts ready tasks in the right order and stays within the machine's resource limits.",
         },
         {
-          title: "Execute",
+          title: "Specialist models",
           description:
-            "Role-specific models receive least-privilege workspace tools and return artifacts rather than direct external mutations.",
+            "Each specialist gets only the repository tools its task needs. It returns files or a request for an outside change, not direct access to external services.",
         },
         {
-          title: "Critique",
+          title: "A separate check",
           description:
-            "Independent review gates decide whether outputs are accepted, retried, or returned as write-back intents to the control plane.",
+            "A critic decides whether to accept the result, retry it, or send a requested outside change to the control plane.",
         },
       ],
       decisions: [
         {
-          title: "Keep credentials out of local inference",
+          title: "Don't give credentials to the models",
           description:
-            "GitHub App credentials and final mutations stay in the teammates' control plane; Helios returns explicit intents across that boundary.",
+            "GitHub App credentials and final outside changes stay in my teammates' control plane. Helios sends an explicit request instead.",
         },
         {
-          title: "Make the plan inspectable",
+          title: "Put the plan on screen",
           description:
-            "Typed tasks and a live plan view expose dependency and execution state instead of hiding coordination inside one long prompt.",
+            "Typed tasks and a live plan view show dependencies and current state instead of hiding everything in one long prompt.",
         },
         {
-          title: "Treat model memory as a managed resource",
+          title: "Manage VRAM in the runtime",
           description:
-            "The runtime owns loading, handoff, and VRAM limits so specialists do not compete unpredictably on a local machine.",
+            "Helios controls model loading, handoffs, and VRAM limits so specialists don't fight for memory.",
         },
       ],
       outcomes: [
-        "Delivered the assigned local runtime lane inside a three-person system with explicit ownership boundaries.",
-        "Added a tested site-generation and live-plan extension on a separate feature branch and deployed a working interface preview.",
-        "Kept the public case study honest about the unmerged branch, failed repository Actions, and the difference between a hosted UI and a local Ollama runtime.",
+        "I completed my assigned local-runtime part of the three-person project.",
+        "The separate site-generation branch has tests and a working UI preview.",
+        "That branch is still unmerged, the repository Actions aren't green, and the hosted UI doesn't run Ollama in the cloud.",
       ],
       evidence: [
         {
-          label: "Helios public repository",
+          label: "Helios on GitHub",
           href: "https://github.com/desync-organization/helios",
           description:
-            "Team source, ownership notes, runtime implementation, operator console, and project documentation.",
+            "The team source, ownership notes, Python runtime, operator app, and project docs.",
         },
         {
-          label: "Helios operator interface",
+          label: "Helios operator app",
           href: "https://helios-desync2.vercel.app",
           description:
-            "Public interface deployment; it does not represent a hosted local-model runtime.",
+            "A public preview of the interface. It isn't a hosted Ollama runtime.",
         },
       ],
       evidenceNote:
-        "Helios is a three-person project. The local runtime is Krishang's documented lane; Convex, Cloudflare Worker, GitHub App control-plane, and training work belong to teammates. The site-generation extension is validated on an unmerged branch, and the repository currently has no green Actions run.",
+        "Helios has three contributors. I own the documented local-runtime part; my teammates own Convex, the Cloudflare Worker, the GitHub App control plane, and training. The site-generation work is on an unmerged branch, and the repository currently has no green Actions run.",
     },
   },
   {
     slug: "hermes",
     title: "Hermes",
-    fullTitle: "Hermes — Self-Hostable P2P Messaging in Rust",
-    subtitle: "Terminal messaging, discovery, and durable delivery",
+    fullTitle: "Hermes — A Self-Hostable Rust Messenger",
+    subtitle: "Peer-to-peer chat in the terminal",
     date: "2026",
     recognition: "14 merged PRs · 31 CI tests",
     summary:
-      "A Rust terminal messenger built around libp2p, direct and relayed delivery, persistent chat state, durable queues, and a Ratatui interface.",
+      "Hermes is a terminal messenger written in Rust with libp2p and Ratatui. It can find peers, fall back to relays, keep chats in SQLite, and retry messages until the recipient has stored them.",
     details: [
-      "Contributed account flows, the terminal chat interface, friend management, database-backed chat lists, and relay configuration across 14 merged team PRs.",
-      "Maintained a later 33-commit runtime branch that consolidated client, relay/bootstrap, and authentication modes into one executable.",
+      "My 14 merged team PRs covered accounts, terminal chat, friends, database-backed chat lists, relay settings, and reliability fixes.",
+      "I later maintained a 33-commit branch that put the client, relay/bootstrap, and authentication modes into one executable.",
     ],
     stack: [
       "Rust",
@@ -753,70 +754,70 @@ const newProjects: Project[] = [
     ],
     metrics: [
       { value: "14", label: "merged team PRs" },
-      { value: "31", label: "passing CI tests" },
+      { value: "31", label: "tests passing in CI" },
     ],
     caseStudy: {
       challengeHeading:
-        "Make terminal messaging survive more than the happy path.",
+        "The hard part starts when the other person goes offline.",
       challenge:
-        "A peer-to-peer messenger still needs usable account flows, discovery, relay fallback, durable local state, acknowledgements, and a coherent interface when peers disconnect or restart. Hermes brings those pieces into a self-hostable Rust application.",
+        "Peer-to-peer chat still needs accounts, peer discovery, relay fallback, local history, and sensible retries when somebody disconnects or restarts. Hermes brings those pieces together in a Rust app that people can host themselves.",
       role: [
-        "Authored 14 merged ACM-VIT pull requests covering Ratatui chat, signup and login, friends, persistent chat lists, relay configuration, and reliability fixes.",
-        "Maintained a later 33-commit development branch that consolidated duplicated services around one long-lived libp2p swarm.",
-        "Added durable queued delivery, Ed25519-backed account identity, SQLx repositories, attachment validation, deployment scripts, and CI hardening.",
+        "I wrote 14 merged ACM-VIT pull requests for Ratatui chat, signup and login, friends, saved chat lists, relay settings, and reliability fixes.",
+        "I maintained a later 33-commit development branch that replaced duplicated services with one long-running libp2p swarm.",
+        "I added a persistent message queue, Ed25519 account identity, SQLx repositories, attachment checks, deployment scripts, and stricter CI.",
       ],
       architecture: [
         {
-          title: "Authenticate",
+          title: "Accounts and peer identity",
           description:
-            "Shared Axum and Argon2 account services establish an account that is resolved to an Ed25519-backed peer identity.",
+            "Axum and Argon2 handle accounts, which resolve to Ed25519-backed peer identities.",
         },
         {
-          title: "Discover",
+          title: "Finding peers",
           description:
-            "Kademlia, Identify, relay configuration, and persisted bootstrap state locate peers across restarts and network boundaries.",
+            "Kademlia, Identify, relay settings, and saved bootstrap data help peers find each other after restarts and across networks.",
         },
         {
-          title: "Connect",
+          title: "The connection",
           description:
-            "TCP or QUIC connects through Noise-secured libp2p transports, with relay and hole-punching support where available.",
+            "TCP or QUIC runs through Noise-secured libp2p transport, with relay and hole-punching support where available.",
         },
         {
-          title: "Deliver",
+          title: "The message queue",
           description:
-            "Request-response messages enter an idempotent queue and are acknowledged after the recipient persists them.",
+            "Messages enter an idempotent queue. The recipient acknowledges one only after saving it.",
         },
         {
-          title: "Persist",
+          title: "Local chat history",
           description:
-            "SQLx and SQLite store accounts, friends, history, delivery state, and bounded attachment metadata for the Ratatui client.",
+            "SQLx and SQLite store accounts, friends, history, message state, and limited attachment metadata for Ratatui.",
         },
       ],
       decisions: [
         {
-          title: "One swarm, several operating modes",
+          title: "Use one libp2p swarm",
           description:
-            "Client, relay/bootstrap, retry worker, and authentication entry points were consolidated into one executable instead of duplicating transports.",
+            "The client, relay/bootstrap mode, retry worker, and authentication entry points share one executable instead of duplicating network code.",
         },
         {
-          title: "Acknowledge after persistence",
+          title: "Acknowledge only after saving",
           description:
-            "Delivery success follows recipient storage, making retries idempotent and reducing the gap between a network send and durable chat history.",
+            "Hermes marks a message successful after the recipient writes it to storage, so retries don't create duplicate chat entries.",
         },
         {
-          title: "Name the encryption boundary accurately",
+          title: "Be exact about encryption",
           description:
-            "Noise protects transport connections; the project does not claim application-layer or group end-to-end encryption that is not implemented.",
+            "Noise protects each transport connection. Hermes doesn't claim application-level or group end-to-end encryption because those aren't implemented.",
         },
       ],
       outcomes: [
-        "Merged fourteen concrete feature and reliability pull requests into the ACM-VIT development branch.",
-        "Produced a later consolidated runtime branch with formatting, Clippy, and 31 automated tests passing in CI.",
-        "Added deployment modes and persistent delivery while keeping multi-node proof, larger transfers, recovery, and group encryption as explicit future work.",
+        "Fourteen of my feature and reliability PRs were merged into the ACM-VIT development branch.",
+        "My later consolidated branch passes formatting, Clippy, and 31 automated tests in CI.",
+        "Multi-node proof, larger transfers, account recovery, and group encryption are still future work.",
       ],
       evidence: [],
       evidenceNote:
-        "The official repository and Krishang's current development branch are private, and the organization default branch is stale. This account is based on merged pull requests and passing CI on the personal dev branch; there is no public demo or release, and WhatsApp or Slack bridges are not presented as implemented.",
+        "The official repository and my current development branch are private, and the organization's default branch is stale. The details here come from merged PRs and passing CI on my branch. There is no public demo or release, and I haven't described the unfinished WhatsApp or Slack bridges as working features.",
     },
   },
 ];
@@ -833,42 +834,42 @@ export const labProjects: LabProject[] = [
   {
     title: "Sticker Cabinet",
     summary:
-      "A local WhatsApp sticker pipeline that extracts over ADB, finds perceptual duplicates, classifies with Ollama, and exports valid packs.",
+      "This pulls my WhatsApp stickers over ADB, removes near-duplicates, sorts them with Ollama, and rebuilds packs that WhatsApp can import.",
     stack: ["Python", "FastAPI", "Ollama", "ADB"],
     href: "https://github.com/Krishang-Zinzuwadia/sticker-organiser",
-    note: "Local-first utility",
+    note: "Runs locally",
   },
   {
     title: "Zephyr",
     summary:
-      "Push-to-talk voice input for Linux with faster-whisper, a GTK overlay, X11 and Wayland typing backends, systemd, and Arch packaging.",
+      "Hold a key, speak, and Zephyr types the result into Linux apps. It uses faster-whisper, shows a GTK overlay, and supports both X11 and Wayland.",
     stack: ["Python", "faster-whisper", "GTK", "Linux"],
     href: "https://github.com/Krishang-Zinzuwadia/zephyr",
-    note: "Linux experiment",
+    note: "Voice input for Linux",
   },
   {
     title: "Right Click Clear Folder",
     summary:
-      "A small Windows Explorer context-menu utility with confirmation, protected-path checks, and install and uninstall scripts.",
+      "It adds Clear Folder to the Windows Explorer right-click menu. There is a confirmation step, checks for protected paths, and scripts to add or remove it.",
     stack: ["C#", ".NET", "Windows Registry"],
     href: "https://github.com/Krishang-Zinzuwadia/rightclickclearfolder",
-    note: "Windows utility",
+    note: "Explorer right-click tool",
   },
   {
     title: "Spirit",
     summary:
-      "A Windows voice-assistant experiment using Sarvam speech, a PyQt overlay, global shortcuts, and pywinauto actions.",
+      "A Windows voice-assistant experiment with Sarvam speech, a PyQt overlay, keyboard shortcuts, and pywinauto for desktop actions.",
     stack: ["Python", "PyQt", "Sarvam", "pywinauto"],
     href: "https://github.com/Krishang-Zinzuwadia/spirit",
-    note: "Voice interface study",
+    note: "Windows voice experiment",
   },
   {
     title: "Better Terminal",
     summary:
-      "A Bash utility for ANSI, 256-color, and true-color prompt text with gradients, completions, and install targets.",
+      "A Bash helper for styling terminal text with ANSI, 256-color, or true-color output. It also has gradients, completions, and install targets.",
     stack: ["Bash", "Linux", "ANSI"],
     href: "https://github.com/Krishang-Zinzuwadia/better-terminal",
-    note: "Open-source micro-tool",
+    note: "Small Bash utility",
   },
 ];
 
@@ -877,48 +878,48 @@ export const openSourceContributions: OpenSourceContribution[] = [
     title: "SGLang Docs",
     organization: "sgl-project",
     contribution:
-      "Added developer guides for serving, benchmarking, profiling, Docker, JIT kernels, and model evaluation; expanded VLM documentation and repaired navigation across four merged PRs.",
-    proof: "4 merged pull requests",
+      "I wrote guides for serving, benchmarking, profiling, Docker, JIT kernels, and model evaluation. I also expanded the VLM docs and fixed their navigation across four merged PRs.",
+    proof: "4 merged PRs",
     href: "https://github.com/sgl-project/sgl-docs/pull/33",
   },
   {
     title: "React Bits",
     organization: "DavidHDev",
     contribution:
-      "Fixed preview toggle state so the Light Rays and Radar examples update their UI correctly.",
-    proof: "PR #992 merged",
+      "I fixed the preview toggles for Light Rays and Radar so the examples now update the controls correctly.",
+    proof: "Merged as PR #992",
     href: "https://github.com/DavidHDev/react-bits/pull/992",
   },
   {
     title: "Componentry",
     organization: "harshjdhv",
     contribution:
-      "Repaired a documentation preview layout that clipped the circuit-board topology variant selector.",
-    proof: "PR #10 merged",
+      "I fixed a docs preview that was clipping the circuit-board topology variant selector.",
+    proof: "Merged as PR #10",
     href: "https://github.com/harshjdhv/componentry/pull/10",
   },
   {
     title: "Conclave",
     organization: "ACM-VIT",
     contribution:
-      "Shipped a synchronized multiplayer Zip puzzle with generator, solver, SFU lifecycle, interface, and tests; also contributed DMs and speaker prioritization.",
-    proof: "PRs #205 and #41 merged",
+      "I built the synchronized multiplayer Zip puzzle, including its generator, solver, SFU start and stop handling, interface, and tests. I also worked on direct messages and speaker priority.",
+    proof: "PRs #205 and #41 were merged",
     href: "https://github.com/ACM-VIT/conclave/pull/205",
   },
   {
     title: "Sunny.ai",
     organization: "ACM-VIT",
     contribution:
-      "Added LinkedIn OAuth with Better Auth, database migrations, a settings screen, and a complete light, dark, and system theme path.",
-    proof: "PR #6 merged",
+      "I added LinkedIn sign-in with Better Auth, wrote the database migrations, built the settings page, and added light, dark, and system themes.",
+    proof: "Merged as PR #6",
     href: "https://github.com/ACM-VIT/Sunny.ai/pull/6",
   },
   {
     title: "Peter Robinson Workshop",
     organization: "ACM-VIT",
     contribution:
-      "Built the speaker page, event landing experience, footer, motion treatment, and responsive animation fixes across the workshop site.",
-    proof: "9 merged pull requests",
+      "I built the speaker and event pages, the footer, and the motion used across the workshop site. Later fixes made the animations behave on smaller screens.",
+    proof: "9 merged PRs",
     href: "https://github.com/ACM-VIT/DSP-Peter-Robinson-May-2025",
   },
 ];
@@ -929,51 +930,51 @@ export function getProjectBySlug(slug: string) {
 
 export const experience = {
   organization: "ACM Student Chapter, VIT",
-  role: "Core Committee Member · Tech Domain",
+  role: "Core committee member on the tech team",
   location: "Vellore, India",
   date: "May 2025 — Present",
   highlights: [
-    "Led technical operations and served as a judge for Code2Create, which had 1,500+ participants.",
-    "Built a cryptic-hunt game for 400+ participants, including real-time game logic, challenge design, and scoring.",
-    "Led a MERN-stack workshop and deployed an SDG 4 project for digitizing rural education infrastructure.",
+    "I ran technical operations and judged Code2Create, which had 1,500+ participants.",
+    "I built a cryptic hunt for 400+ players, including the live game logic, challenges, and scoring.",
+    "I taught a MERN workshop and deployed an SDG 4 project for digitizing rural education infrastructure.",
   ],
 };
 
 export const achievements = [
   {
     place: "1st",
-    title: "CTFTime team ranking",
-    context: "1st in India · 7th globally",
+    title: "CTFTime team rank",
+    context: "First in India and seventh worldwide",
     date: "Apr 2026",
   },
   {
     place: "1st",
     title: "Hackzero CTF",
-    context: "Security and reverse-engineering challenge",
+    context: "Security and reverse engineering",
     date: "Apr 2026",
   },
   {
     place: "2nd",
     title: "DevSoc Hackathon",
-    context: "CodeChef · 1,200+ participants",
+    context: "CodeChef, with 1,200+ participants",
     date: "Feb 2026",
   },
   {
     place: "2nd",
     title: "B3 Hack",
-    context: "Web3 hackathon · 200+ participants",
+    context: "Web3 hackathon with 200+ participants",
     date: "Feb 2026",
   },
   {
     place: "3rd",
     title: "SENSE Hack",
-    context: "International hackathon · local AI systems",
+    context: "International hackathon for local AI systems",
     date: "Dec 2025",
   },
   {
     place: "3rd",
     title: "Clueminati",
-    context: "CTF-style logic challenge · 700+ participants",
+    context: "CTF-style logic challenge with 700+ participants",
     date: "Oct 2025",
   },
 ];

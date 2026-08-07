@@ -18,10 +18,11 @@ export default function GlobalError({
           <section className={styles.note} aria-labelledby="global-error-title">
             <p className={styles.code}>500</p>
             <h1 className={styles.title} id="global-error-title">
-              That didn’t load.
+              The site crashed.
             </h1>
             <p className={styles.message}>
-              Try once more. If it still breaks, email me.
+              Try loading it again. If the problem keeps happening, send me the
+              error reference below.
             </p>
             <div className={styles.actions}>
               <button
@@ -29,12 +30,12 @@ export default function GlobalError({
                 type="button"
                 onClick={() => unstable_retry()}
               >
-                Try again
+                Reload site
               </button>
             </div>
             {error.digest ? (
               <small className={styles.reference}>
-                Error reference: {error.digest}
+                Reference: {error.digest}
               </small>
             ) : null}
           </section>

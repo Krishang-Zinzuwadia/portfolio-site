@@ -24,11 +24,10 @@ export async function generateMetadata({
     notFound();
   }
 
-  const title = `${project.title} Case Study | ${identity.name}`;
+  const title = `${project.title} | ${identity.name}`;
   const description = project.summary;
   const canonical = `/work/${project.slug}`;
-  const imageAlt =
-    "Krishang Zinzuwadia — agent systems, local-first products, and developer tools.";
+  const imageAlt = "Portfolio cover for Krishang Zinzuwadia.";
 
   return {
     title,

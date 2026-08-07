@@ -2,8 +2,7 @@ import type { Project } from "@/data/portfolio";
 import { absoluteUrl, SITE_NAME, WORK_DESCRIPTION } from "@/lib/site";
 
 type WorkJsonLdProps =
-  | { kind: "index" }
-  | { kind: "project"; project: Project };
+  { kind: "index" } | { kind: "project"; project: Project };
 
 const websiteId = absoluteUrl("/#website");
 const personId = absoluteUrl("/#person");
@@ -25,7 +24,7 @@ function buildIndexJsonLd() {
     "@type": "CollectionPage",
     "@id": `${url}#collection-page`,
     url,
-    name: `Selected Work | ${SITE_NAME}`,
+    name: `Projects | ${SITE_NAME}`,
     description: WORK_DESCRIPTION,
     inLanguage: "en-IN",
     isPartOf: { "@id": websiteId },
@@ -89,7 +88,7 @@ function buildProjectJsonLd(project: Project) {
         "@type": "WebPage",
         "@id": pageId,
         url,
-        name: `${project.title} Case Study | ${SITE_NAME}`,
+        name: `${project.title} | ${SITE_NAME}`,
         description: project.summary,
         inLanguage: "en-IN",
         isPartOf: { "@id": websiteId },

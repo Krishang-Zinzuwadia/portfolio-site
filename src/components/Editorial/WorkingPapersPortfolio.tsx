@@ -23,13 +23,13 @@ export default function WorkingPapersPortfolio() {
   return (
     <div className={styles.page} id="top">
       <a className={styles.skipLink} href="#main-content">
-        Skip to the work
+        Skip to the projects
       </a>
 
       <header className={styles.masthead}>
         <a className={styles.nameplate} href="#top">
           <strong>Krishang Zinzuwadia</strong>
-          <span>Working papers</span>
+          <span>Computer science student at VIT</span>
         </a>
 
         <nav className={styles.primaryNav} aria-label="Primary navigation">
@@ -40,7 +40,7 @@ export default function WorkingPapersPortfolio() {
         </nav>
 
         <a className={styles.helloLink} href={`mailto:${identity.email}`}>
-          Say hello
+          Email me
         </a>
       </header>
 
@@ -49,42 +49,44 @@ export default function WorkingPapersPortfolio() {
           <aside className={styles.marginIntroduction}>
             <span className={styles.ruleMark} aria-hidden="true" />
             <p>
-              A working selection of products, infrastructure, and useful
-              oddities.
+              Seven larger projects, five useful side tools, and the upstream
+              patches I can point to.
             </p>
           </aside>
 
           <div className={styles.heroCopy}>
             <p className={styles.salutation}>Hi, I’m Krishang.</p>
             <h1 id="hero-title">
-              I like software <em>that shows its work.</em>
+              I make agents, local-first apps, and{" "}
+              <em>tools I actually use.</em>
             </h1>
             <p className={styles.heroDeck}>
-              I build agent systems, local-first products, and tools I wish
-              already existed.
+              Quark came from an agent getting stuck on a decision. Scatterfield
+              came from wanting my notes without waiting for the network. Hermes
+              came from realizing that “sent” and “stored” are different states.
             </p>
             <p className={styles.heroDetail}>
-              Recent examples: a guarded phone-call path for a blocked coding
-              agent, an infinite canvas that works offline, and a Rust messenger
-              with durable delivery. I’m studying computer science at VIT in
-              Vellore.
+              I study computer science at VIT Vellore and mostly write
+              TypeScript, Python, and Rust. I spend an unreasonable amount of
+              time on permissions, offline behavior, and what happens after
+              something fails.
             </p>
             <div className={styles.heroActions}>
-              <a href="#projects">See what I’ve built</a>
-              <Link href="/mac">Take the Macintosh detour</Link>
+              <a href="#projects">Browse the projects</a>
+              <Link href="/mac">Open the Macintosh version</Link>
             </div>
           </div>
 
           <aside className={styles.deskNote}>
-            <p>On my desk lately</p>
+            <p>Three problems behind the projects</p>
             <ul>
-              <li>Human handoffs with narrow permissions</li>
-              <li>Products that remain useful offline</li>
-              <li>Small models with very specific jobs</li>
+              <li>Quark: ask a human without giving the agent more access</li>
+              <li>Scatterfield: make the full canvas useful before sign-in</li>
+              <li>Helios: give each local model one small, testable job</li>
             </ul>
             <span>
-              There is a Macintosh version of this site. It is not a joke,
-              though it did begin as one.
+              I also rebuilt this portfolio as a classic Macintosh interface.
+              The link above opens it.
             </span>
           </aside>
         </section>
@@ -95,12 +97,13 @@ export default function WorkingPapersPortfolio() {
           aria-labelledby="projects-title"
         >
           <header className={styles.sectionHeading}>
-            <p className={styles.marginLabel}>Selected work</p>
+            <p className={styles.marginLabel}>Projects</p>
             <div>
-              <h2 id="projects-title">Things I’ve built</h2>
+              <h2 id="projects-title">Larger projects</h2>
               <p>
-                These are the seven projects I’d want to talk through. The first
-                three are the best place to start.
+                Quark, Scatterfield, and Aisle are the three I’d open first.
+                They cover agent permissions, offline-first product work, and
+                package provenance. The other four are just below them.
               </p>
             </div>
           </header>
@@ -132,7 +135,7 @@ export default function WorkingPapersPortfolio() {
 
                     <dl className={styles.projectFacts}>
                       <div>
-                        <dt>My part</dt>
+                        <dt>My work</dt>
                         <dd>{project.caseStudy.role[0]}</dd>
                       </div>
                       <div>
@@ -145,7 +148,7 @@ export default function WorkingPapersPortfolio() {
                       className={styles.readLink}
                       href={`/work/${project.slug}`}
                     >
-                      Read about {project.title}
+                      Open {project.title}
                     </Link>
                   </div>
                 </article>
@@ -155,10 +158,11 @@ export default function WorkingPapersPortfolio() {
 
           <div className={styles.moreProjects}>
             <header className={styles.moreProjectsHeading}>
-              <p>Four more from the same desk</p>
+              <p>Four more projects</p>
               <span>
-                Local agents, a large review workflow, and messaging that does
-                not confuse “sent” with “stored.”
+                Helios and Atlas run agents locally. OCS handles applications
+                and interviews at scale. Hermes is a Rust peer-to-peer
+                messenger.
               </span>
             </header>
 
@@ -183,7 +187,7 @@ export default function WorkingPapersPortfolio() {
                     <p>{presentation.summary}</p>
                     <dl className={styles.compactFacts}>
                       <div>
-                        <dt>My part</dt>
+                        <dt>My work</dt>
                         <dd>{project.caseStudy.role[0]}</dd>
                       </div>
                       <div>
@@ -195,7 +199,7 @@ export default function WorkingPapersPortfolio() {
                       className={styles.readLink}
                       href={`/work/${project.slug}`}
                     >
-                      Read about {project.title}
+                      Open {project.title}
                     </Link>
                   </article>
                 );
@@ -203,7 +207,7 @@ export default function WorkingPapersPortfolio() {
             </div>
 
             <Link className={styles.allWorkLink} href="/work">
-              See all seven projects together
+              View all project pages
             </Link>
           </div>
         </section>
@@ -214,13 +218,15 @@ export default function WorkingPapersPortfolio() {
           aria-labelledby="tools-title"
         >
           <header className={styles.sectionHeading}>
-            <p className={styles.marginLabel}>Small tools</p>
+            <p className={styles.marginLabel}>Side projects</p>
             <div>
-              <h2 id="tools-title">Made because I wanted them</h2>
+              <h2 id="tools-title">Tools I built for myself</h2>
               <p>
-                Small software with one job. One cleans a folder from Explorer.
-                One turns push-to-talk into Linux text input. One rescues a
-                WhatsApp sticker collection. None needed a startup pitch.
+                Sticker Cabinet sorts and rebuilds WhatsApp sticker packs.
+                Zephyr adds push-to-talk dictation on Linux. Right Click Clear
+                Folder adds a guarded Explorer shortcut. Spirit tests a desktop
+                voice interface, and Better Terminal handles shell colors and
+                completions.
               </p>
             </div>
           </header>
@@ -237,7 +243,7 @@ export default function WorkingPapersPortfolio() {
                   ))}
                 </ul>
                 <a href={project.href} target="_blank" rel="noreferrer">
-                  Repository
+                  View source
                 </a>
               </article>
             ))}
@@ -252,10 +258,11 @@ export default function WorkingPapersPortfolio() {
           <header className={styles.sectionHeading}>
             <p className={styles.marginLabel}>Open source</p>
             <div>
-              <h2 id="open-source-title">Work I sent upstream</h2>
+              <h2 id="open-source-title">Code I sent upstream</h2>
               <p>
-                These changes are merged. The projects still belong to the
-                people and organizations named below.
+                The repositories below aren’t mine. These are the pull requests
+                and commits I contributed, all merged into the upstream
+                projects.
               </p>
             </div>
           </header>
@@ -287,14 +294,14 @@ export default function WorkingPapersPortfolio() {
           <p className={styles.marginLabel}>About</p>
 
           <div className={styles.aboutCopy}>
-            <h2 id="about-title">A bit about me</h2>
+            <h2 id="about-title">VIT, ACM, and a lot of CTFs</h2>
             <p>
-              I’m a computer science student at VIT and a core committee member
-              in ACM’s tech domain. I’ve helped run a hackathon with 1,500+
-              participants, built a cryptic hunt for 400+ players, and led a
-              MERN workshop. Outside class, I build products, contribute
-              upstream, and play CTFs. In April 2026, my team ranked first in
-              India and seventh globally on CTFTime.
+              I’m a computer science student at VIT Vellore and a core committee
+              member in ACM-VIT’s tech domain. I’ve judged and helped run
+              Code2Create for 1,500+ participants, built a cryptic hunt played
+              by 400+ people, and taught a MERN workshop. I also compete in
+              CTFs; in April 2026, my team reached first in India and seventh
+              worldwide on CTFTime.
             </p>
             <div className={styles.aboutLinks}>
               <a href={identity.ctftime} target="_blank" rel="noreferrer">
@@ -307,7 +314,7 @@ export default function WorkingPapersPortfolio() {
           </div>
 
           <aside className={styles.results} aria-labelledby="results-title">
-            <h3 id="results-title">A few scoreboards</h3>
+            <h3 id="results-title">Competition results</h3>
             <ul>
               {achievements.map((achievement) => (
                 <li key={`${achievement.title}-${achievement.date}`}>
@@ -330,11 +337,11 @@ export default function WorkingPapersPortfolio() {
         >
           <p className={styles.marginLabel}>Contact</p>
           <div className={styles.contactCopy}>
-            <h2 id="contact-title">Want to compare notes?</h2>
+            <h2 id="contact-title">Email me</h2>
             <p>
-              I’m always happy to talk about agent runtimes, local-first
-              products, developer tools, or a bug that turned out to be an
-              architecture problem.
+              Send me a note if you want to ask about one of these projects,
+              work on an agent or developer tool together, or point out
+              something I got wrong.
             </p>
             <a className={styles.emailLink} href={`mailto:${identity.email}`}>
               {identity.email}

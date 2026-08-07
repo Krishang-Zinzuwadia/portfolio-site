@@ -8,11 +8,14 @@ export default function WorkNotFound() {
       <section className={styles.note} aria-labelledby="work-not-found-title">
         <p className={styles.code}>404</p>
         <h1 className={styles.title} id="work-not-found-title">
-          I don’t have a project page at this address.
+          I couldn’t find that project.
         </h1>
+        <p className={styles.message}>
+          It may have been renamed, or the address may be wrong.
+        </p>
         <div className={styles.actions}>
           <Link className={styles.action} href="/work">
-            See all projects
+            Go to all projects
           </Link>
         </div>
       </section>

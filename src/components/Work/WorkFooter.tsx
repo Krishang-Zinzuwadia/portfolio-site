@@ -8,12 +8,11 @@ export default function WorkFooter() {
   return (
     <footer className={styles.footer}>
       <div className={styles.footerInvitation}>
-        <p className={styles.sectionLabel}>Want to compare notes?</p>
-        <h2>Tell me about the stubborn part.</h2>
+        <p className={styles.sectionLabel}>Contact</p>
+        <h2>Have a question about a project?</h2>
         <p>
-          I’m always happy to talk about agent runtimes, local-first products,
-          developer tools, or a bug that turned out to be an architecture
-          problem.
+          If something here is unclear, email me. I can explain the code, a
+          decision, or what I’d change now.
         </p>
         <a className={styles.footerEmail} href={`mailto:${identity.email}`}>
           {identity.email}
@@ -33,7 +32,7 @@ export default function WorkFooter() {
           <Link href="/mac">Macintosh</Link>
         </nav>
         <small>
-          Written and built by {identity.name}, {new Date().getFullYear()}.
+          Built by {identity.name} · {new Date().getFullYear()}
         </small>
       </div>
     </footer>

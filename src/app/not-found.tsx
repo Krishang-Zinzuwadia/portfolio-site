@@ -8,14 +8,14 @@ export default function NotFound() {
       <section className={styles.note} aria-labelledby="not-found-title">
         <p className={styles.code}>404</p>
         <h1 className={styles.title} id="not-found-title">
-          That page isn’t here.
+          I couldn’t find that page.
         </h1>
         <p className={styles.message}>
-          The link may be old, or I may have moved it.
+          Check the address, or go back to the portfolio.
         </p>
         <div className={styles.actions}>
           <Link className={styles.action} href="/">
-            Go back home
+            Go to the homepage
           </Link>
         </div>
       </section>

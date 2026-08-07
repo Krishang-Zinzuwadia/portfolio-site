@@ -1,188 +1,142 @@
+import type { ReactNode } from "react";
+
 import styles from "./ProjectSketch.module.css";
 
-type ProjectSketchProps = {
-  slug: string;
+type ProjectSketchProps = { slug: string };
+
+const sketches: Record<string, ReactNode> = {
+  quark: (
+    <div className={`${styles.diagram} ${styles.quark}`}>
+      <div className={styles.panel}>
+        <b>Agent</b>
+        <span>paused</span>
+      </div>
+      <strong>?</strong>
+      <div className={styles.panel}>
+        <b>Human</b>
+        <span>confirm ✓</span>
+      </div>
+      <footer>
+        <span>decision saved</span>
+        <b>resume →</b>
+      </footer>
+    </div>
+  ),
+  scatterfield: (
+    <div className={`${styles.diagram} ${styles.scatterfield}`}>
+      <div className={styles.canvas}>
+        <span>note</span>
+        <span>image</span>
+        <span>link</span>
+        <span>file</span>
+        <i />
+      </div>
+      <footer>
+        <b>IndexedDB</b>
+        <span>works offline</span>
+      </footer>
+    </div>
+  ),
+  aisle: (
+    <div className={`${styles.diagram} ${styles.aisle}`}>
+      <header>
+        <b>Install checks</b>
+        <span>all required</span>
+      </header>
+      <div className={styles.catalog}>
+        {["source path", "exact revision", "license + trust"].map((check) => (
+          <div key={check}>
+            <span>◆</span>
+            <b>{check}</b>
+            <span>✓</span>
+          </div>
+        ))}
+      </div>
+      <footer>
+        <span>public</span>
+        <span>pinned</span>
+        <span>eligible</span>
+      </footer>
+    </div>
+  ),
+  helios: (
+    <div className={`${styles.diagram} ${styles.helios}`}>
+      <div className={styles.plan}>
+        <b>Task plan</b>
+        <span>01 scope</span>
+        <span>02 route</span>
+        <span>03 verify</span>
+      </div>
+      <strong>→</strong>
+      <div className={styles.specialists}>
+        <span>read</span>
+        <span>build</span>
+        <span>test</span>
+        <b>✓ checked</b>
+      </div>
+    </div>
+  ),
+  atlas: (
+    <div className={`${styles.diagram} ${styles.atlas}`}>
+      <div className={styles.screen}>
+        <span className={styles.eye}>
+          <i />
+        </span>
+        <b>＋</b>
+      </div>
+      <footer>
+        {["1 Observe", "2 Act", "3 Check"].map((step) => (
+          <span key={step}>{step}</span>
+        ))}
+      </footer>
+    </div>
+  ),
+  ocs: (
+    <div className={`${styles.diagram} ${styles.ocs}`}>
+      <div className={styles.queue}>
+        <b>Applications</b>
+        {["01", "02", "03", "04"].map((n) => (
+          <span key={n}>{n}</span>
+        ))}
+      </div>
+      <div className={styles.review}>
+        <b>Review</b>
+        <span>work</span>
+        <span>notes</span>
+        <span>fit</span>
+        <span>score</span>
+        <strong>Advance ✓</strong>
+      </div>
+    </div>
+  ),
+  hermes: (
+    <div className={`${styles.diagram} ${styles.hermes}`}>
+      <div>
+        <span>MSG</span>
+        <b>Message</b>
+      </div>
+      <strong>→</strong>
+      <div>
+        <span className={styles.drawer}>
+          <i />
+          <i />
+          <i />
+        </span>
+        <b>Stored</b>
+      </div>
+      <strong>→</strong>
+      <div>
+        <span className={styles.ack}>✓</span>
+        <b>Ack</b>
+      </div>
+    </div>
+  ),
 };
 
-function QuarkSketch() {
-  return (
-    <>
-      <div className={styles.quarkPrompt}>
-        <span>agent paused</span>
-        <i />
-        <i />
-      </div>
-      <div className={styles.quarkHandset}>
-        <span />
-      </div>
-      <div className={styles.quarkConsent}>
-        <span>confirm</span>
-        <b>✓</b>
-      </div>
-      <span className={styles.quarkWire} />
-    </>
-  );
-}
-
-function ScatterfieldSketch() {
-  return (
-    <>
-      <span className={styles.scatterLineOne} />
-      <span className={styles.scatterLineTwo} />
-      <span className={styles.scatterLineThree} />
-      <div className={`${styles.scatterNote} ${styles.scatterNoteOne}`}>
-        a thought
-      </div>
-      <div className={`${styles.scatterNote} ${styles.scatterNoteTwo}`}>
-        image
-      </div>
-      <div className={`${styles.scatterNote} ${styles.scatterNoteThree}`}>
-        link
-      </div>
-      <div className={styles.scatterFolder}>
-        <span>local</span>
-      </div>
-    </>
-  );
-}
-
-function AisleSketch() {
-  return (
-    <>
-      <div className={styles.aisleShop}>
-        <div className={styles.aisleAwning}>
-          <i />
-          <i />
-          <i />
-          <i />
-          <i />
-        </div>
-        <span className={styles.aisleShelf} />
-        <div className={styles.aisleLabels}>
-          <span>source</span>
-          <span>revision</span>
-          <span>license</span>
-        </div>
-      </div>
-      <div className={styles.aisleStamp}>checked</div>
-    </>
-  );
-}
-
-function HeliosSketch() {
-  return (
-    <>
-      <div className={styles.heliosPlan}>
-        <span>plan</span>
-        <i />
-        <i />
-        <i />
-      </div>
-      <span className={`${styles.heliosThread} ${styles.heliosThreadOne}`} />
-      <span className={`${styles.heliosThread} ${styles.heliosThreadTwo}`} />
-      <span className={`${styles.heliosThread} ${styles.heliosThreadThree}`} />
-      <div
-        className={`${styles.heliosSpecialist} ${styles.heliosSpecialistOne}`}
-      >
-        build
-      </div>
-      <div
-        className={`${styles.heliosSpecialist} ${styles.heliosSpecialistTwo}`}
-      >
-        test
-      </div>
-      <div
-        className={`${styles.heliosSpecialist} ${styles.heliosSpecialistThree}`}
-      >
-        read
-      </div>
-    </>
-  );
-}
-
-function AtlasSketch() {
-  return (
-    <>
-      <div className={styles.atlasScreen}>
-        <div className={styles.atlasEye}>
-          <span />
-        </div>
-        <div className={styles.atlasCursor} />
-      </div>
-      <span className={styles.atlasLoop}>look · act · look</span>
-      <b className={styles.atlasCheck}>✓</b>
-    </>
-  );
-}
-
-function OcsSketch() {
-  return (
-    <>
-      <div className={`${styles.ocsSheet} ${styles.ocsSheetBack}`} />
-      <div className={`${styles.ocsSheet} ${styles.ocsSheetMiddle}`} />
-      <div className={`${styles.ocsSheet} ${styles.ocsSheetFront}`}>
-        <span>applicant</span>
-        <i />
-        <i />
-        <i />
-      </div>
-      <div className={styles.ocsNotes}>
-        <span>strong work</span>
-        <b>✓</b>
-      </div>
-    </>
-  );
-}
-
-function HermesSketch() {
-  return (
-    <>
-      <div className={styles.hermesEnvelope}>
-        <span />
-      </div>
-      <span className={styles.hermesRoute} />
-      <i className={styles.hermesRelay} />
-      <div className={styles.hermesDrawer}>
-        <span>stored</span>
-        <i />
-      </div>
-      <b className={styles.hermesAck}>ack ✓</b>
-    </>
-  );
-}
-
 export default function ProjectSketch({ slug }: ProjectSketchProps) {
-  let drawing;
-
-  switch (slug) {
-    case "quark":
-      drawing = <QuarkSketch />;
-      break;
-    case "scatterfield":
-      drawing = <ScatterfieldSketch />;
-      break;
-    case "aisle":
-      drawing = <AisleSketch />;
-      break;
-    case "helios":
-      drawing = <HeliosSketch />;
-      break;
-    case "atlas":
-      drawing = <AtlasSketch />;
-      break;
-    case "ocs":
-      drawing = <OcsSketch />;
-      break;
-    case "hermes":
-      drawing = <HermesSketch />;
-      break;
-    default:
-      drawing = null;
-  }
-
   return (
     <div className={styles.sketch} aria-hidden="true">
-      {drawing}
+      {sketches[slug]}
     </div>
   );
 }
