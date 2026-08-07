@@ -8,6 +8,8 @@ import {
   achievements,
   experience,
   identity,
+  labProjects,
+  openSourceContributions,
   projects,
   skills,
 } from "@/data/portfolio";
@@ -52,8 +54,8 @@ export default function EditorialPortfolio() {
 
         <nav className="primary-nav" aria-label="Primary navigation">
           <Link href="/work">Work</Link>
-          <a href="#experience">Experience</a>
-          <a href="#recognition">Recognition</a>
+          <a href="#lab">Lab</a>
+          <a href="#open-source">Open source</a>
           <a href="#contact">Contact</a>
         </nav>
 
@@ -83,8 +85,8 @@ export default function EditorialPortfolio() {
               </h1>
 
               <p className="hero-lede">
-                Desktop automation, multi-agent development, and production
-                platforms used by 1,000+ applicants.
+                Human-in-the-loop agents, local-first software, and production
+                systems across Python, Rust, and TypeScript.
               </p>
 
               <div className="hero-actions">
@@ -120,8 +122,8 @@ export default function EditorialPortfolio() {
               Selected <em>projects.</em>
             </h2>
             <p>
-              Three projects across desktop AI, multi-agent development, and
-              recruitment infrastructure.
+              Seven systems across agent safety, spatial software, local-model
+              orchestration, marketplaces, messaging, and operations.
             </p>
           </div>
 
@@ -190,6 +192,96 @@ export default function EditorialPortfolio() {
           </div>
         </section>
 
+        <section className="lab-section section-shell" id="lab">
+          <div className="section-heading" data-reveal="up">
+            <p className="eyebrow">
+              <span>03</span>
+              LAB
+            </p>
+            <h2>
+              Small tools, <em>real use.</em>
+            </h2>
+            <p>
+              Focused experiments and utilities that solve one problem well
+              without pretending to be larger products.
+            </p>
+          </div>
+
+          <div className="lab-grid">
+            {labProjects.map((project, index) => (
+              <article
+                className="lab-card"
+                data-reveal="up"
+                key={project.title}
+                style={revealDelay(index * 70)}
+              >
+                <div className="lab-card-meta">
+                  <span>{String(index + 1).padStart(2, "0")}</span>
+                  <span>{project.note}</span>
+                </div>
+                <h3>{project.title}</h3>
+                <p>{project.summary}</p>
+                <ul aria-label={`${project.title} technologies`}>
+                  {project.stack.map((technology) => (
+                    <li key={technology}>
+                      <TechIcon name={technology} />
+                      <span>{technology}</span>
+                    </li>
+                  ))}
+                </ul>
+                <a href={project.href} target="_blank" rel="noreferrer">
+                  View repository <span aria-hidden="true">↗</span>
+                </a>
+              </article>
+            ))}
+          </div>
+        </section>
+
+        <section className="open-source-section" id="open-source">
+          <div className="section-shell">
+            <div
+              className="section-heading section-heading-light"
+              data-reveal="up"
+            >
+              <p className="eyebrow">
+                <span>04</span>
+                OPEN SOURCE
+              </p>
+              <h2>
+                Contributions, <em>accepted.</em>
+              </h2>
+              <p>
+                Merged work in projects I do not claim to own, with the exact
+                contribution boundary kept visible.
+              </p>
+            </div>
+
+            <ol className="contribution-list">
+              {openSourceContributions.map((contribution, index) => (
+                <li
+                  data-reveal="line"
+                  key={`${contribution.organization}-${contribution.title}`}
+                  style={revealDelay(index * 55)}
+                >
+                  <span className="contribution-index">
+                    {String(index + 1).padStart(2, "0")}
+                  </span>
+                  <div className="contribution-title">
+                    <p>{contribution.organization}</p>
+                    <h3>{contribution.title}</h3>
+                  </div>
+                  <p className="contribution-copy">
+                    {contribution.contribution}
+                  </p>
+                  <a href={contribution.href} target="_blank" rel="noreferrer">
+                    {contribution.proof} <span aria-hidden="true">↗</span>
+                  </a>
+                </li>
+              ))}
+            </ol>
+          </div>
+        </section>
+
         <section className="about-section" id="experience">
           <div className="about-inner section-shell">
             <div
@@ -197,7 +289,7 @@ export default function EditorialPortfolio() {
               data-reveal="up"
             >
               <p className="eyebrow">
-                <span>03</span>
+                <span>05</span>
                 EXPERIENCE &amp; BACKGROUND
               </p>
               <h2>
@@ -289,7 +381,7 @@ export default function EditorialPortfolio() {
         <section className="proof-section section-shell" id="recognition">
           <div className="section-heading proof-heading" data-reveal="up">
             <p className="eyebrow">
-              <span>04</span>
+              <span>06</span>
               RECOGNITION
             </p>
             <h2>
@@ -324,7 +416,7 @@ export default function EditorialPortfolio() {
         <section className="contact-section" id="contact">
           <div className="contact-inner section-shell">
             <p className="eyebrow" data-reveal="up">
-              <span>05</span>
+              <span>07</span>
               CONTACT
             </p>
 

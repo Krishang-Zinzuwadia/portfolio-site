@@ -3,10 +3,10 @@ export const SITE_ORIGIN = "https://portfolio.krishang.dev";
 export const SITE_URL = new URL(`${SITE_ORIGIN}/`);
 
 export const SITE_DESCRIPTION =
-  "Krishang Zinzuwadia builds AI agents, full-stack products, and security tooling. Explore selected projects, engineering experience, and technical results.";
+  "Krishang Zinzuwadia builds human-in-the-loop agents, local-first software, developer tools, and production systems across Python, Rust, and TypeScript.";
 
 export const WORK_DESCRIPTION =
-  "Detailed case studies of Krishang Zinzuwadia's work across local AI agents, multi-agent software delivery, and recruitment infrastructure.";
+  "Seven engineering case studies plus focused lab projects and verified open-source contributions by Krishang Zinzuwadia.";
 
 export function absoluteUrl(pathname: string = "/") {
   return new URL(pathname, SITE_URL).toString();

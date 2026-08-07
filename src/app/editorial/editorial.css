@@ -829,6 +829,186 @@
   transition: transform 300ms var(--motion-ease);
 }
 
+.lab-section {
+  padding-top: clamp(6rem, 10vw, 10rem);
+  padding-bottom: clamp(6rem, 10vw, 10rem);
+  border-top: 1px solid var(--line);
+  content-visibility: auto;
+  contain-intrinsic-size: auto 72rem;
+}
+
+.lab-grid {
+  display: grid;
+  margin-top: clamp(3rem, 6vw, 5.5rem);
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1rem;
+}
+
+.lab-card {
+  display: flex;
+  min-height: 25rem;
+  padding: clamp(1.35rem, 2.4vw, 2rem);
+  border: 1px solid var(--line);
+  border-radius: 1.4rem;
+  background: rgba(255, 253, 247, 0.48);
+  box-shadow: 0 1.2rem 3rem rgba(18, 19, 16, 0.05);
+  flex-direction: column;
+  transition:
+    border-color 260ms ease,
+    box-shadow 420ms ease,
+    transform 420ms var(--motion-ease);
+}
+
+.lab-card:first-child,
+.lab-card:nth-child(5) {
+  grid-column: span 2;
+}
+
+.lab-card-meta {
+  display: flex;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid var(--line);
+  color: var(--ink-soft);
+  font-family: var(--font-code);
+  font-size: 0.58rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.lab-card h3 {
+  max-width: 14ch;
+  margin-top: 2rem;
+  font-size: clamp(2.1rem, 3.2vw, 3.5rem);
+  font-weight: 540;
+  letter-spacing: -0.06em;
+  line-height: 0.95;
+}
+
+.lab-card > p {
+  max-width: 37rem;
+  margin-top: 1.25rem;
+  color: var(--ink-soft);
+  font-size: 0.92rem;
+  line-height: 1.65;
+}
+
+.lab-card > ul {
+  display: flex;
+  margin-top: auto;
+  padding-top: 2rem;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+
+.lab-card > ul li {
+  display: inline-flex;
+  padding: 0.4rem 0.55rem;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: rgba(255, 253, 247, 0.62);
+  font-family: var(--font-code);
+  font-size: 0.52rem;
+  align-items: center;
+  gap: 0.34rem;
+}
+
+.lab-card > ul svg {
+  width: 0.72rem;
+  height: 0.72rem;
+  color: var(--blue);
+}
+
+.lab-card > a {
+  display: inline-flex;
+  width: fit-content;
+  margin-top: 1.25rem;
+  padding-bottom: 0.28rem;
+  border-bottom: 1px solid var(--ink);
+  font-family: var(--font-code);
+  font-size: 0.58rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.open-source-section {
+  overflow: hidden;
+  padding-top: clamp(6rem, 10vw, 10rem);
+  padding-bottom: clamp(6rem, 10vw, 10rem);
+  background:
+    radial-gradient(
+      circle at 88% 14%,
+      rgba(201, 255, 99, 0.13),
+      transparent 28rem
+    ),
+    var(--ink);
+  color: var(--white);
+  content-visibility: auto;
+  contain-intrinsic-size: auto 76rem;
+}
+
+.contribution-list {
+  margin-top: clamp(3.5rem, 6vw, 5.5rem);
+  border-top: 1px solid rgba(255, 255, 255, 0.28);
+}
+
+.contribution-list > li {
+  display: grid;
+  min-height: 9rem;
+  padding: 1.5rem 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.16);
+  grid-template-columns: 3rem minmax(12rem, 0.72fr) minmax(18rem, 1.1fr) auto;
+  align-items: center;
+  gap: clamp(1.25rem, 3vw, 3rem);
+}
+
+.contribution-index {
+  color: rgba(255, 253, 247, 0.38);
+  font-family: var(--font-code);
+  font-size: 0.6rem;
+}
+
+.contribution-title p {
+  margin-bottom: 0.45rem;
+  color: var(--acid);
+  font-family: var(--font-code);
+  font-size: 0.58rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.contribution-title h3 {
+  font-size: clamp(1.5rem, 2.4vw, 2.4rem);
+  font-weight: 540;
+  letter-spacing: -0.045em;
+  line-height: 1;
+}
+
+.contribution-copy {
+  max-width: 42rem;
+  color: rgba(255, 253, 247, 0.66);
+  font-size: 0.88rem;
+  line-height: 1.65;
+}
+
+.contribution-list a {
+  display: inline-flex;
+  width: fit-content;
+  padding-bottom: 0.28rem;
+  border-bottom: 1px solid rgba(201, 255, 99, 0.65);
+  color: var(--white);
+  font-family: var(--font-code);
+  font-size: 0.58rem;
+  letter-spacing: 0.055em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  align-items: center;
+  gap: 0.55rem;
+}
+
 .about-section {
   overflow: hidden;
   background:
@@ -1453,6 +1633,21 @@
     transform: translateY(-0.16rem);
   }
 
+  .editorial-portfolio .lab-card:hover {
+    border-color: color-mix(in srgb, var(--blue) 55%, var(--line));
+    box-shadow: 0 1.8rem 4rem rgba(18, 19, 16, 0.1);
+    transform: translateY(-0.3rem);
+  }
+
+  .editorial-portfolio .lab-card > a:hover,
+  .editorial-portfolio .contribution-list a:hover {
+    color: var(--blue);
+  }
+
+  .editorial-portfolio .contribution-list > li:hover .contribution-title h3 {
+    color: var(--acid);
+  }
+
   .editorial-portfolio .education-card:hover {
     border-color: rgba(201, 255, 99, 0.48);
     background: rgba(255, 255, 255, 0.075);
@@ -1681,6 +1876,23 @@
   .project-card:not(:first-child) {
     min-height: 36rem;
   }
+
+  .lab-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .lab-card:first-child,
+  .lab-card:nth-child(5) {
+    grid-column: span 1;
+  }
+
+  .contribution-list > li {
+    grid-template-columns: 3rem minmax(12rem, 0.7fr) minmax(0, 1fr);
+  }
+
+  .contribution-list a {
+    grid-column: 2;
+  }
 }
 
 @media (max-width: 860px) {
@@ -1745,6 +1957,25 @@
 
   .project-details {
     grid-template-columns: 1fr;
+  }
+
+  .lab-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .lab-card {
+    min-height: 23rem;
+  }
+
+  .contribution-list > li {
+    grid-template-columns: 2.5rem minmax(0, 1fr);
+    align-items: start;
+    gap: 1rem;
+  }
+
+  .contribution-copy,
+  .contribution-list a {
+    grid-column: 2;
   }
 
   .about-grid {
@@ -1950,6 +2181,30 @@
     font-size: clamp(3rem, 16vw, 4.8rem);
   }
 
+  .lab-card {
+    min-height: 21rem;
+    padding: 1.1rem;
+    border-radius: 1rem;
+  }
+
+  .lab-card h3 {
+    margin-top: 1.5rem;
+    font-size: 2.25rem;
+  }
+
+  .contribution-list > li {
+    min-height: 0;
+    padding: 1.35rem 0;
+  }
+
+  .contribution-title h3 {
+    font-size: 1.55rem;
+  }
+
+  .contribution-copy {
+    font-size: 0.82rem;
+  }
+
   .about-grid {
     gap: 2rem;
   }
@@ -2079,6 +2334,8 @@
 
 @media print {
   .work-section,
+  .lab-section,
+  .open-source-section,
   .about-section,
   .proof-section,
   .contact-section {

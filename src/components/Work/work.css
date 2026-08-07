@@ -426,6 +426,194 @@
   font-style: normal;
 }
 
+.work-lab {
+  padding-top: clamp(6rem, 9vw, 9rem);
+  padding-bottom: clamp(6rem, 9vw, 9rem);
+  border-top: 1px solid var(--line);
+}
+
+.work-collection-heading {
+  display: grid;
+  margin-bottom: clamp(3rem, 6vw, 5rem);
+  grid-template-columns: 0.55fr 1fr 0.55fr;
+  align-items: end;
+  gap: 2rem;
+}
+
+.work-collection-heading h2 {
+  font-size: clamp(3.8rem, 6vw, 6rem);
+  font-weight: 540;
+  letter-spacing: -0.075em;
+  line-height: 0.9;
+}
+
+.work-collection-heading > p:last-child {
+  color: var(--ink-soft);
+  font-size: 0.9rem;
+  line-height: 1.65;
+}
+
+.work-lab-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1rem;
+}
+
+.work-lab-grid > article {
+  display: flex;
+  min-height: 24rem;
+  padding: clamp(1.35rem, 2.4vw, 2rem);
+  border: 1px solid var(--line);
+  border-radius: 1.35rem;
+  background: rgba(255, 253, 247, 0.5);
+  flex-direction: column;
+  transition:
+    border-color 180ms ease,
+    transform 260ms ease;
+}
+
+.work-lab-grid > article:first-child,
+.work-lab-grid > article:nth-child(5) {
+  grid-column: span 2;
+}
+
+.work-lab-grid > article:hover {
+  border-color: var(--blue);
+  transform: translateY(-0.25rem);
+}
+
+.work-lab-grid article > header {
+  display: flex;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid var(--line);
+  color: rgba(21, 23, 19, 0.54);
+  font-family: var(--work-code);
+  font-size: 0.57rem;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.work-lab-grid h3 {
+  max-width: 14ch;
+  margin-top: 2rem;
+  font-size: clamp(2rem, 3vw, 3.4rem);
+  font-weight: 540;
+  letter-spacing: -0.06em;
+  line-height: 0.95;
+}
+
+.work-lab-grid article > p {
+  max-width: 37rem;
+  margin-top: 1.2rem;
+  color: var(--ink-soft);
+  font-size: 0.88rem;
+  line-height: 1.65;
+}
+
+.work-lab-grid ul {
+  display: flex;
+  margin-top: auto;
+  padding-top: 2rem;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+}
+
+.work-lab-grid li {
+  padding: 0.38rem 0.52rem;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  font-family: var(--work-code);
+  font-size: 0.51rem;
+}
+
+.work-lab-grid article > a {
+  width: fit-content;
+  margin-top: 1.2rem;
+  padding-bottom: 0.25rem;
+  border-bottom: 1px solid var(--ink);
+  font-family: var(--work-code);
+  font-size: 0.58rem;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.work-open-source {
+  padding-top: clamp(6rem, 9vw, 9rem);
+  padding-bottom: clamp(6rem, 9vw, 9rem);
+  background:
+    radial-gradient(
+      circle at 88% 10%,
+      rgba(201, 255, 99, 0.13),
+      transparent 28rem
+    ),
+    var(--ink);
+  color: var(--white);
+}
+
+.work-collection-heading-dark > p:last-child {
+  color: rgba(255, 253, 247, 0.6);
+}
+
+.work-collection-heading-dark em {
+  color: var(--acid);
+}
+
+.work-contribution-list {
+  border-top: 1px solid rgba(255, 255, 255, 0.28);
+}
+
+.work-contribution-list > li {
+  display: grid;
+  min-height: 9rem;
+  padding: 1.5rem 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.16);
+  grid-template-columns: 3rem minmax(12rem, 0.7fr) minmax(18rem, 1.1fr) auto;
+  align-items: center;
+  gap: clamp(1.25rem, 3vw, 3rem);
+}
+
+.work-contribution-list > li > span {
+  color: rgba(255, 253, 247, 0.36);
+  font-family: var(--work-code);
+  font-size: 0.6rem;
+}
+
+.work-contribution-list li > div p {
+  margin-bottom: 0.45rem;
+  color: var(--acid);
+  font-family: var(--work-code);
+  font-size: 0.57rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.work-contribution-list h3 {
+  font-size: clamp(1.5rem, 2.3vw, 2.35rem);
+  font-weight: 540;
+  letter-spacing: -0.045em;
+  line-height: 1;
+}
+
+.work-contribution-list li > div + p {
+  max-width: 42rem;
+  color: rgba(255, 253, 247, 0.64);
+  font-size: 0.88rem;
+  line-height: 1.65;
+}
+
+.work-contribution-list a {
+  width: fit-content;
+  padding-bottom: 0.25rem;
+  border-bottom: 1px solid rgba(201, 255, 99, 0.66);
+  font-family: var(--work-code);
+  font-size: 0.57rem;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
 .work-index-principle {
   display: grid;
   padding-top: clamp(4rem, 7vw, 7rem);
@@ -987,7 +1175,29 @@
     grid-template-columns: 0.45fr 1fr;
   }
 
-  .work-index-list-heading > p:last-child {
+  .work-index-list-heading > p:last-child,
+  .work-collection-heading > p:last-child {
+    grid-column: 2;
+  }
+
+  .work-collection-heading {
+    grid-template-columns: 0.45fr 1fr;
+  }
+
+  .work-lab-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .work-lab-grid > article:first-child,
+  .work-lab-grid > article:nth-child(5) {
+    grid-column: span 1;
+  }
+
+  .work-contribution-list > li {
+    grid-template-columns: 3rem minmax(12rem, 0.7fr) minmax(0, 1fr);
+  }
+
+  .work-contribution-list a {
     grid-column: 2;
   }
 
@@ -1039,6 +1249,8 @@
   .work-index-list-heading,
   .work-index-grid,
   .work-index-principle,
+  .work-collection-heading,
+  .work-lab-grid,
   .case-section-heading,
   .case-narrative,
   .case-toolkit,
@@ -1047,8 +1259,20 @@
   }
 
   .work-index-list-heading > p:last-child,
+  .work-collection-heading > p:last-child,
   .case-role {
     grid-column: 1;
+  }
+
+  .work-contribution-list > li {
+    grid-template-columns: 2.5rem minmax(0, 1fr);
+    align-items: start;
+    gap: 1rem;
+  }
+
+  .work-contribution-list li > div + p,
+  .work-contribution-list a {
+    grid-column: 2;
   }
 
   .work-index-card:first-child {
@@ -1151,6 +1375,20 @@
     margin-top: 3rem;
   }
 
+  .work-lab-grid > article {
+    min-height: 21rem;
+    padding: 1.1rem;
+  }
+
+  .work-lab-grid h3 {
+    font-size: 2.25rem;
+  }
+
+  .work-contribution-list > li {
+    min-height: 0;
+    padding: 1.35rem 0;
+  }
+
   .case-hero-grid {
     padding-top: 3.5rem;
   }
@@ -1197,8 +1435,22 @@
 
   .work-page,
   .case-architecture,
-  .case-results {
+  .case-results,
+  .work-open-source {
     background: white;
     color: black;
+  }
+
+  .work-open-source .work-collection-heading > p:last-child,
+  .work-open-source .work-collection-heading em,
+  .work-contribution-list > li > span,
+  .work-contribution-list li > div p,
+  .work-contribution-list li > div + p {
+    color: black;
+  }
+
+  .work-contribution-list,
+  .work-contribution-list > li {
+    border-color: #999;
   }
 }

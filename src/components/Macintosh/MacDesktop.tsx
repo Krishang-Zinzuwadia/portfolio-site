@@ -16,6 +16,8 @@ import {
   achievements,
   experience,
   identity,
+  labProjects,
+  openSourceContributions,
   projects,
   signalStats,
   skills,
@@ -1260,6 +1262,61 @@ function ProjectsView() {
           </div>
         </article>
       ))}
+
+      <section className={styles.projectCollection}>
+        <header className={styles.collectionHeader}>
+          <div>
+            <p className={styles.kicker}>THE LAB</p>
+            <h3>Small tools, real use.</h3>
+          </div>
+          <span>{labProjects.length} experiments</span>
+        </header>
+
+        <div className={styles.compactProjectGrid}>
+          {labProjects.map((project, index) => (
+            <a
+              className={styles.compactProjectCard}
+              href={project.href}
+              key={project.title}
+              target="_blank"
+              rel="noreferrer"
+            >
+              <span>{String(index + 1).padStart(2, "0")}</span>
+              <div>
+                <h4>{project.title}</h4>
+                <p>{project.summary}</p>
+              </div>
+              <strong aria-hidden="true">↗</strong>
+            </a>
+          ))}
+        </div>
+      </section>
+
+      <section className={styles.projectCollection}>
+        <header className={styles.collectionHeader}>
+          <div>
+            <p className={styles.kicker}>OPEN SOURCE</p>
+            <h3>Merged contributions.</h3>
+          </div>
+          <span>{openSourceContributions.length} records</span>
+        </header>
+
+        <ol className={styles.openSourceList}>
+          {openSourceContributions.map((contribution, index) => (
+            <li key={`${contribution.organization}-${contribution.title}`}>
+              <span>{String(index + 1).padStart(2, "0")}</span>
+              <div>
+                <p>{contribution.organization}</p>
+                <h4>{contribution.title}</h4>
+                <p>{contribution.contribution}</p>
+              </div>
+              <a href={contribution.href} target="_blank" rel="noreferrer">
+                {contribution.proof} ↗
+              </a>
+            </li>
+          ))}
+        </ol>
+      </section>
     </div>
   );
 }
