@@ -3,9 +3,8 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 
 import styles from "./DoomGame.module.css";
-import type { MacSound } from "./useMacSounds";
 
-const PLAYER_URL = "/assets/doom/player.html";
+const PLAYER_URL = "/assets/doom/player.html?rev=native-start-1";
 const MESSAGE_SOURCE = "krishang-portfolio-doom";
 
 type DoomPhase =
@@ -18,7 +17,7 @@ type DoomPhase =
 
 type DoomFrameMessage = {
   source: typeof MESSAGE_SOURCE;
-  type: "launcher-ready" | "runtime-event" | "state";
+  type: "runtime-event" | "state";
   state?: DoomPhase;
   event?: string;
   message?: string;
@@ -27,7 +26,6 @@ type DoomFrameMessage = {
 type DoomGameProps = {
   isActive: boolean;
   muted?: boolean;
-  onSound?: (sound: MacSound) => void;
 };
 
 declare global {
@@ -37,20 +35,7 @@ declare global {
   }
 }
 
-const PHASE_LABELS: Record<DoomPhase, string> = {
-  loading: "Loading local DOS runtime…",
-  ready: "Ready to run the original DOOM.EXE",
-  starting: "Mounting DOOM Shareware v1.9…",
-  running: "DOOM.EXE is running",
-  paused: "Paused while this window is inactive",
-  error: "The DOS runtime reported an error",
-};
-
-export default function DoomGame({
-  isActive,
-  muted = false,
-  onSound,
-}: DoomGameProps) {
+export default function DoomGame({ isActive, muted = false }: DoomGameProps) {
   const iframeRef = useRef<HTMLIFrameElement>(null);
   const [phase, setPhase] = useState<DoomPhase>("loading");
   const [error, setError] = useState<string | null>(null);
@@ -72,12 +57,6 @@ export default function DoomGame({
         event.source !== frameWindow ||
         data?.source !== MESSAGE_SOURCE
       ) {
-        return;
-      }
-
-      if (data.type === "launcher-ready") {
-        setError(null);
-        setPhase("ready");
         return;
       }
 
@@ -136,20 +115,6 @@ export default function DoomGame({
     postCommand("set-muted", { muted });
   };
 
-  const requestFullscreen = () => {
-    onSound?.("select");
-    const frame = iframeRef.current;
-    if (!frame?.requestFullscreen) return;
-    void frame.requestFullscreen().catch(() => undefined);
-  };
-
-  const resetGame = () => {
-    onSound?.("open");
-    setError(null);
-    setPhase("loading");
-    postCommand("reset");
-  };
-
   return (
     <div
       className={styles.root}
@@ -168,47 +133,8 @@ export default function DoomGame({
         />
 
         {!isActive && (
-          <div
-            className={styles.inactiveShield}
-            aria-label="Activate DOOM window"
-          >
-            <span>Click to activate DOOM</span>
-          </div>
+          <div className={styles.inactiveShield} aria-hidden="true" />
         )}
-      </div>
-
-      <div className={styles.controlStrip}>
-        <div className={styles.runtimeStatus} role="status" aria-live="polite">
-          <span
-            className={styles.statusLight}
-            data-running={phase === "running" ? "true" : undefined}
-            aria-hidden="true"
-          />
-          <span title={error ?? PHASE_LABELS[phase]}>
-            {error ?? PHASE_LABELS[phase]}
-          </span>
-        </div>
-
-        <p className={styles.keys} aria-label="DOOM keyboard controls">
-          <kbd>↑↓</kbd> move <kbd>←→</kbd> turn <kbd>Ctrl</kbd> fire{" "}
-          <kbd>Space</kbd> use <kbd>Shift</kbd> run
-        </p>
-
-        <div className={styles.actions}>
-          <span className={styles.soundState}>
-            {muted ? "Music + SFX off" : "Original OPL music + SFX on"}
-          </span>
-          <button type="button" onClick={requestFullscreen}>
-            Full Screen
-          </button>
-          <button
-            type="button"
-            onClick={resetGame}
-            disabled={phase === "loading"}
-          >
-            Reset
-          </button>
-        </div>
       </div>
     </div>
   );

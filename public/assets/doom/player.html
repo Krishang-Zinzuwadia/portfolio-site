@@ -6,42 +6,17 @@
     <meta name="color-scheme" content="dark" />
     <title>DOOM Shareware v1.9</title>
     <link rel="stylesheet" href="./js-dos/js-dos.css" />
-    <link rel="stylesheet" href="./player.css" />
+    <link rel="stylesheet" href="./player.css?rev=native-start-1" />
     <script src="./js-dos/js-dos.js" defer></script>
-    <script src="./player.js" defer></script>
+    <script src="./player.js?rev=native-start-1" defer></script>
   </head>
   <body data-state="loading">
     <main id="doom-shell">
-      <section id="launcher" aria-labelledby="doom-title">
-        <div class="launcher-grain" aria-hidden="true"></div>
-        <p class="release-stamp">ORIGINAL DOS SHAREWARE · 1995</p>
-        <h1 id="doom-title" aria-label="DOOM">DOOM</h1>
-        <p class="episode">Episode One · Knee-Deep in the Dead</p>
-        <button id="launch-doom" type="button" disabled>
-          <span class="prompt" aria-hidden="true">C:\&gt;</span>
-          <span id="launch-label">Loading DOS runtime…</span>
-        </button>
-        <p class="authenticity">
-          Unmodified <strong>DOOM.EXE</strong> + <strong>DOOM1.WAD</strong>
-        </p>
-        <p class="legal">
-          Free shareware episode · id Software · v1.9
-          <a href="./THIRD_PARTY_NOTICES.md" target="_blank" rel="noreferrer"
-            >Notices</a
-          >
-        </p>
-      </section>
-
       <div
         id="dos-player"
         role="application"
         aria-label="Original DOOM Shareware running in DOS"
       ></div>
-
-      <div id="pause-card" aria-live="polite">
-        <strong>GAME PAUSED</strong>
-        <span>Select the DOOM window to continue</span>
-      </div>
 
       <div id="fatal-error" role="alert">
         <strong>DOOM could not start.</strong>

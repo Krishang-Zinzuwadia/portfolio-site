@@ -505,27 +505,9 @@
 }
 
 .gameLoading {
-  display: grid;
   width: 100%;
   min-height: 100%;
-  color: #e7d6b4;
-  background:
-    repeating-linear-gradient(
-      0deg,
-      rgba(255, 255, 255, 0.025) 0 1px,
-      transparent 1px 3px
-    ),
-    #090706;
-  font-family: "KZ Chicago", monospace;
-  letter-spacing: 0.08em;
-  place-content: center;
-  place-items: center;
-  gap: 8px;
-}
-
-.gameLoading span {
-  color: #b83825;
-  font-size: 28px;
+  background: #000;
 }
 
 .systemToast {
@@ -726,6 +708,11 @@
 
 .doomWindow {
   background: #111;
+  grid-template-rows: 25px minmax(0, 1fr);
+}
+
+.doomWindowBody > * {
+  animation: none;
 }
 
 .windowBody::-webkit-scrollbar {
@@ -1607,6 +1594,10 @@
 
   .window {
     grid-template-rows: 21px minmax(0, 1fr) 15px;
+  }
+
+  .doomWindow {
+    grid-template-rows: 21px minmax(0, 1fr);
   }
 
   .titleBar {
