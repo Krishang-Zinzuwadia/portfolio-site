@@ -1,39 +1,11 @@
-import type { Metadata } from "next";
-import {
-  Instrument_Sans,
-  Instrument_Serif,
-  Intel_One_Mono,
-} from "next/font/google";
+import type { Metadata, Viewport } from "next";
 
-import EditorialPortfolio from "@/components/Portfolio/EditorialPortfolio";
+import NightIndexPortfolio from "@/components/Editorial/NightIndexPortfolio";
 import PortfolioJsonLd from "@/components/Portfolio/PortfolioJsonLd";
-import PortfolioViewSwitcher from "@/components/Portfolio/PortfolioViewSwitcher";
+import { editorialFonts } from "@/lib/editorial-fonts";
 import { SITE_DESCRIPTION, SITE_NAME } from "@/lib/site";
 
 import "./editorial/editorial.css";
-
-const instrumentSans = Instrument_Sans({
-  subsets: ["latin"],
-  style: "normal",
-  variable: "--font-instrument-sans",
-  display: "swap",
-});
-
-const instrumentSerif = Instrument_Serif({
-  subsets: ["latin"],
-  weight: "400",
-  style: "italic",
-  variable: "--font-instrument-serif",
-  display: "swap",
-});
-
-const intelOneMono = Intel_One_Mono({
-  subsets: ["latin"],
-  style: "normal",
-  variable: "--font-intel-one-mono",
-  display: "swap",
-  adjustFontFallback: false,
-});
 
 export const metadata: Metadata = {
   title: SITE_NAME,
@@ -65,14 +37,16 @@ export const metadata: Metadata = {
   },
 };
 
+export const viewport: Viewport = {
+  themeColor: "#090a0b",
+  colorScheme: "dark",
+};
+
 export default function Home() {
   return (
-    <div
-      className={`${instrumentSans.variable} ${instrumentSerif.variable} ${intelOneMono.variable}`}
-    >
+    <div className={editorialFonts}>
       <PortfolioJsonLd />
-      <PortfolioViewSwitcher currentView="editorial" />
-      <EditorialPortfolio />
+      <NightIndexPortfolio />
     </div>
   );
 }

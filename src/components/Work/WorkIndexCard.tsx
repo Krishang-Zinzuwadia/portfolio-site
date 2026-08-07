@@ -1,6 +1,5 @@
 import Link from "next/link";
 
-import TechIcon from "@/components/Portfolio/TechIcon";
 import type { Project } from "@/data/portfolio";
 
 type WorkIndexCardProps = {
@@ -10,40 +9,36 @@ type WorkIndexCardProps = {
 
 export default function WorkIndexCard({ index, project }: WorkIndexCardProps) {
   return (
-    <article className={`work-index-card work-tone-${project.tone}`}>
+    <article className="night-directory-entry">
       <Link
-        className="work-index-card-link"
+        className="night-directory-link"
         href={`/work/${project.slug}`}
-        aria-label={`Read the ${project.title} case study`}
+        aria-labelledby={`directory-${project.slug}`}
+        aria-describedby={`directory-${project.slug}-summary`}
       >
-        <div className="work-card-meta">
-          <span>{String(index + 1).padStart(2, "0")}</span>
-          <span>{project.date ?? "Case study"}</span>
+        <span className="night-directory-number">
+          {String(index + 1).padStart(2, "0")}
+        </span>
+
+        <div className="night-directory-title">
+          <h3 id={`directory-${project.slug}`}>{project.title}</h3>
+          <p>{project.subtitle}</p>
         </div>
 
-        <div className="work-card-title">
-          <p>{project.recognition}</p>
-          <h2>{project.title}</h2>
-          {project.fullTitle !== project.title ? (
-            <span>{project.fullTitle}</span>
-          ) : null}
+        <div className="night-directory-scope">
+          <span>Scope</span>
+          <p id={`directory-${project.slug}-summary`}>{project.summary}</p>
         </div>
 
-        <p className="work-card-summary">{project.summary}</p>
-
-        <div className="work-card-lower">
-          <ul aria-label={`${project.title} technologies`}>
-            {project.stack.slice(0, 6).map((technology) => (
-              <li key={technology}>
-                <TechIcon name={technology} />
-                {technology}
-              </li>
-            ))}
-          </ul>
-          <span className="work-card-cta">
-            Open case study <i aria-hidden="true">↗</i>
-          </span>
+        <div className="night-directory-signal">
+          <span>Record</span>
+          <strong>{project.recognition}</strong>
         </div>
+
+        <time>{project.date ?? "—"}</time>
+        <span className="night-directory-arrow" aria-hidden="true">
+          ↗
+        </span>
       </Link>
     </article>
   );

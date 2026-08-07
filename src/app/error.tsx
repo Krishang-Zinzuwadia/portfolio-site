@@ -10,14 +10,14 @@ export default function ErrorPage({
   return (
     <main className="error-shell">
       <div className="error-card">
-        <p>500 / SIGNAL INTERRUPTED</p>
-        <h1>Something slipped out of orbit.</h1>
+        <p>500 / RECORD INTERRUPTED</p>
+        <h1>The portfolio could not be rendered.</h1>
         <span>
-          The portfolio hit an unexpected error
+          An unexpected error interrupted the build record
           {error.digest ? ` · ${error.digest}` : ""}.
         </span>
         <button type="button" onClick={() => unstable_retry()}>
-          Try the signal again ↻
+          Retry the portfolio →
         </button>
       </div>
     </main>

@@ -89,61 +89,73 @@ em {
 }
 
 .error-shell {
+  --error-night: #090a0b;
+  --error-chalk: #f4f1ea;
+  --error-ash: #989c9f;
+  --error-ember: #ffb000;
   display: grid;
   min-height: 100svh;
-  padding: var(--page-gutter);
-  background:
-    radial-gradient(
-      circle at 76% 18%,
-      rgba(201, 255, 99, 0.7),
-      transparent 23rem
-    ),
-    var(--paper);
+  padding: clamp(1.25rem, 4vw, 5rem);
+  background: var(--error-night);
+  color: var(--error-chalk);
+  font-family: "Segoe UI", Helvetica, Arial, sans-serif;
   place-items: center;
 }
 
 .error-card {
-  width: min(100%, 46rem);
-  padding: clamp(2rem, 6vw, 5rem);
-  border: 1px solid var(--line);
-  border-radius: 2rem;
-  background: rgba(255, 253, 247, 0.72);
-  box-shadow: 0 2rem 5rem rgba(45, 42, 33, 0.14);
+  width: min(100%, 72rem);
+  padding: clamp(2rem, 7vw, 7rem) 0;
+  border-top: 1px solid rgba(244, 241, 234, 0.16);
+  border-bottom: 1px solid rgba(244, 241, 234, 0.16);
 }
 
 .error-card > p {
-  font-family: var(--font-code);
-  font-size: 0.67rem;
-  letter-spacing: 0.1em;
+  color: var(--error-ember);
+  font-family: "Cascadia Mono", Consolas, monospace;
+  font-size: 0.62rem;
+  font-weight: 600;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
 }
 
 .error-card h1 {
-  max-width: 9ch;
-  margin-top: 2rem;
-  font-size: clamp(3.2rem, 8vw, 6.8rem);
-  font-weight: 520;
-  letter-spacing: -0.075em;
-  line-height: 0.9;
+  max-width: 11ch;
+  margin-top: clamp(3rem, 7vw, 7rem);
+  font-size: clamp(3.5rem, 9vw, 9rem);
+  font-weight: 650;
+  letter-spacing: -0.07em;
+  line-height: 0.86;
 }
 
 .error-card > span {
   display: block;
-  max-width: 32rem;
-  margin-top: 1.6rem;
-  color: var(--ink-soft);
+  max-width: 38rem;
+  margin-top: 2rem;
+  color: var(--error-ash);
+  font-size: clamp(1rem, 1.4vw, 1.22rem);
 }
 
 .error-card button,
 .error-card a {
   display: inline-flex;
-  margin-top: 2rem;
-  padding: 0.85rem 1.1rem;
-  border: 1px solid var(--ink);
-  border-radius: 999px;
-  background: var(--ink);
-  color: var(--white);
-  font: 500 0.7rem/1 var(--font-code);
+  min-height: 2.75rem;
+  margin-top: 3rem;
+  padding: 0;
+  border: 0;
+  border-bottom: 1px solid rgba(244, 241, 234, 0.2);
+  background: transparent;
+  color: var(--error-ember);
+  font: 600 0.64rem/1 "Cascadia Mono", Consolas, monospace;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
   cursor: pointer;
+  align-items: center;
+}
+
+.error-card button:focus-visible,
+.error-card a:focus-visible {
+  outline: 2px solid var(--error-ember);
+  outline-offset: 4px;
 }
 
 .portfolio-view-switcher {

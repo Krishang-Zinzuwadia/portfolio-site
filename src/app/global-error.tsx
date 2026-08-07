@@ -1,5 +1,7 @@
 "use client";
 
+import "./globals.css";
+
 export default function GlobalError({
   error,
   unstable_retry,
@@ -13,13 +15,13 @@ export default function GlobalError({
         <main className="error-shell">
           <div className="error-card">
             <p>500 / SYSTEM FAULT</p>
-            <h1>The main signal went quiet.</h1>
+            <h1>The portfolio stopped before it could render.</h1>
             <span>
               A critical error stopped the page
               {error.digest ? ` · ${error.digest}` : ""}.
             </span>
             <button type="button" onClick={() => unstable_retry()}>
-              Restart the system ↻
+              Retry the portfolio →
             </button>
           </div>
         </main>
