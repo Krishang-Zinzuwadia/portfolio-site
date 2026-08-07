@@ -196,7 +196,7 @@ export default function DoomGame({
 
         <div className={styles.actions}>
           <span className={styles.soundState}>
-            {muted ? "Sound off" : "Sound on"}
+            {muted ? "Music + SFX off" : "Original OPL music + SFX on"}
           </span>
           <button type="button" onClick={requestFullscreen}>
             Full Screen
