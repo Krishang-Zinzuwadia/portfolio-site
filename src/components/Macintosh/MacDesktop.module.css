@@ -259,7 +259,7 @@
   padding: 1px 4px;
   color: #fff;
   background: rgba(16, 16, 16, 0.78);
-  content: "Desk Accessories";
+  content: "Applications & Desk Accessories";
   font-family: "KZ Chicago", Chicago, sans-serif;
   font-size: 8px;
   letter-spacing: 0.04em;
@@ -504,6 +504,30 @@
   place-items: center;
 }
 
+.gameLoading {
+  display: grid;
+  width: 100%;
+  min-height: 100%;
+  color: #e7d6b4;
+  background:
+    repeating-linear-gradient(
+      0deg,
+      rgba(255, 255, 255, 0.025) 0 1px,
+      transparent 1px 3px
+    ),
+    #090706;
+  font-family: "KZ Chicago", monospace;
+  letter-spacing: 0.08em;
+  place-content: center;
+  place-items: center;
+  gap: 8px;
+}
+
+.gameLoading span {
+  color: #b83825;
+  font-size: 28px;
+}
+
 .systemToast {
   position: absolute;
   z-index: 1200;
@@ -689,6 +713,19 @@
   scrollbar-color: var(--black) var(--platinum);
   scrollbar-width: thin;
   user-select: text;
+}
+
+.windowBody.doomWindowBody {
+  overflow: hidden;
+  padding: 0;
+  border-color: #111;
+  background: #030303;
+  overscroll-behavior: none;
+  user-select: none;
+}
+
+.doomWindow {
+  background: #111;
 }
 
 .windowBody::-webkit-scrollbar {

@@ -780,6 +780,7 @@ function KeyboardShortcuts() {
     ["⌘ / Ctrl + O", "Open the selected desktop icon"],
     ["⌘ / Ctrl + W", "Close the active window"],
     ["⌘ / Ctrl + ⇧ + A", "Open all portfolio windows"],
+    ["⌘ / Ctrl + D", "Open DOOM"],
     ["⌘ / Ctrl + K", "Open Control Panels"],
     ["⌘ / Ctrl + T", "Open the Trash"],
     ["⌘ / Ctrl + ⇧ + ⌫", "Empty the Trash"],

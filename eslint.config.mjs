@@ -13,6 +13,8 @@ const eslintConfig = defineConfig([
     "out/**",
     "build/**",
     "next-env.d.ts",
+    // Self-hosted, minified js-dos runtime (kept byte-identical to upstream).
+    "public/assets/doom/js-dos/**",
   ]),
   eslintConfigPrettier,
 ]);

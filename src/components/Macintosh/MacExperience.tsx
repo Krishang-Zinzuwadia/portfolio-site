@@ -384,6 +384,7 @@ export default function MacExperience() {
           >
             {bootPhase === "ready" ? (
               <MacDesktop
+                muted={muted}
                 onRestart={restartMac}
                 onShutdown={shutdownMac}
                 onSound={playSound}

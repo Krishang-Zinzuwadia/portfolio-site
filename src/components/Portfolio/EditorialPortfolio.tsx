@@ -1,4 +1,5 @@
 import type { CSSProperties } from "react";
+import Link from "next/link";
 
 import EditorialHeroArtwork from "@/components/Portfolio/EditorialHeroArtwork";
 import EditorialRevealController from "@/components/Portfolio/EditorialRevealController";
@@ -50,7 +51,7 @@ export default function EditorialPortfolio() {
         </a>
 
         <nav className="primary-nav" aria-label="Primary navigation">
-          <a href="#work">Projects</a>
+          <Link href="/work">Work</Link>
           <a href="#experience">Experience</a>
           <a href="#recognition">Recognition</a>
           <a href="#contact">Contact</a>
@@ -75,7 +76,8 @@ export default function EditorialPortfolio() {
                 KRISHANG ZINZUWADIA · COMPUTER SCIENCE, VIT
               </p>
 
-              <h1>
+              <h1 aria-label="Krishang Zinzuwadia builds AI systems end to end">
+                <span className="hero-name">Krishang Zinzuwadia</span>
                 <span>I build AI systems,</span>
                 <em>end to end.</em>
               </h1>
@@ -133,13 +135,19 @@ export default function EditorialPortfolio() {
               >
                 <div className="project-card-top">
                   <span className="project-number">0{index + 1}</span>
-                  <span className="project-date">{project.date}</span>
+                  <span className="project-date">
+                    {project.date ?? "Case study"}
+                  </span>
                 </div>
 
                 <div className="project-title-row">
                   <div>
                     <p>{project.recognition}</p>
-                    <h3>{project.title}</h3>
+                    <h3>
+                      <Link href={`/work/${project.slug}`}>
+                        {project.title}
+                      </Link>
+                    </h3>
                     <span>{project.subtitle}</span>
                   </div>
                   <div className="project-orbit" aria-hidden="true">
@@ -169,6 +177,14 @@ export default function EditorialPortfolio() {
                     </li>
                   ))}
                 </ul>
+
+                <Link
+                  className="project-case-link"
+                  href={`/work/${project.slug}`}
+                  aria-label={`Read the ${project.title} case study`}
+                >
+                  Read case study <span aria-hidden="true">↗</span>
+                </Link>
               </article>
             ))}
           </div>
