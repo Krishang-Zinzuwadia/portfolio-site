@@ -1,0 +1,595 @@
+.sketch {
+  --sketch-paper: var(--working-paper, #f2ead6);
+  --sketch-paper-deep: var(--working-paper-deep, #e6d7b7);
+  --sketch-ink: var(--working-ink, #22231e);
+  --sketch-red: var(--working-red, #a13a32);
+  --sketch-olive: var(--working-olive, #566047);
+  --sketch-blue: var(--working-blue, #65728f);
+  position: relative;
+  width: min(100%, 26rem);
+  aspect-ratio: 4 / 3;
+  color: var(--sketch-ink);
+  font-family: var(--font-paper-sans), sans-serif;
+}
+
+.quarkPrompt {
+  position: absolute;
+  top: 13%;
+  left: 5%;
+  width: 54%;
+  height: 35%;
+  padding: 0.85rem 1rem;
+  border: 2px solid currentColor;
+  background: var(--sketch-paper);
+  transform: rotate(-2deg);
+}
+
+.quarkPrompt span,
+.quarkConsent span,
+.scatterNote,
+.scatterFolder span,
+.aisleLabels span,
+.heliosPlan span,
+.heliosSpecialist,
+.atlasLoop,
+.ocsSheet span,
+.ocsNotes span,
+.hermesDrawer span,
+.hermesAck {
+  font-size: clamp(0.58rem, 1.5vw, 0.76rem);
+  font-weight: 700;
+  letter-spacing: 0.04em;
+}
+
+.quarkPrompt i {
+  display: block;
+  width: 82%;
+  margin-top: 0.62rem;
+  border-top: 1px solid currentColor;
+}
+
+.quarkPrompt i:last-child {
+  width: 57%;
+}
+
+.quarkHandset {
+  position: absolute;
+  z-index: 2;
+  top: 29%;
+  right: 6%;
+  width: 34%;
+  height: 18%;
+  border: 0.7rem solid var(--sketch-red);
+  border-top-color: transparent;
+  border-bottom-color: transparent;
+  transform: rotate(-36deg);
+}
+
+.quarkHandset::before,
+.quarkHandset::after {
+  position: absolute;
+  top: -0.72rem;
+  width: 0.82rem;
+  height: 1.3rem;
+  border: 2px solid var(--sketch-red);
+  background: var(--sketch-paper);
+  content: "";
+}
+
+.quarkHandset::before {
+  left: -0.9rem;
+}
+
+.quarkHandset::after {
+  right: -0.9rem;
+}
+
+.quarkConsent {
+  position: absolute;
+  right: 9%;
+  bottom: 9%;
+  display: flex;
+  width: 43%;
+  padding: 0.7rem 0.8rem;
+  border-top: 2px solid currentColor;
+  border-bottom: 2px solid currentColor;
+  background: var(--sketch-paper-deep);
+  align-items: center;
+  justify-content: space-between;
+  transform: rotate(2deg);
+}
+
+.quarkConsent b {
+  color: var(--sketch-olive);
+  font-family: var(--font-paper-serif), serif;
+  font-size: 1.4rem;
+}
+
+.quarkWire {
+  position: absolute;
+  top: 48%;
+  left: 33%;
+  width: 30%;
+  height: 31%;
+  border-right: 2px solid var(--sketch-red);
+  border-bottom: 2px solid var(--sketch-red);
+  transform: skew(-18deg) rotate(8deg);
+}
+
+.scatterLineOne,
+.scatterLineTwo,
+.scatterLineThree {
+  position: absolute;
+  z-index: 0;
+  display: block;
+  height: 1px;
+  background: var(--sketch-blue);
+  transform-origin: left center;
+}
+
+.scatterLineOne {
+  top: 32%;
+  left: 25%;
+  width: 45%;
+  transform: rotate(19deg);
+}
+
+.scatterLineTwo {
+  top: 62%;
+  left: 22%;
+  width: 49%;
+  transform: rotate(-16deg);
+}
+
+.scatterLineThree {
+  top: 36%;
+  left: 66%;
+  width: 22%;
+  transform: rotate(74deg);
+}
+
+.scatterNote {
+  position: absolute;
+  z-index: 1;
+  display: grid;
+  border: 2px solid currentColor;
+  background: var(--sketch-paper);
+  place-items: center;
+}
+
+.scatterNoteOne {
+  top: 10%;
+  left: 7%;
+  width: 32%;
+  height: 25%;
+  transform: rotate(-5deg);
+}
+
+.scatterNoteTwo {
+  top: 20%;
+  right: 4%;
+  width: 27%;
+  height: 31%;
+  background: var(--sketch-blue);
+  color: var(--sketch-paper);
+  transform: rotate(4deg);
+}
+
+.scatterNoteThree {
+  bottom: 8%;
+  left: 13%;
+  width: 33%;
+  height: 21%;
+  color: var(--sketch-red);
+  transform: rotate(3deg);
+}
+
+.scatterFolder {
+  position: absolute;
+  right: 8%;
+  bottom: 8%;
+  display: grid;
+  width: 36%;
+  height: 27%;
+  border: 2px solid var(--sketch-olive);
+  background: var(--sketch-paper-deep);
+  color: var(--sketch-olive);
+  place-items: center;
+  transform: rotate(-3deg);
+}
+
+.scatterFolder::before {
+  position: absolute;
+  top: -0.55rem;
+  left: -2px;
+  width: 39%;
+  height: 0.55rem;
+  border: 2px solid var(--sketch-olive);
+  border-bottom: 0;
+  background: var(--sketch-paper-deep);
+  content: "";
+}
+
+.aisleShop {
+  position: absolute;
+  top: 8%;
+  left: 8%;
+  width: 68%;
+  height: 77%;
+  border: 2px solid currentColor;
+  background: var(--sketch-paper);
+  transform: rotate(-1deg);
+}
+
+.aisleAwning {
+  display: grid;
+  height: 25%;
+  border-bottom: 2px solid currentColor;
+  grid-template-columns: repeat(5, 1fr);
+}
+
+.aisleAwning i:nth-child(odd) {
+  background: var(--sketch-red);
+}
+
+.aisleShelf {
+  position: absolute;
+  right: 8%;
+  bottom: 22%;
+  left: 8%;
+  border-top: 2px solid currentColor;
+}
+
+.aisleLabels {
+  position: absolute;
+  right: 8%;
+  bottom: 29%;
+  left: 8%;
+  display: flex;
+  gap: 0.35rem;
+  align-items: flex-end;
+}
+
+.aisleLabels span {
+  display: grid;
+  min-height: 2.25rem;
+  padding: 0.25rem;
+  border: 1px solid currentColor;
+  place-items: center;
+}
+
+.aisleStamp {
+  position: absolute;
+  z-index: 2;
+  right: 0;
+  bottom: 17%;
+  padding: 0.35rem 0.7rem;
+  border: 3px double var(--sketch-olive);
+  background: var(--sketch-paper);
+  color: var(--sketch-olive);
+  font-family: var(--font-paper-serif), serif;
+  font-size: clamp(0.8rem, 2.2vw, 1.12rem);
+  font-style: italic;
+  font-weight: 700;
+  transform: rotate(-10deg);
+}
+
+.heliosPlan {
+  position: absolute;
+  top: 9%;
+  left: 30%;
+  width: 42%;
+  height: 49%;
+  padding: 0.85rem;
+  border: 2px solid currentColor;
+  background: var(--sketch-paper-deep);
+  transform: rotate(2deg);
+}
+
+.heliosPlan i {
+  display: block;
+  width: 75%;
+  margin-top: 0.6rem;
+  border-top: 1px solid currentColor;
+}
+
+.heliosPlan i:nth-of-type(2) {
+  width: 55%;
+}
+
+.heliosThread {
+  position: absolute;
+  z-index: 0;
+  height: 1px;
+  background: var(--sketch-red);
+  transform-origin: left center;
+}
+
+.heliosThreadOne {
+  top: 53%;
+  left: 44%;
+  width: 30%;
+  transform: rotate(37deg);
+}
+
+.heliosThreadTwo {
+  top: 53%;
+  left: 51%;
+  width: 30%;
+  transform: rotate(87deg);
+}
+
+.heliosThreadThree {
+  top: 52%;
+  left: 47%;
+  width: 30%;
+  transform: rotate(141deg);
+}
+
+.heliosSpecialist {
+  position: absolute;
+  z-index: 1;
+  display: grid;
+  width: clamp(3.7rem, 16vw, 5rem);
+  aspect-ratio: 1;
+  border: 2px solid var(--sketch-red);
+  border-radius: 50%;
+  background: var(--sketch-paper);
+  color: var(--sketch-red);
+  place-items: center;
+}
+
+.heliosSpecialistOne {
+  right: 2%;
+  bottom: 7%;
+}
+
+.heliosSpecialistTwo {
+  bottom: 1%;
+  left: 39%;
+}
+
+.heliosSpecialistThree {
+  bottom: 9%;
+  left: 2%;
+}
+
+.atlasScreen {
+  position: absolute;
+  top: 9%;
+  left: 8%;
+  width: 75%;
+  height: 68%;
+  border: 2px solid currentColor;
+  background: var(--sketch-paper-deep);
+  transform: rotate(-1deg);
+}
+
+.atlasScreen::after {
+  position: absolute;
+  right: 35%;
+  bottom: -18%;
+  left: 35%;
+  height: 18%;
+  border-right: 2px solid currentColor;
+  border-left: 2px solid currentColor;
+  content: "";
+}
+
+.atlasEye {
+  position: absolute;
+  top: 24%;
+  left: 29%;
+  width: 42%;
+  aspect-ratio: 2 / 1;
+  border: 2px solid var(--sketch-blue);
+  border-radius: 70% 0 70% 0;
+  transform: rotate(45deg);
+}
+
+.atlasEye span {
+  position: absolute;
+  top: 30%;
+  left: 39%;
+  width: 22%;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: var(--sketch-blue);
+}
+
+.atlasCursor {
+  position: absolute;
+  right: 13%;
+  bottom: 10%;
+  width: 0;
+  height: 0;
+  border-top: 1.65rem solid var(--sketch-red);
+  border-right: 0.75rem solid transparent;
+  border-left: 0.75rem solid transparent;
+  transform: rotate(-27deg);
+}
+
+.atlasLoop {
+  position: absolute;
+  bottom: 2%;
+  left: 5%;
+  color: var(--sketch-blue);
+  transform: rotate(-3deg);
+}
+
+.atlasCheck {
+  position: absolute;
+  right: 0;
+  bottom: 2%;
+  color: var(--sketch-olive);
+  font-family: var(--font-paper-serif), serif;
+  font-size: 2.2rem;
+  transform: rotate(9deg);
+}
+
+.ocsSheet {
+  position: absolute;
+  width: 51%;
+  height: 67%;
+  border: 2px solid currentColor;
+  background: var(--sketch-paper);
+}
+
+.ocsSheetBack {
+  top: 7%;
+  left: 15%;
+  background: var(--sketch-paper-deep);
+  transform: rotate(-8deg);
+}
+
+.ocsSheetMiddle {
+  top: 10%;
+  left: 22%;
+  transform: rotate(4deg);
+}
+
+.ocsSheetFront {
+  top: 15%;
+  left: 29%;
+  padding: 1rem;
+  transform: rotate(-1deg);
+}
+
+.ocsSheetFront i {
+  display: block;
+  width: 90%;
+  margin-top: 0.65rem;
+  border-top: 1px solid currentColor;
+}
+
+.ocsSheetFront i:last-child {
+  width: 54%;
+}
+
+.ocsNotes {
+  position: absolute;
+  z-index: 3;
+  right: 0;
+  bottom: 5%;
+  width: 41%;
+  padding: 0.65rem 0.75rem;
+  border-top: 2px solid var(--sketch-red);
+  border-bottom: 2px solid var(--sketch-red);
+  background: var(--sketch-paper-deep);
+  color: var(--sketch-red);
+  transform: rotate(-5deg);
+}
+
+.ocsNotes b {
+  position: absolute;
+  right: 0.45rem;
+  bottom: -1.2rem;
+  font-family: var(--font-paper-serif), serif;
+  font-size: 1.7rem;
+}
+
+.hermesEnvelope {
+  position: absolute;
+  top: 13%;
+  left: 5%;
+  width: 39%;
+  height: 29%;
+  border: 2px solid currentColor;
+  background: var(--sketch-paper);
+  transform: rotate(-4deg);
+}
+
+.hermesEnvelope::before,
+.hermesEnvelope::after {
+  position: absolute;
+  top: 0;
+  width: 58%;
+  height: 2px;
+  background: currentColor;
+  content: "";
+  transform-origin: top left;
+}
+
+.hermesEnvelope::before {
+  left: 0;
+  transform: rotate(28deg);
+}
+
+.hermesEnvelope::after {
+  right: -2px;
+  transform: rotate(152deg);
+}
+
+.hermesRoute {
+  position: absolute;
+  top: 31%;
+  left: 42%;
+  width: 34%;
+  border-top: 2px dashed var(--sketch-blue);
+  transform: rotate(20deg);
+}
+
+.hermesRelay {
+  position: absolute;
+  top: 38%;
+  right: 19%;
+  width: 1rem;
+  aspect-ratio: 1;
+  border: 2px solid var(--sketch-blue);
+  border-radius: 50%;
+  background: var(--sketch-paper);
+}
+
+.hermesDrawer {
+  position: absolute;
+  right: 4%;
+  bottom: 8%;
+  width: 55%;
+  height: 35%;
+  border: 2px solid currentColor;
+  background: var(--sketch-paper-deep);
+  transform: rotate(2deg);
+}
+
+.hermesDrawer span {
+  position: absolute;
+  top: 20%;
+  left: 9%;
+}
+
+.hermesDrawer i {
+  position: absolute;
+  right: 12%;
+  bottom: 22%;
+  left: 12%;
+  border-top: 2px solid currentColor;
+}
+
+.hermesAck {
+  position: absolute;
+  bottom: 3%;
+  left: 4%;
+  color: var(--sketch-olive);
+  font-family: var(--font-paper-serif), serif;
+  font-style: italic;
+  text-transform: none;
+  transform: rotate(-8deg);
+}
+
+@media (max-width: 40rem) {
+  .sketch {
+    width: min(100%, 22rem);
+  }
+}
+
+@media (forced-colors: active) {
+  .sketch {
+    --sketch-paper: Canvas;
+    --sketch-paper-deep: Canvas;
+    --sketch-ink: CanvasText;
+    --sketch-red: CanvasText;
+    --sketch-olive: CanvasText;
+    --sketch-blue: CanvasText;
+    forced-color-adjust: none;
+  }
+}

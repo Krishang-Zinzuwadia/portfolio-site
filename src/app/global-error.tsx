@@ -1,5 +1,7 @@
 "use client";
 
+import styles from "@/components/Portfolio/ErrorPage.module.css";
+
 import "./globals.css";
 
 export default function GlobalError({
@@ -12,18 +14,30 @@ export default function GlobalError({
   return (
     <html lang="en">
       <body>
-        <main className="error-shell">
-          <div className="error-card">
-            <p>500 / SYSTEM FAULT</p>
-            <h1>The portfolio stopped before it could render.</h1>
-            <span>
-              A critical error stopped the page
-              {error.digest ? ` · ${error.digest}` : ""}.
-            </span>
-            <button type="button" onClick={() => unstable_retry()}>
-              Retry the portfolio →
-            </button>
-          </div>
+        <main className={styles.page}>
+          <section className={styles.note} aria-labelledby="global-error-title">
+            <p className={styles.code}>500</p>
+            <h1 className={styles.title} id="global-error-title">
+              That didn’t load.
+            </h1>
+            <p className={styles.message}>
+              Try once more. If it still breaks, email me.
+            </p>
+            <div className={styles.actions}>
+              <button
+                className={styles.action}
+                type="button"
+                onClick={() => unstable_retry()}
+              >
+                Try again
+              </button>
+            </div>
+            {error.digest ? (
+              <small className={styles.reference}>
+                Error reference: {error.digest}
+              </small>
+            ) : null}
+          </section>
         </main>
       </body>
     </html>

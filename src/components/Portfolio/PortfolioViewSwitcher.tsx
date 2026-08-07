@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useSyncExternalStore } from "react";
 
+import styles from "./PortfolioViewSwitcher.module.css";
 import {
   hasPortfolioEntryCompleted,
   subscribeToPortfolioEntry,
@@ -48,7 +49,7 @@ export default function PortfolioViewSwitcher({
   };
 
   return (
-    <nav className="portfolio-view-switcher" aria-label="Portfolio view mode">
+    <nav className={styles.switcher} aria-label="Portfolio view mode">
       {(Object.keys(viewRoutes) as PortfolioView[]).map((view) => {
         const isActive = view === currentView;
 
@@ -57,9 +58,7 @@ export default function PortfolioViewSwitcher({
             key={view}
             href={viewRoutes[view]}
             prefetch={false}
-            className={`portfolio-view-switcher__option${
-              isActive ? " portfolio-view-switcher__option--active" : ""
-            }`}
+            className={`${styles.option} ${isActive ? styles.active : ""}`}
             aria-current={isActive ? "page" : undefined}
             onFocus={() => prefetchOnIntent(view)}
             onPointerEnter={() => prefetchOnIntent(view)}

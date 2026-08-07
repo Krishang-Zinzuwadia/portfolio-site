@@ -1,20 +1,19 @@
 import type { Viewport } from "next";
 
-import { editorialFonts } from "@/lib/editorial-fonts";
-
-import "@/components/Work/work.css";
+import styles from "@/components/Work/WorkPages.module.css";
+import { paperFontClassName } from "@/lib/paper-fonts";
 
 export const viewport: Viewport = {
-  themeColor: "#090a0b",
-  colorScheme: "dark",
+  themeColor: "#f2ead6",
+  colorScheme: "light",
 };
 
 export default function WorkLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <div className={`${editorialFonts} night-work-fonts`}>
-      <a className="night-skip-link" href="#main-content">
+    <div className={`${paperFontClassName} ${styles.workRoot}`}>
+      <a className={styles.skipLink} href="#main-content">
         Skip to content
       </a>
       {children}

@@ -27,7 +27,8 @@ export async function generateMetadata({
   const title = `${project.title} Case Study | ${identity.name}`;
   const description = project.summary;
   const canonical = `/work/${project.slug}`;
-  const imageAlt = `${project.title} case study by ${identity.name}`;
+  const imageAlt =
+    "Krishang Zinzuwadia — agent systems, local-first products, and developer tools.";
 
   return {
     title,

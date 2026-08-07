@@ -1,5 +1,7 @@
 "use client";
 
+import styles from "@/components/Portfolio/ErrorPage.module.css";
+
 export default function ErrorPage({
   error,
   unstable_retry,
@@ -8,18 +10,30 @@ export default function ErrorPage({
   unstable_retry: () => void;
 }) {
   return (
-    <main className="error-shell">
-      <div className="error-card">
-        <p>500 / RECORD INTERRUPTED</p>
-        <h1>The portfolio could not be rendered.</h1>
-        <span>
-          An unexpected error interrupted the build record
-          {error.digest ? ` · ${error.digest}` : ""}.
-        </span>
-        <button type="button" onClick={() => unstable_retry()}>
-          Retry the portfolio →
-        </button>
-      </div>
+    <main className={styles.page}>
+      <section className={styles.note} aria-labelledby="error-title">
+        <p className={styles.code}>500</p>
+        <h1 className={styles.title} id="error-title">
+          That didn’t load.
+        </h1>
+        <p className={styles.message}>
+          Try once more. If it still breaks, email me.
+        </p>
+        <div className={styles.actions}>
+          <button
+            className={styles.action}
+            type="button"
+            onClick={() => unstable_retry()}
+          >
+            Try again
+          </button>
+        </div>
+        {error.digest ? (
+          <small className={styles.reference}>
+            Error reference: {error.digest}
+          </small>
+        ) : null}
+      </section>
     </main>
   );
 }

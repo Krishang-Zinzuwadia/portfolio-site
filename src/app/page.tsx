@@ -1,11 +1,9 @@
 import type { Metadata, Viewport } from "next";
 
-import NightIndexPortfolio from "@/components/Editorial/NightIndexPortfolio";
+import WorkingPapersPortfolio from "@/components/Editorial/WorkingPapersPortfolio";
 import PortfolioJsonLd from "@/components/Portfolio/PortfolioJsonLd";
-import { editorialFonts } from "@/lib/editorial-fonts";
+import { paperFontClassName } from "@/lib/paper-fonts";
 import { SITE_DESCRIPTION, SITE_NAME } from "@/lib/site";
-
-import "./editorial/editorial.css";
 
 export const metadata: Metadata = {
   title: SITE_NAME,
@@ -38,15 +36,15 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: "#090a0b",
-  colorScheme: "dark",
+  themeColor: "#f2ead6",
+  colorScheme: "light",
 };
 
 export default function Home() {
   return (
-    <div className={editorialFonts}>
+    <div className={paperFontClassName}>
       <PortfolioJsonLd />
-      <NightIndexPortfolio />
+      <WorkingPapersPortfolio />
     </div>
   );
 }

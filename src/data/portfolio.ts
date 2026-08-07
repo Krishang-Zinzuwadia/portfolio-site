@@ -9,7 +9,6 @@ export type Project = {
   details: string[];
   stack: string[];
   metrics: { value: string; label: string }[];
-  tone: "acid" | "blue" | "coral";
   caseStudy: {
     challengeHeading: string;
     challenge: string;
@@ -90,7 +89,6 @@ const establishedProjects: Project[] = [
       { value: "2nd", label: "DevSoc Hack" },
       { value: "Local", label: "desktop execution" },
     ],
-    tone: "acid",
     caseStudy: {
       challengeHeading: "Turning a request into a verified desktop action.",
       challenge:
@@ -158,7 +156,7 @@ const establishedProjects: Project[] = [
         },
       ],
       evidenceNote:
-        "The project record and award record list different months, so this case study deliberately does not assert an Atlas date.",
+        "The résumé and award notes list different months, so this page deliberately does not assert an Atlas date.",
     },
   },
   {
@@ -179,7 +177,6 @@ const establishedProjects: Project[] = [
       { value: "27", label: "role-specific agents" },
       { value: "Automated", label: "deployment pipeline" },
     ],
-    tone: "blue",
     caseStudy: {
       challengeHeading: "Keeping 27 agents on one delivery path.",
       challenge:
@@ -240,7 +237,7 @@ const establishedProjects: Project[] = [
       ],
       evidence: [],
       evidenceNote:
-        "The scope and results here are limited to the project record in Krishang's résumé; no public Labyrinth repository is linked yet.",
+        "The scope and results here come from Krishang's résumé; no public Labyrinth repository is linked yet.",
     },
   },
   {
@@ -268,7 +265,6 @@ const establishedProjects: Project[] = [
       { value: "1,000+", label: "applicants" },
       { value: "100 ms", label: "median queries" },
     ],
-    tone: "coral",
     caseStudy: {
       challengeHeading: "Making high-volume review fast and workable.",
       challenge:
@@ -324,12 +320,12 @@ const establishedProjects: Project[] = [
       ],
       outcomes: [
         "Supported a recruitment workflow for more than 1,000 applicants and more than 50 interviewers.",
-        "Reached a recorded median query latency of 100 milliseconds after schema and caching work.",
+        "Reached a measured median query latency of 100 milliseconds after schema and caching work.",
         "Shipped as part of a 50-plus-person team.",
       ],
       evidence: [],
       evidenceNote:
-        "The scope and measurements here are limited to the project record in Krishang's résumé; no public OCS repository is linked.",
+        "The scope and measurements here come from Krishang's résumé; no public OCS repository is linked.",
     },
   },
 ];
@@ -362,7 +358,6 @@ const newProjects: Project[] = [
       { value: "7", label: "typed MCP tools" },
       { value: "24", label: "voice-contract cases" },
     ],
-    tone: "acid",
     caseStudy: {
       challengeHeading:
         "Let an agent ask for judgment without giving it more power.",
@@ -454,7 +449,6 @@ const newProjects: Project[] = [
       { value: "3", label: "client surfaces" },
       { value: "8 MiB", label: "resumable chunks" },
     ],
-    tone: "blue",
     caseStudy: {
       challengeHeading:
         "Make a spatial workspace useful before the network arrives.",
@@ -552,7 +546,6 @@ const newProjects: Project[] = [
       { value: "32", label: "merged PRs" },
       { value: "89%", label: "measured navigation gain" },
     ],
-    tone: "coral",
     caseStudy: {
       challengeHeading:
         "Build discovery without pretending that public means safe.",
@@ -609,7 +602,7 @@ const newProjects: Project[] = [
       ],
       outcomes: [
         "Shipped a public marketplace and deterministic stack-building flow through a sequence of merged production pull requests.",
-        "Reduced the measured packages navigation by about 89 percent in the recorded production pass.",
+        "Reduced the measured packages navigation by about 89 percent in the July 2026 production pass.",
         "Made upstream drift visible and blocking instead of silently publishing stale packages.",
       ],
       evidence: [
@@ -623,7 +616,7 @@ const newProjects: Project[] = [
           label: "Navigation performance pull request",
           href: "https://github.com/desync-organization/aisle/pull/53",
           description:
-            "The measured N+1 diagnosis, implementation, and validation record.",
+            "The measured N+1 diagnosis, implementation, and validation details.",
         },
       ],
       evidenceNote:
@@ -658,7 +651,6 @@ const newProjects: Project[] = [
       { value: "Local", label: "model execution" },
       { value: "3", label: "person team" },
     ],
-    tone: "acid",
     caseStudy: {
       challengeHeading:
         "Let small local models do useful repository work safely.",
@@ -763,7 +755,6 @@ const newProjects: Project[] = [
       { value: "14", label: "merged team PRs" },
       { value: "31", label: "passing CI tests" },
     ],
-    tone: "blue",
     caseStudy: {
       challengeHeading:
         "Make terminal messaging survive more than the happy path.",
@@ -825,7 +816,7 @@ const newProjects: Project[] = [
       ],
       evidence: [],
       evidenceNote:
-        "The official repository and Krishang's current development branch are private, and the organization default branch is stale. This account is based on the merged PR record and passing CI on the personal dev branch; there is no public demo or release, and WhatsApp or Slack bridges are not presented as implemented.",
+        "The official repository and Krishang's current development branch are private, and the organization default branch is stale. This account is based on merged pull requests and passing CI on the personal dev branch; there is no public demo or release, and WhatsApp or Slack bridges are not presented as implemented.",
     },
   },
 ];

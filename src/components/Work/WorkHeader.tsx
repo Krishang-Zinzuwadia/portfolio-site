@@ -2,23 +2,23 @@ import Link from "next/link";
 
 import { identity } from "@/data/portfolio";
 
+import styles from "./WorkPages.module.css";
+
 export default function WorkHeader() {
   return (
-    <header className="night-work-header">
-      <Link className="night-work-brand" href="/">
-        <strong>Krishang Zinzuwadia</strong>
-        <span>Build record</span>
-      </Link>
+    <header className={styles.masthead}>
+      <div className={styles.mastheadInner}>
+        <Link className={styles.wordmark} href="/">
+          <strong>{identity.name}</strong>
+          <span>Software, notes, and working papers</span>
+        </Link>
 
-      <nav className="night-work-nav" aria-label="Work navigation">
-        <Link href="/work">Index 01—07</Link>
-        <Link href="/">Portfolio</Link>
-        <Link href="/mac">Macintosh</Link>
-      </nav>
-
-      <a className="night-work-contact" href={`mailto:${identity.email}`}>
-        Email ↗
-      </a>
+        <nav className={styles.primaryNav} aria-label="Portfolio navigation">
+          <Link href="/work">Projects</Link>
+          <Link href="/mac">Macintosh detour</Link>
+          <a href={`mailto:${identity.email}`}>Write to me</a>
+        </nav>
+      </div>
     </header>
   );
 }

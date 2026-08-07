@@ -1,7 +1,10 @@
 import Link from "next/link";
 
+import ProjectSketch from "@/components/Editorial/ProjectSketch";
+import { getProjectPresentation } from "@/components/Editorial/project-presentation";
 import type { Project } from "@/data/portfolio";
 
+import styles from "./WorkPages.module.css";
 import WorkFooter from "./WorkFooter";
 import WorkHeader from "./WorkHeader";
 import WorkJsonLd from "./WorkJsonLd";
@@ -12,152 +15,112 @@ type ProjectCaseStudyProps = {
   previousProject: Project;
 };
 
-const chapters = [
-  ["01", "Context", "context"],
-  ["02", "System", "system"],
-  ["03", "Decisions", "decisions"],
-  ["04", "Results", "results"],
-  ["05", "Evidence", "evidence"],
-] as const;
-
 export default function ProjectCaseStudy({
   project,
   nextProject,
   previousProject,
 }: ProjectCaseStudyProps) {
   const { caseStudy } = project;
+  const presentation = getProjectPresentation(project.slug);
+  const metricSentence = project.metrics
+    .map((metric) => `${metric.value} ${metric.label}`)
+    .join(" · ");
 
   return (
-    <div className="night-work night-case-study">
+    <div className={styles.page}>
       <WorkJsonLd kind="project" project={project} />
       <WorkHeader />
 
-      <main id="main-content">
-        <section className="night-case-hero" aria-labelledby="project-title">
-          <nav className="night-breadcrumb" aria-label="Breadcrumb">
-            <Link href="/">Portfolio</Link>
-            <span aria-hidden="true">/</span>
-            <Link href="/work">Case studies</Link>
-            <span aria-hidden="true">/</span>
-            <span aria-current="page">{project.title}</span>
-          </nav>
-
-          <div className="night-case-heading">
-            <p className="night-work-kicker">Build record / {project.slug}</p>
-            <h1 id="project-title">{project.title}</h1>
-            {project.fullTitle !== project.title ? (
-              <p className="night-case-full-title">{project.fullTitle}</p>
-            ) : null}
-            <p className="night-case-standfirst">{project.summary}</p>
-          </div>
-
-          <dl className="night-case-facts" aria-label="Project record">
-            <div>
-              <dt>Record</dt>
-              <dd>{project.recognition}</dd>
-            </div>
-            <div>
-              <dt>System</dt>
-              <dd>{project.subtitle}</dd>
-            </div>
-            <div>
-              <dt>Date</dt>
-              <dd>{project.date ?? "Not listed"}</dd>
-            </div>
-          </dl>
-
-          <dl className="night-case-metrics" aria-label="Recorded metrics">
-            {project.metrics.map((metric) => (
-              <div key={`${metric.value}-${metric.label}`}>
-                <dt>{metric.label}</dt>
-                <dd>{metric.value}</dd>
-              </div>
-            ))}
-          </dl>
-        </section>
-
-        <div className="night-case-body">
-          <nav className="night-chapter-rail" aria-label="Case study chapters">
-            <p>Contents</p>
+      <main id="main-content" className={styles.main}>
+        <header className={styles.caseHero}>
+          <nav className={styles.breadcrumbs} aria-label="Breadcrumb">
             <ol>
-              {chapters.map(([index, title, href]) => (
-                <li key={href}>
-                  <a href={`#${href}`}>
-                    <span>{index}</span>
-                    {title}
-                  </a>
-                </li>
-              ))}
+              <li>
+                <Link href="/">Portfolio</Link>
+              </li>
+              <li>
+                <Link href="/work">Projects</Link>
+              </li>
+              <li aria-current="page">{project.title}</li>
             </ol>
           </nav>
 
-          <div className="night-case-content">
+          <div className={styles.caseHeroLayout}>
+            <div className={styles.caseTitleBlock}>
+              <p className={styles.sectionLabel}>{project.subtitle}</p>
+              <h1 id="project-title">{project.title}</h1>
+              {project.fullTitle !== project.title ? (
+                <p className={styles.fullTitle}>{project.fullTitle}</p>
+              ) : null}
+              <p className={styles.caseStandfirst}>{presentation.summary}</p>
+              <p className={styles.caseByline}>
+                {project.recognition}
+                {project.date ? ` · ${project.date}` : ""}
+              </p>
+            </div>
+
+            <div className={styles.caseSketch} aria-hidden="true">
+              <ProjectSketch slug={project.slug} />
+            </div>
+          </div>
+        </header>
+
+        <div className={styles.readingLayout}>
+          <aside className={styles.caseMargin} aria-label="Project at a glance">
+            <p className={styles.marginHeading}>At a glance</p>
+            <p>{metricSentence}</p>
+            <p>{project.stack.join(", ")}</p>
+          </aside>
+
+          <article className={styles.essay} aria-labelledby="project-title">
             <section
-              className="night-case-context night-case-chapter"
-              id="context"
-              aria-labelledby="context-title"
+              className={styles.essaySection}
+              aria-labelledby="problem-title"
             >
-              <div className="night-chapter-heading">
-                <p className="night-work-kicker">01 / Problem &amp; scope</p>
-                <h2 id="context-title">{caseStudy.challengeHeading}</h2>
-              </div>
-
-              <div className="night-context-grid">
-                <div className="night-case-reading">
-                  <p>{caseStudy.challenge}</p>
-                </div>
-
-                <aside className="night-owned" aria-labelledby="owned-title">
-                  <p className="night-work-kicker">What I owned</p>
-                  <h3 id="owned-title">Responsibility boundary</h3>
-                  <ul>
-                    {caseStudy.role.map((item) => (
-                      <li key={item}>{item}</li>
-                    ))}
-                  </ul>
-                </aside>
-              </div>
+              <p className={styles.sectionLabel}>The problem</p>
+              <h2 id="problem-title">{presentation.problemHeading}</h2>
+              <p className={styles.bodyCopy}>{caseStudy.challenge}</p>
             </section>
 
             <section
-              className="night-architecture night-case-chapter"
-              id="system"
-              aria-labelledby="system-title"
+              className={styles.essaySection}
+              aria-labelledby="part-title"
             >
-              <div className="night-chapter-heading">
-                <p className="night-work-kicker">02 / How it works</p>
-                <h2 id="system-title">From input to outcome.</h2>
-              </div>
+              <p className={styles.sectionLabel}>My part</p>
+              <h2 id="part-title">What I was responsible for.</h2>
+              <ul className={styles.proseList}>
+                {caseStudy.role.map((item) => (
+                  <li key={item}>{item}</li>
+                ))}
+              </ul>
+            </section>
 
-              <ol className="night-architecture-band">
-                {caseStudy.architecture.map((stage, index) => (
-                  <li key={stage.title}>
-                    <span>{String(index + 1).padStart(2, "0")}</span>
+            <section
+              className={styles.essaySection}
+              aria-labelledby="works-title"
+            >
+              <p className={styles.sectionLabel}>How it works</p>
+              <h2 id="works-title">The path through the product.</h2>
+              <div className={styles.explanationList}>
+                {caseStudy.architecture.map((stage) => (
+                  <article key={stage.title}>
                     <h3>{stage.title}</h3>
                     <p>{stage.description}</p>
-                  </li>
+                  </article>
                 ))}
-              </ol>
+              </div>
             </section>
 
             <section
-              className="night-decisions night-case-chapter"
-              id="decisions"
-              aria-labelledby="decisions-title"
+              className={styles.essaySection}
+              aria-labelledby="calls-title"
             >
-              <div className="night-chapter-heading">
-                <p className="night-work-kicker">03 / Important decisions</p>
-                <h2 id="decisions-title">What shaped the build.</h2>
-              </div>
-
-              <div className="night-decision-list">
-                {caseStudy.decisions.map((decision, index) => (
+              <p className={styles.sectionLabel}>The calls that mattered</p>
+              <h2 id="calls-title">Decisions that changed the build.</h2>
+              <div className={styles.decisionList}>
+                {caseStudy.decisions.map((decision) => (
                   <article key={decision.title}>
-                    <span>{String(index + 1).padStart(2, "0")}</span>
-                    <div>
-                      <p>Why</p>
-                      <h3>{decision.title}</h3>
-                    </div>
+                    <h3>{decision.title}</h3>
                     <p>{decision.description}</p>
                   </article>
                 ))}
@@ -165,74 +128,58 @@ export default function ProjectCaseStudy({
             </section>
 
             <section
-              className="night-results night-case-chapter"
-              id="results"
-              aria-labelledby="results-title"
+              className={styles.essaySection}
+              aria-labelledby="landed-title"
             >
-              <div className="night-results-inner">
-                <div className="night-chapter-heading">
-                  <p className="night-work-kicker">04 / Recorded result</p>
-                  <h2 id="results-title">What the project delivered.</h2>
-                </div>
-
-                <ol className="night-outcomes">
-                  {caseStudy.outcomes.map((outcome, index) => (
-                    <li key={outcome}>
-                      <span>{String(index + 1).padStart(2, "0")}</span>
-                      <p>{outcome}</p>
-                    </li>
-                  ))}
-                </ol>
-
-                <p className="night-results-stack">
-                  <span>Stack</span>
-                  {project.stack.join(" — ")}
-                </p>
-              </div>
+              <p className={styles.sectionLabel}>Where it landed</p>
+              <h2 id="landed-title">What the project delivered.</h2>
+              <ul className={styles.outcomeList}>
+                {caseStudy.outcomes.map((outcome) => (
+                  <li key={outcome}>{outcome}</li>
+                ))}
+              </ul>
+              <p className={styles.stackLine}>
+                <strong>Built with</strong> {project.stack.join(", ")}.
+              </p>
             </section>
 
             <section
-              className="night-evidence night-case-chapter"
-              id="evidence"
-              aria-labelledby="evidence-title"
+              className={styles.essaySection}
+              aria-labelledby="source-title"
             >
-              <div className="night-chapter-heading">
-                <p className="night-work-kicker">05 / Evidence &amp; limits</p>
-                <h2 id="evidence-title">What this account is based on.</h2>
-              </div>
-
-              <p className="night-evidence-note">{caseStudy.evidenceNote}</p>
+              <p className={styles.sectionLabel}>Source and caveats</p>
+              <h2 id="source-title">What you can inspect.</h2>
+              <p className={styles.bodyCopy}>{caseStudy.evidenceNote}</p>
 
               {caseStudy.evidence.length > 0 ? (
-                <ul className="night-evidence-list">
-                  {caseStudy.evidence.map((item, index) => (
+                <ul className={styles.sourceList}>
+                  {caseStudy.evidence.map((item) => (
                     <li key={item.href}>
                       <a href={item.href} target="_blank" rel="noreferrer">
-                        <span>{String(index + 1).padStart(2, "0")}</span>
                         <strong>{item.label}</strong>
-                        <p>{item.description}</p>
-                        <i aria-hidden="true">↗</i>
+                        <span>{item.description}</span>
+                        <small>Open the public link</small>
                       </a>
                     </li>
                   ))}
                 </ul>
               ) : (
-                <p className="night-no-public-proof">
-                  No public evidence link is listed.
+                <p className={styles.noSource}>
+                  There is not a public source link for this project.
                 </p>
               )}
             </section>
-          </div>
+          </article>
         </div>
 
-        <nav className="night-case-pagination" aria-label="Other case studies">
+        <nav className={styles.projectPagination} aria-label="Other projects">
           <Link href={`/work/${previousProject.slug}`}>
-            <span>Previous record</span>
-            <strong>← {previousProject.title}</strong>
+            <span>Previous project</span>
+            <strong>{previousProject.title}</strong>
           </Link>
           <Link href={`/work/${nextProject.slug}`}>
-            <span>Next record</span>
-            <strong>{nextProject.title} →</strong>
+            <span>Next project</span>
+            <strong>{nextProject.title}</strong>
           </Link>
         </nav>
       </main>

@@ -1,18 +1,21 @@
 import Link from "next/link";
 
+import styles from "@/components/Portfolio/ErrorPage.module.css";
+
 export default function WorkNotFound() {
   return (
-    <main className="night-work-state" id="main-content">
-      <p className="night-work-kicker">404 / Record unavailable</p>
-      <h1>That case study is not in the index.</h1>
-      <p>
-        The requested record may have moved, or it may never have been part of
-        the public portfolio.
-      </p>
-      <div>
-        <Link href="/work">Return to the case-study index →</Link>
-        <Link href="/">Return to the portfolio ↗</Link>
-      </div>
+    <main className={styles.page} id="main-content">
+      <section className={styles.note} aria-labelledby="work-not-found-title">
+        <p className={styles.code}>404</p>
+        <h1 className={styles.title} id="work-not-found-title">
+          I don’t have a project page at this address.
+        </h1>
+        <div className={styles.actions}>
+          <Link className={styles.action} href="/work">
+            See all projects
+          </Link>
+        </div>
+      </section>
     </main>
   );
 }

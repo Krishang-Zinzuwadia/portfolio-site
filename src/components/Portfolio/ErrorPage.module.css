@@ -1,0 +1,121 @@
+.page {
+  --error-paper: #f2ead6;
+  --error-ink: #22231e;
+  --error-red: #a13a32;
+  display: grid;
+  min-height: 100svh;
+  padding: clamp(1.25rem, 5vw, 5rem);
+  background: var(--error-paper);
+  color: var(--error-ink);
+  font-family: var(--font-body), "Segoe UI", sans-serif;
+  place-items: center;
+}
+
+.note {
+  position: relative;
+  width: min(100%, 47rem);
+  padding: clamp(2.5rem, 8vw, 6.5rem) clamp(1.4rem, 6vw, 5rem);
+  border-top: 1px solid rgba(34, 35, 30, 0.45);
+  border-bottom: 1px solid rgba(34, 35, 30, 0.45);
+}
+
+.note::before {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: clamp(0.55rem, 2vw, 1.5rem);
+  width: 1px;
+  background: rgba(161, 58, 50, 0.55);
+  content: "";
+}
+
+.code {
+  margin: 0 0 clamp(2.5rem, 7vw, 5rem);
+  color: var(--error-red);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+}
+
+.title {
+  max-width: 12ch;
+  margin: 0;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: clamp(3.2rem, 10vw, 7.4rem);
+  font-weight: 400;
+  letter-spacing: -0.055em;
+  line-height: 0.92;
+}
+
+.message {
+  max-width: 35rem;
+  margin: 1.6rem 0 0;
+  font-size: clamp(1rem, 1.5vw, 1.18rem);
+  line-height: 1.65;
+}
+
+.actions {
+  display: flex;
+  margin-top: 2.5rem;
+  flex-wrap: wrap;
+  gap: 1rem 1.5rem;
+  align-items: center;
+}
+
+.action {
+  appearance: none;
+  display: inline-flex;
+  min-height: 2.75rem;
+  padding: 0;
+  border: 0;
+  border-bottom: 1px solid var(--error-red);
+  background: transparent;
+  color: var(--error-ink);
+  font-size: 0.82rem;
+  font-weight: 700;
+  line-height: 1.2;
+  text-decoration: none;
+  cursor: pointer;
+  align-items: center;
+}
+
+.action:hover {
+  color: var(--error-red);
+}
+
+.action:focus-visible {
+  outline: 2px solid var(--error-red);
+  outline-offset: 4px;
+}
+
+.reference {
+  display: block;
+  margin-top: 2rem;
+  color: rgba(34, 35, 30, 0.68);
+  font-size: 0.68rem;
+  overflow-wrap: anywhere;
+}
+
+@media (max-width: 32rem) {
+  .note {
+    padding-left: 2rem;
+  }
+}
+
+@media (forced-colors: active) {
+  .page,
+  .note {
+    border-color: CanvasText;
+    background: Canvas;
+    color: CanvasText;
+    forced-color-adjust: none;
+  }
+
+  .note::before {
+    background: LinkText;
+  }
+
+  .action {
+    border-color: LinkText;
+  }
+}
