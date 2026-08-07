@@ -29,6 +29,7 @@ export type AccessoryId =
   | "keyCaps"
   | "notePad"
   | "puzzle"
+  | "slidingPuzzle"
   | "scrapbook"
   | "shortcuts"
   | "secret"
@@ -39,6 +40,8 @@ export type AlarmSettings = {
   time: string;
   label: string;
 };
+
+export type MacGameWindowId = "slidingPuzzle" | "doom";
 
 type MacAccessoriesProps = {
   id: AccessoryId;
@@ -51,6 +54,7 @@ type MacAccessoriesProps = {
   onVolumeChange?: (volume: number) => void;
   onResetPreferences: () => void;
   onResetWindowLayout: () => void;
+  onOpenGame: (game: MacGameWindowId) => void;
   trashEmpty: boolean;
   onEmptyTrash: () => void;
   alarmSettings: AlarmSettings;
@@ -143,6 +147,9 @@ const KEY_ROWS = [
 
 const SOLVED_PUZZLE = [1, 2, 3, 4, 5, 6, 7, 8, 0];
 const SHUFFLED_PUZZLE = [1, 2, 3, 7, 4, 6, 0, 5, 8];
+const MICROSOFT_MINESWEEPER_URL = "https://zone.msn.com/en/games/msminesweeper";
+const PACMAN_DOODLE_URL =
+  "https://doodles.google/doodle/30th-anniversary-of-pac-man/";
 
 function AboutMacintosh() {
   return (
@@ -1264,7 +1271,134 @@ function NotePad() {
   );
 }
 
-function Puzzle({ onSound }: Pick<MacAccessoriesProps, "onSound">) {
+function GamePicker({
+  onSound,
+  onOpenGame,
+}: Pick<MacAccessoriesProps, "onSound" | "onOpenGame">) {
+  return (
+    <section
+      className={styles.gameLibrary}
+      aria-labelledby="game-library-title"
+    >
+      <header className={styles.gameLibraryHeader}>
+        <span className={styles.gameLibraryIcon} aria-hidden="true">
+          <i />
+          <i />
+          <i />
+          <i />
+        </span>
+        <div>
+          <p className={styles.eyebrow}>PUZZLE · GAME LIBRARY</p>
+          <h3 id="game-library-title">What do you want to play?</h3>
+          <p>
+            Pick a Macintosh game or open an official, publisher-supported
+            browser edition.
+          </p>
+        </div>
+      </header>
+
+      <nav className={styles.gamePickerGrid} aria-label="Choose a game">
+        <button
+          type="button"
+          className={styles.gameCard}
+          onClick={() => onOpenGame("slidingPuzzle")}
+        >
+          <span
+            className={styles.gameCardIcon}
+            data-game="sliding"
+            aria-hidden="true"
+          >
+            8
+          </span>
+          <span className={styles.gameCardCopy}>
+            <strong>Sliding Puzzle</strong>
+            <small>Built-in desk accessory</small>
+            <span>Put eight numbered tiles back in order.</span>
+          </span>
+          <span className={styles.gameCardAction}>
+            Play here <b aria-hidden="true">→</b>
+          </span>
+        </button>
+
+        <a
+          className={styles.gameCard}
+          data-external="true"
+          href={MICROSOFT_MINESWEEPER_URL}
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label="Play Microsoft Minesweeper on the official Microsoft site, opens in a new tab"
+          onClick={() => onSound?.("open")}
+        >
+          <span
+            className={styles.gameCardIcon}
+            data-game="minesweeper"
+            aria-hidden="true"
+          >
+            ✱
+          </span>
+          <span className={styles.gameCardCopy}>
+            <strong>Microsoft Minesweeper</strong>
+            <small>Microsoft Casual Games</small>
+            <span>Play the official Classic Mode in your browser.</span>
+          </span>
+          <span className={styles.gameCardAction}>
+            Open official site <b aria-hidden="true">↗</b>
+          </span>
+        </a>
+
+        <button
+          type="button"
+          className={styles.gameCard}
+          onClick={() => onOpenGame("doom")}
+        >
+          <span
+            className={styles.gameCardIcon}
+            data-game="doom"
+            aria-hidden="true"
+          >
+            D
+          </span>
+          <span className={styles.gameCardCopy}>
+            <strong>DOOM</strong>
+            <small>id Software · Shareware v1.9</small>
+            <span>Run the original Episode One release.</span>
+          </span>
+          <span className={styles.gameCardAction}>
+            Play here <b aria-hidden="true">→</b>
+          </span>
+        </button>
+
+        <a
+          className={styles.gameCard}
+          data-external="true"
+          href={PACMAN_DOODLE_URL}
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label="Play the official PAC-MAN Google Doodle, opens in a new tab"
+          onClick={() => onSound?.("open")}
+        >
+          <span
+            className={styles.gameCardIcon}
+            data-game="pacman"
+            aria-hidden="true"
+          >
+            <i />
+          </span>
+          <span className={styles.gameCardCopy}>
+            <strong>PAC-MAN</strong>
+            <small>Google Doodle · Bandai Namco-supported</small>
+            <span>Original logic, graphics, sounds, and ghosts.</span>
+          </span>
+          <span className={styles.gameCardAction}>
+            Open official site <b aria-hidden="true">↗</b>
+          </span>
+        </a>
+      </nav>
+    </section>
+  );
+}
+
+function SlidingPuzzle({ onSound }: Pick<MacAccessoriesProps, "onSound">) {
   const [tiles, setTiles] = useState(SHUFFLED_PUZZLE);
   const solved = tiles.every((tile, index) => tile === SOLVED_PUZZLE[index]);
 
@@ -1530,7 +1664,11 @@ export default function MacAccessories(props: MacAccessoriesProps) {
     case "notePad":
       return <NotePad />;
     case "puzzle":
-      return <Puzzle onSound={props.onSound} />;
+      return (
+        <GamePicker onSound={props.onSound} onOpenGame={props.onOpenGame} />
+      );
+    case "slidingPuzzle":
+      return <SlidingPuzzle onSound={props.onSound} />;
     case "scrapbook":
       return <Scrapbook onSound={props.onSound} />;
     case "shortcuts":

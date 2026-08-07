@@ -4,7 +4,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 
 import styles from "./DoomGame.module.css";
 
-const PLAYER_URL = "/assets/doom/player.html?rev=native-start-1";
+const PLAYER_URL = "/assets/doom/player.html?rev=native-start-2";
 const MESSAGE_SOURCE = "krishang-portfolio-doom";
 
 type DoomPhase =

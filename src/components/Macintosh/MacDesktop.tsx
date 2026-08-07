@@ -163,6 +163,7 @@ const ACCESSORY_IDS: AccessoryId[] = [
   "keyCaps",
   "notePad",
   "puzzle",
+  "slidingPuzzle",
   "scrapbook",
   "shortcuts",
   "secret",
@@ -323,12 +324,20 @@ const WINDOW_PROFILES: Record<WindowId, WindowProfile> = {
     y: 0.07,
   },
   puzzle: {
+    width: 0.58,
+    height: 0.68,
+    maxWidth: 720,
+    maxHeight: 540,
+    x: 0.08,
+    y: 0.055,
+  },
+  slidingPuzzle: {
     width: 0.48,
     height: 0.58,
     maxWidth: 600,
     maxHeight: 470,
-    x: 0.12,
-    y: 0.08,
+    x: 0.15,
+    y: 0.09,
   },
   scrapbook: {
     width: 0.46,
@@ -608,9 +617,18 @@ const WINDOW_DEFINITIONS: Record<WindowId, WindowDefinition> = {
     icon: "puzzle",
     x: 52,
     y: 36,
+    width: 560,
+    height: 410,
+    status: "4 games · 2 official web launches",
+  },
+  slidingPuzzle: {
+    title: "Sliding Puzzle",
+    icon: "puzzle",
+    x: 76,
+    y: 48,
     width: 430,
     height: 320,
-    status: "Desk accessory",
+    status: "8 tiles · 1 empty space",
   },
   scrapbook: {
     title: "Scrapbook",
@@ -2296,6 +2314,7 @@ export default function MacDesktop({
               onVolumeChange={onVolumeChange}
               onResetPreferences={resetControlPanelPreferences}
               onResetWindowLayout={arrangeWindows}
+              onOpenGame={(game) => openWindow(game)}
               trashEmpty={trashEmpty}
               onEmptyTrash={emptyTrash}
               alarmSettings={alarmSettings}
