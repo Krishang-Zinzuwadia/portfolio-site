@@ -21,11 +21,9 @@ import {
   skills,
 } from "@/data/portfolio";
 import styles from "./MacDesktop.module.css";
-import type {
-  AccessoryId,
-  AlarmSettings,
-  DesktopPattern,
-} from "./MacAccessories";
+import type { AccessoryId, AlarmSettings } from "./MacAccessories";
+import { DEFAULT_MAC_PREFERENCES } from "./macPreferences";
+import { useMacPreferences } from "./useMacPreferences";
 import type { MacSound } from "./useMacSounds";
 
 const MacAccessories = dynamic(() => import("./MacAccessories"), {
@@ -123,9 +121,12 @@ type WindowStyle = CSSProperties & {
 
 type MacDesktopProps = {
   muted?: boolean;
+  volume?: number;
   onRestart?: () => void;
   onShutdown?: () => void;
   onSound?: (sound: MacSound) => void;
+  onToggleMuted?: () => void;
+  onVolumeChange?: (volume: number) => void;
 };
 
 const DESKTOP_ICON_IDS: WindowId[] = [
@@ -184,6 +185,7 @@ const RESIZE_DIRECTIONS: ResizeDirection[] = [
 const WINDOW_MARGIN = 6;
 const MIN_WINDOW_WIDTH = 220;
 const MIN_WINDOW_HEIGHT = 132;
+const DEFAULT_MAC_VOLUME = 0.82;
 const DEFAULT_ALARM_SETTINGS: AlarmSettings = {
   enabled: false,
   time: "07:30",
@@ -297,12 +299,12 @@ const WINDOW_PROFILES: Record<WindowId, WindowProfile> = {
     y: 0.13,
   },
   controlPanels: {
-    width: 0.48,
-    height: 0.5,
-    maxWidth: 600,
-    maxHeight: 410,
-    x: 0.12,
-    y: 0.11,
+    width: 0.68,
+    height: 0.72,
+    maxWidth: 760,
+    maxHeight: 560,
+    x: 0.07,
+    y: 0.06,
   },
   keyCaps: {
     width: 0.52,
@@ -579,9 +581,9 @@ const WINDOW_DEFINITIONS: Record<WindowId, WindowDefinition> = {
     icon: "control",
     x: 58,
     y: 44,
-    width: 430,
-    height: 300,
-    status: "Desktop pattern",
+    width: 650,
+    height: 470,
+    status: "5 panels · preferences saved locally",
   },
   keyCaps: {
     title: "Key Caps",
@@ -798,11 +800,30 @@ function MacIcon({ kind }: { kind: IconKind }) {
         aria-hidden="true"
       >
         <path d="M12 8 7 14m29-6 5 6" stroke="#111" strokeWidth="3" />
-        <circle cx="24" cy="25" r="18" fill="#f4f1dd" stroke="#111" strokeWidth="2" />
-        <path d="M24 11v4m0 20v4M10 25h4m20 0h4" stroke="#111" strokeWidth="2" />
+        <circle
+          cx="24"
+          cy="25"
+          r="18"
+          fill="#f4f1dd"
+          stroke="#111"
+          strokeWidth="2"
+        />
+        <path
+          d="M24 11v4m0 20v4M10 25h4m20 0h4"
+          stroke="#111"
+          strokeWidth="2"
+        />
         <path d="M24 25V16m0 9 8 5" fill="none" stroke="#111" strokeWidth="3" />
         <path d="M13 40 9 45m26-5 4 5" stroke="#111" strokeWidth="3" />
-        <rect x="20" y="2" width="8" height="4" fill="#cfcec5" stroke="#111" strokeWidth="2" />
+        <rect
+          x="20"
+          y="2"
+          width="8"
+          height="4"
+          fill="#cfcec5"
+          stroke="#111"
+          strokeWidth="2"
+        />
       </svg>
     );
   }
@@ -815,12 +836,44 @@ function MacIcon({ kind }: { kind: IconKind }) {
         shapeRendering="crispEdges"
         aria-hidden="true"
       >
-        <rect x="19" y="2" width="11" height="5" fill="#d6d5cd" stroke="#111" strokeWidth="2" />
+        <rect
+          x="19"
+          y="2"
+          width="11"
+          height="5"
+          fill="#d6d5cd"
+          stroke="#111"
+          strokeWidth="2"
+        />
         <path d="M24 7v4m12 0 4 4" stroke="#111" strokeWidth="3" />
-        <circle cx="24" cy="28" r="17" fill="#eef2e5" stroke="#111" strokeWidth="2" />
-        <path d="M24 14v4m0 20v4M10 28h4m20 0h4" stroke="#111" strokeWidth="2" />
-        <path d="M24 28V18m0 10 7 7" fill="none" stroke="#c43b35" strokeWidth="2" />
-        <rect x="34" y="7" width="7" height="4" fill="#cfcec5" stroke="#111" strokeWidth="2" />
+        <circle
+          cx="24"
+          cy="28"
+          r="17"
+          fill="#eef2e5"
+          stroke="#111"
+          strokeWidth="2"
+        />
+        <path
+          d="M24 14v4m0 20v4M10 28h4m20 0h4"
+          stroke="#111"
+          strokeWidth="2"
+        />
+        <path
+          d="M24 28V18m0 10 7 7"
+          fill="none"
+          stroke="#c43b35"
+          strokeWidth="2"
+        />
+        <rect
+          x="34"
+          y="7"
+          width="7"
+          height="4"
+          fill="#cfcec5"
+          stroke="#111"
+          strokeWidth="2"
+        />
       </svg>
     );
   }
@@ -833,8 +886,25 @@ function MacIcon({ kind }: { kind: IconKind }) {
         shapeRendering="crispEdges"
         aria-hidden="true"
       >
-        <rect x="8" y="3" width="32" height="42" rx="2" fill="#d4d3ca" stroke="#111" strokeWidth="2" />
-        <rect x="12" y="8" width="24" height="9" fill="#dce9d8" stroke="#111" strokeWidth="2" />
+        <rect
+          x="8"
+          y="3"
+          width="32"
+          height="42"
+          rx="2"
+          fill="#d4d3ca"
+          stroke="#111"
+          strokeWidth="2"
+        />
+        <rect
+          x="12"
+          y="8"
+          width="24"
+          height="9"
+          fill="#dce9d8"
+          stroke="#111"
+          strokeWidth="2"
+        />
         <path d="M15 12h16" stroke="#53645b" strokeWidth="2" />
         {[0, 1, 2].map((row) =>
           [0, 1, 2, 3].map((column) => (
@@ -861,10 +931,20 @@ function MacIcon({ kind }: { kind: IconKind }) {
         shapeRendering="crispEdges"
         aria-hidden="true"
       >
-        <path d="M12 5h24v15H12z" fill="#edf1e6" stroke="#111" strokeWidth="2" />
+        <path
+          d="M12 5h24v15H12z"
+          fill="#edf1e6"
+          stroke="#111"
+          strokeWidth="2"
+        />
         <path d="M16 9h16v7H16z" fill="#93bbb5" stroke="#111" />
         <path d="M7 19h34v18H7z" fill="#d4d3ca" stroke="#111" strokeWidth="2" />
-        <path d="M13 31h22v13H13z" fill="#f5f1df" stroke="#111" strokeWidth="2" />
+        <path
+          d="M13 31h22v13H13z"
+          fill="#f5f1df"
+          stroke="#111"
+          strokeWidth="2"
+        />
         <path d="M17 35h14m-14 4h10" stroke="#777" strokeWidth="2" />
         <rect x="34" y="23" width="3" height="3" fill="#5c958b" />
       </svg>
@@ -879,11 +959,43 @@ function MacIcon({ kind }: { kind: IconKind }) {
         shapeRendering="crispEdges"
         aria-hidden="true"
       >
-        <rect x="5" y="5" width="38" height="38" fill="#e3e1d7" stroke="#111" strokeWidth="2" />
+        <rect
+          x="5"
+          y="5"
+          width="38"
+          height="38"
+          fill="#e3e1d7"
+          stroke="#111"
+          strokeWidth="2"
+        />
         <path d="M12 14h24M12 24h24M12 34h24" stroke="#111" strokeWidth="2" />
-        <rect x="17" y="10" width="7" height="8" fill="#7faea5" stroke="#111" strokeWidth="2" />
-        <rect x="29" y="20" width="7" height="8" fill="#d9ba68" stroke="#111" strokeWidth="2" />
-        <rect x="12" y="30" width="7" height="8" fill="#a89fd3" stroke="#111" strokeWidth="2" />
+        <rect
+          x="17"
+          y="10"
+          width="7"
+          height="8"
+          fill="#7faea5"
+          stroke="#111"
+          strokeWidth="2"
+        />
+        <rect
+          x="29"
+          y="20"
+          width="7"
+          height="8"
+          fill="#d9ba68"
+          stroke="#111"
+          strokeWidth="2"
+        />
+        <rect
+          x="12"
+          y="30"
+          width="7"
+          height="8"
+          fill="#a89fd3"
+          stroke="#111"
+          strokeWidth="2"
+        />
       </svg>
     );
   }
@@ -896,7 +1008,12 @@ function MacIcon({ kind }: { kind: IconKind }) {
         shapeRendering="crispEdges"
         aria-hidden="true"
       >
-        <path d="M4 14h40l-3 24H7z" fill="#dddcd3" stroke="#111" strokeWidth="2" />
+        <path
+          d="M4 14h40l-3 24H7z"
+          fill="#dddcd3"
+          stroke="#111"
+          strokeWidth="2"
+        />
         {[0, 1, 2].map((row) =>
           [0, 1, 2, 3, 4].map((column) => (
             <rect
@@ -910,7 +1027,14 @@ function MacIcon({ kind }: { kind: IconKind }) {
             />
           ))
         )}
-        <rect x="15" y="34" width="18" height="3" fill="#faf8ee" stroke="#777" />
+        <rect
+          x="15"
+          y="34"
+          width="18"
+          height="3"
+          fill="#faf8ee"
+          stroke="#777"
+        />
       </svg>
     );
   }
@@ -926,7 +1050,11 @@ function MacIcon({ kind }: { kind: IconKind }) {
         <path d="M9 7h32v38H9z" fill="#fff2a8" stroke="#111" strokeWidth="2" />
         <path d="M9 7h32v7H9z" fill="#d6c25f" stroke="#111" strokeWidth="2" />
         <path d="M15 3v8m7-8v8m7-8v8m7-8v8" stroke="#111" strokeWidth="2" />
-        <path d="M15 21h20m-20 6h20m-20 6h16m-16 6h12" stroke="#766c41" strokeWidth="2" />
+        <path
+          d="M15 21h20m-20 6h20m-20 6h16m-16 6h12"
+          stroke="#766c41"
+          strokeWidth="2"
+        />
       </svg>
     );
   }
@@ -939,10 +1067,32 @@ function MacIcon({ kind }: { kind: IconKind }) {
         shapeRendering="crispEdges"
         aria-hidden="true"
       >
-        <rect x="5" y="5" width="38" height="38" fill="#c9c8bf" stroke="#111" strokeWidth="2" />
-        <path d="M8 8h15v15H8zm17 0h15v15H25zM8 25h15v15H8z" fill="#a9a1d8" stroke="#111" strokeWidth="2" />
-        <path d="M25 25h15v15H25z" fill="#f0eee3" stroke="#888" strokeDasharray="2 2" />
-        <path d="M15 12v7m-3-4h6m11-3 6 7m0-7-6 7m-17 12h7" stroke="#111" strokeWidth="2" />
+        <rect
+          x="5"
+          y="5"
+          width="38"
+          height="38"
+          fill="#c9c8bf"
+          stroke="#111"
+          strokeWidth="2"
+        />
+        <path
+          d="M8 8h15v15H8zm17 0h15v15H25zM8 25h15v15H8z"
+          fill="#a9a1d8"
+          stroke="#111"
+          strokeWidth="2"
+        />
+        <path
+          d="M25 25h15v15H25z"
+          fill="#f0eee3"
+          stroke="#888"
+          strokeDasharray="2 2"
+        />
+        <path
+          d="M15 12v7m-3-4h6m11-3 6 7m0-7-6 7m-17 12h7"
+          stroke="#111"
+          strokeWidth="2"
+        />
       </svg>
     );
   }
@@ -956,8 +1106,18 @@ function MacIcon({ kind }: { kind: IconKind }) {
         aria-hidden="true"
       >
         <path d="M8 4h33v40H8z" fill="#92775d" stroke="#111" strokeWidth="2" />
-        <path d="M14 4h27v40H14z" fill="#d8c7a5" stroke="#111" strokeWidth="2" />
-        <path d="M18 11h18v21H18z" fill="#f7f3e4" stroke="#111" strokeWidth="2" />
+        <path
+          d="M14 4h27v40H14z"
+          fill="#d8c7a5"
+          stroke="#111"
+          strokeWidth="2"
+        />
+        <path
+          d="M18 11h18v21H18z"
+          fill="#f7f3e4"
+          stroke="#111"
+          strokeWidth="2"
+        />
         <circle cx="27" cy="19" r="5" fill="#86afa8" stroke="#111" />
         <path d="m19 30 6-7 4 4 3-3 4 6" fill="#a9a1d8" stroke="#111" />
         <path d="M6 11h5m-5 8h5m-5 8h5m-5 8h5" stroke="#111" strokeWidth="2" />
@@ -973,11 +1133,55 @@ function MacIcon({ kind }: { kind: IconKind }) {
         shapeRendering="crispEdges"
         aria-hidden="true"
       >
-        <rect x="4" y="8" width="40" height="32" rx="3" fill="#d9d8cf" stroke="#111" strokeWidth="2" />
-        <rect x="9" y="14" width="14" height="19" fill="#f8f5e8" stroke="#111" strokeWidth="2" />
-        <rect x="26" y="14" width="13" height="19" fill="#a8c9c3" stroke="#111" strokeWidth="2" />
-        <text x="16" y="28" fontFamily="serif" fontSize="13" textAnchor="middle" fill="#111">⌘</text>
-        <text x="32.5" y="28" fontFamily="sans-serif" fontSize="13" fontWeight="bold" textAnchor="middle" fill="#111">?</text>
+        <rect
+          x="4"
+          y="8"
+          width="40"
+          height="32"
+          rx="3"
+          fill="#d9d8cf"
+          stroke="#111"
+          strokeWidth="2"
+        />
+        <rect
+          x="9"
+          y="14"
+          width="14"
+          height="19"
+          fill="#f8f5e8"
+          stroke="#111"
+          strokeWidth="2"
+        />
+        <rect
+          x="26"
+          y="14"
+          width="13"
+          height="19"
+          fill="#a8c9c3"
+          stroke="#111"
+          strokeWidth="2"
+        />
+        <text
+          x="16"
+          y="28"
+          fontFamily="serif"
+          fontSize="13"
+          textAnchor="middle"
+          fill="#111"
+        >
+          ⌘
+        </text>
+        <text
+          x="32.5"
+          y="28"
+          fontFamily="sans-serif"
+          fontSize="13"
+          fontWeight="bold"
+          textAnchor="middle"
+          fill="#111"
+        >
+          ?
+        </text>
       </svg>
     );
   }
@@ -1401,9 +1605,12 @@ function ResumeView() {
 
 export default function MacDesktop({
   muted = false,
+  volume = 0.82,
   onRestart,
   onShutdown,
   onSound,
+  onToggleMuted,
+  onVolumeChange,
 }: MacDesktopProps) {
   const [windows, setWindows] = useState(createInitialWindows);
   const [activeWindow, setActiveWindow] = useState<WindowId | null>("welcome");
@@ -1415,7 +1622,7 @@ export default function MacDesktop({
   const [activeInteraction, setActiveInteraction] =
     useState<ActiveInteraction | null>(null);
   const [clock, setClock] = useState("--:--");
-  const [pattern, setPattern] = useState<DesktopPattern>("sage");
+  const { preferences, setPreferences } = useMacPreferences();
   const [trashEmpty, setTrashEmpty] = useState(false);
   const [alarmSettings, setAlarmSettings] = useState<AlarmSettings>(
     DEFAULT_ALARM_SETTINGS
@@ -1438,19 +1645,26 @@ export default function MacDesktop({
 
   useEffect(() => {
     const updateClock = () => {
-      setClock(
-        new Intl.DateTimeFormat(undefined, {
-          weekday: "short",
-          hour: "numeric",
-          minute: "2-digit",
-        }).format(new Date())
-      );
+      const options: Intl.DateTimeFormatOptions = {
+        hour: "numeric",
+        minute: "2-digit",
+      };
+      if (preferences.showWeekday) options.weekday = "short";
+      if (preferences.showSeconds) options.second = "2-digit";
+      if (preferences.hourCycle !== "system") {
+        options.hour12 = preferences.hourCycle === "12";
+      }
+
+      setClock(new Intl.DateTimeFormat(undefined, options).format(new Date()));
     };
 
     updateClock();
-    const timer = window.setInterval(updateClock, 30_000);
+    const timer = window.setInterval(
+      updateClock,
+      preferences.showSeconds ? 1_000 : 30_000
+    );
     return () => window.clearInterval(timer);
-  }, []);
+  }, [preferences.hourCycle, preferences.showSeconds, preferences.showWeekday]);
 
   useEffect(() => {
     const root = rootRef.current;
@@ -1631,6 +1845,46 @@ export default function MacDesktop({
     window.requestAnimationFrame(() => windowRefs.current.resume?.focus());
   }, [onSound, windows]);
 
+  const arrangeWindows = useCallback(() => {
+    const root = rootRef.current;
+    if (!root) return;
+    const area = getWorkArea(root, menuBarRef.current);
+
+    setWindows((current) =>
+      WINDOW_IDS.reduce(
+        (next, id) => {
+          next[id] = {
+            ...current[id],
+            ...getResponsiveWindowBounds(id, area),
+            maximized: false,
+          };
+          return next;
+        },
+        { ...current }
+      )
+    );
+    onSound?.("menu");
+    showToast("Windows arranged for this desktop");
+  }, [onSound, showToast]);
+
+  const resetControlPanelPreferences = useCallback(() => {
+    setPreferences(DEFAULT_MAC_PREFERENCES);
+    onVolumeChange?.(DEFAULT_MAC_VOLUME);
+    if (muted) {
+      onToggleMuted?.();
+    } else {
+      onSound?.("success");
+    }
+    showToast("Control Panels restored to defaults");
+  }, [
+    muted,
+    onSound,
+    onToggleMuted,
+    onVolumeChange,
+    setPreferences,
+    showToast,
+  ]);
+
   const resetDesktop = useCallback(() => {
     onSound?.("close");
     nextZ.current = 20;
@@ -1653,7 +1907,6 @@ export default function MacDesktop({
     setActiveWindow("welcome");
     setSelectedIcon("welcome");
     setActiveMenu(null);
-    setPattern("sage");
     setTrashEmpty(false);
     setAlarmSettings(DEFAULT_ALARM_SETTINGS);
     lastAlarmMinuteRef.current = null;
@@ -1697,7 +1950,7 @@ export default function MacDesktop({
       }
 
       lastAlarmMinuteRef.current = minuteKey;
-      onSound?.("alarm");
+      onSound?.(preferences.alertSound);
       showToast(`Alarm · ${alarmSettings.label}`);
       openWindow("alarmClock");
     };
@@ -1705,7 +1958,7 @@ export default function MacDesktop({
     checkAlarm();
     const timer = window.setInterval(checkAlarm, 1_000);
     return () => window.clearInterval(timer);
-  }, [alarmSettings, onSound, openWindow, showToast]);
+  }, [alarmSettings, onSound, openWindow, preferences.alertSound, showToast]);
 
   const toggleMenu = useCallback(
     (menu: MenuId) => {
@@ -2028,20 +2281,21 @@ export default function MacDesktop({
       case "resume":
         return <ResumeView />;
       case "doom":
-        return (
-          <DoomGame
-            isActive={activeWindow === "doom"}
-            muted={muted}
-          />
-        );
+        return <DoomGame isActive={activeWindow === "doom"} muted={muted} />;
       default:
         if (ACCESSORY_IDS.includes(id as AccessoryId)) {
           return (
             <MacAccessories
               id={id as AccessoryId}
               onSound={onSound}
-              pattern={pattern}
-              onPatternChange={setPattern}
+              preferences={preferences}
+              onPreferencesChange={setPreferences}
+              muted={muted}
+              volume={volume}
+              onToggleMuted={onToggleMuted}
+              onVolumeChange={onVolumeChange}
+              onResetPreferences={resetControlPanelPreferences}
+              onResetWindowLayout={arrangeWindows}
               trashEmpty={trashEmpty}
               onEmptyTrash={emptyTrash}
               alarmSettings={alarmSettings}
@@ -2060,7 +2314,10 @@ export default function MacDesktop({
       tabIndex={-1}
       role="region"
       aria-label={`${identity.name} interactive portfolio desktop`}
-      data-pattern={pattern}
+      data-pattern={preferences.pattern}
+      data-highlight={preferences.highlightColor}
+      data-contrast={preferences.highContrast ? "high" : "standard"}
+      data-reduce-motion={preferences.reduceMotion ? "true" : "false"}
       onKeyDown={handleDesktopKeyDown}
       onPointerDown={() => setActiveMenu(null)}
     >
@@ -2345,12 +2602,21 @@ export default function MacDesktop({
               aria-pressed={selected}
               data-open={windows[id].open ? "true" : undefined}
               onClick={() => {
+                if (preferences.singleClickOpen) {
+                  openWindow(id);
+                  return;
+                }
                 setSelectedIcon(id);
                 onSound?.("select");
               }}
               onDoubleClick={() => openWindow(id)}
               onPointerUp={(event) => {
-                if (event.pointerType !== "mouse") openWindow(id);
+                if (
+                  event.pointerType !== "mouse" &&
+                  !preferences.singleClickOpen
+                ) {
+                  openWindow(id);
+                }
               }}
               onKeyDown={(event) => {
                 if (event.key === "Enter") {
@@ -2368,48 +2634,61 @@ export default function MacDesktop({
         })}
       </nav>
 
-      <nav
-        className={styles.accessoryGrid}
-        aria-label="Applications and desk accessories on the desktop"
-      >
-        {DESKTOP_ACCESSORY_ICON_IDS.map((id, index) => {
-          const definition = WINDOW_DEFINITIONS[id];
-          const selected = selectedIcon === id;
+      {preferences.showAccessoryShelf ? (
+        <nav
+          className={styles.accessoryGrid}
+          aria-label="Applications and desk accessories on the desktop"
+        >
+          {DESKTOP_ACCESSORY_ICON_IDS.map((id, index) => {
+            const definition = WINDOW_DEFINITIONS[id];
+            const selected = selectedIcon === id;
 
-          return (
-            <button
-              type="button"
-              className={`${styles.desktopIcon}${selected ? ` ${styles.selectedIcon}` : ""}`}
-              style={
-                { "--icon-delay": `${420 + index * 45}ms` } as CSSProperties
-              }
-              key={id}
-              aria-label={`Open ${definition.title}`}
-              aria-pressed={selected}
-              data-open={windows[id].open ? "true" : undefined}
-              onClick={() => {
-                setSelectedIcon(id);
-                onSound?.("select");
-              }}
-              onDoubleClick={() => openWindow(id)}
-              onPointerUp={(event) => {
-                if (event.pointerType !== "mouse") openWindow(id);
-              }}
-              onKeyDown={(event) => {
-                if (event.key === "Enter") {
-                  event.preventDefault();
-                  openWindow(id);
+            return (
+              <button
+                type="button"
+                className={`${styles.desktopIcon}${selected ? ` ${styles.selectedIcon}` : ""}`}
+                style={
+                  {
+                    "--icon-delay": `${420 + index * 45}ms`,
+                  } as CSSProperties
                 }
-              }}
-            >
-              <span className={styles.iconArtwork}>
-                <MacIcon kind={definition.icon} />
-              </span>
-              <span className={styles.iconLabel}>{definition.title}</span>
-            </button>
-          );
-        })}
-      </nav>
+                key={id}
+                aria-label={`Open ${definition.title}`}
+                aria-pressed={selected}
+                data-open={windows[id].open ? "true" : undefined}
+                onClick={() => {
+                  if (preferences.singleClickOpen) {
+                    openWindow(id);
+                    return;
+                  }
+                  setSelectedIcon(id);
+                  onSound?.("select");
+                }}
+                onDoubleClick={() => openWindow(id)}
+                onPointerUp={(event) => {
+                  if (
+                    event.pointerType !== "mouse" &&
+                    !preferences.singleClickOpen
+                  ) {
+                    openWindow(id);
+                  }
+                }}
+                onKeyDown={(event) => {
+                  if (event.key === "Enter") {
+                    event.preventDefault();
+                    openWindow(id);
+                  }
+                }}
+              >
+                <span className={styles.iconArtwork}>
+                  <MacIcon kind={definition.icon} />
+                </span>
+                <span className={styles.iconLabel}>{definition.title}</span>
+              </button>
+            );
+          })}
+        </nav>
+      ) : null}
 
       <button
         type="button"
@@ -2419,12 +2698,18 @@ export default function MacDesktop({
         data-empty={trashEmpty ? "true" : "false"}
         data-open={windows.trash.open ? "true" : undefined}
         onClick={() => {
+          if (preferences.singleClickOpen) {
+            openWindow("trash");
+            return;
+          }
           setSelectedIcon("trash");
           onSound?.("select");
         }}
         onDoubleClick={() => openWindow("trash")}
         onPointerUp={(event) => {
-          if (event.pointerType !== "mouse") openWindow("trash");
+          if (event.pointerType !== "mouse" && !preferences.singleClickOpen) {
+            openWindow("trash");
+          }
         }}
         onKeyDown={(event) => {
           if (event.key === "Enter") {
@@ -2563,15 +2848,15 @@ export default function MacDesktop({
               ? RESIZE_DIRECTIONS.filter(
                   (direction) => id === "doom" || direction !== "se"
                 ).map((direction) => (
-                    <span
-                      key={direction}
-                      className={`${styles.resizeEdge} ${styles[`resize${direction.toUpperCase()}` as keyof typeof styles]}`}
-                      aria-hidden="true"
-                      onPointerDown={(event) =>
-                        beginPointerOperation(id, "resize", event, direction)
-                      }
-                    />
-                  ))
+                  <span
+                    key={direction}
+                    className={`${styles.resizeEdge} ${styles[`resize${direction.toUpperCase()}` as keyof typeof styles]}`}
+                    aria-hidden="true"
+                    onPointerDown={(event) =>
+                      beginPointerOperation(id, "resize", event, direction)
+                    }
+                  />
+                ))
               : null}
           </section>
         );
@@ -2584,13 +2869,17 @@ export default function MacDesktop({
         </div>
       ) : null}
 
-      <p className={styles.desktopHint} aria-hidden="true">
-        Double-click an icon · Drag title bars · ⌘1–9 opens apps · ? shows
-        shortcuts
-      </p>
-      <p className={styles.touchHint} aria-hidden="true">
-        Tap an icon · Drag title bars · Apple menu opens desk accessories
-      </p>
+      {preferences.showDesktopHints ? (
+        <>
+          <p className={styles.desktopHint} aria-hidden="true">
+            {preferences.singleClickOpen ? "Click" : "Double-click"} an icon ·
+            Drag title bars · ⌘1–9 opens apps · ? shows shortcuts
+          </p>
+          <p className={styles.touchHint} aria-hidden="true">
+            Tap an icon · Drag title bars · Apple menu opens desk accessories
+          </p>
+        </>
+      ) : null}
     </div>
   );
 }

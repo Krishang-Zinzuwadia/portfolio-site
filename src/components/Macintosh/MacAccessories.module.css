@@ -284,8 +284,7 @@
   border: 3px solid #111;
   border-radius: 50%;
   background:
-    repeating-conic-gradient(#111 0 1deg, transparent 1deg 30deg),
-    #f6f2df;
+    repeating-conic-gradient(#111 0 1deg, transparent 1deg 30deg), #f6f2df;
   box-shadow:
     inset 2px 2px #fff,
     inset -3px -3px #999;
@@ -340,7 +339,9 @@
   padding: 7px 10px;
   border: 2px inset #aaa;
   background: #fff;
-  font: 400 27px/1 "KZ Chicago", monospace;
+  font:
+    400 27px/1 "KZ Chicago",
+    monospace;
   text-align: center;
   letter-spacing: 0.04em;
 }
@@ -407,7 +408,9 @@
 
 .calculatorDisplay output {
   overflow: hidden;
-  font: 400 28px/1 "KZ Chicago", monospace;
+  font:
+    400 28px/1 "KZ Chicago",
+    monospace;
 }
 
 .calculator:focus-visible {
@@ -494,43 +497,452 @@
 }
 
 .controlPanels {
+  container: control-panel / inline-size;
   display: grid;
-  gap: 8px;
+  width: 100%;
+  height: 100%;
+  min-width: 0;
+  min-height: 330px;
+  overflow: hidden;
+  border: 1px solid #111;
+  background: #d7d6cc;
+  box-shadow:
+    inset 1px 1px #fff,
+    inset -1px -1px #85847d;
+  grid-template-rows: auto minmax(0, 1fr) auto;
+  user-select: none;
+}
+
+.controlHeader {
+  display: flex;
+  min-width: 0;
+  min-height: 55px;
+  padding: 8px 10px;
+  background:
+    repeating-linear-gradient(
+      0deg,
+      rgba(17, 17, 17, 0.025) 0 1px,
+      transparent 1px 3px
+    ),
+    #e3e1d7;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+}
+
+.controlHeader > div {
+  flex: 0 0 auto;
+}
+
+.controlHeader h3 {
+  margin: 2px 0 0;
+  font-size: 17px;
+}
+
+.controlHeader > p {
+  max-width: 290px;
+  margin: 0;
+  color: #4e4d48;
+  font-size: 10px;
+  text-align: right;
+}
+
+.controlWorkspace {
+  display: grid;
+  min-width: 0;
+  min-height: 0;
+  border-block: 1px solid #111;
+  grid-template-columns: 118px minmax(0, 1fr);
+}
+
+.controlRail {
+  display: grid;
+  min-width: 0;
+  min-height: 0;
+  padding: 4px;
+  overflow-y: auto;
+  border-right: 1px solid #111;
+  background: repeating-conic-gradient(#d9d8cf 0 25%, #cfcec5 0 50%) 0 / 4px 4px;
+  align-content: start;
+  gap: 2px;
+}
+
+.controlTab {
+  appearance: none;
+  display: grid;
+  width: 100%;
+  min-width: 0;
+  min-height: 50px;
+  padding: 5px;
+  border: 1px solid transparent;
+  border-radius: 0;
+  color: #111;
+  background: transparent;
+  font-family: "KZ Chicago", "Courier New", monospace;
+  font-size: 9px;
+  text-align: left;
+  cursor: pointer;
+  grid-template-columns: 31px minmax(0, 1fr);
+  align-items: center;
+  gap: 7px;
+}
+
+.controlTab:hover {
+  border-color: #77766f;
+  background: rgba(255, 255, 255, 0.48);
+}
+
+.controlTab[aria-selected="true"] {
+  border-color: #111;
+  color: #fff;
+  background: #111;
+}
+
+.controlTab:focus-visible {
+  outline: 2px solid #111;
+  outline-offset: -3px;
+}
+
+.controlTab[aria-selected="true"]:focus-visible {
+  outline-color: #fff;
+}
+
+.controlTabIcon {
+  display: grid;
+  width: 29px;
+  height: 29px;
+  border: 1px solid currentColor;
+  background: #f9f8f1;
+  color: #111;
+  box-shadow:
+    inset 1px 1px #fff,
+    inset -1px -1px #77766f;
+  font:
+    18px/1 "KZ Chicago",
+    monospace;
+  place-items: center;
+}
+
+.controlPane {
+  min-width: 0;
+  min-height: 0;
+  padding: 11px;
+  overflow: auto;
+  background:
+    linear-gradient(rgba(255, 255, 255, 0.72), rgba(255, 255, 255, 0.72)),
+    repeating-conic-gradient(#f4f3eb 0 25%, #ecebe3 0 50%) 0 / 4px 4px;
+  outline: 0;
+  scrollbar-color: #111 #d7d6cc;
+  scrollbar-width: thin;
+  user-select: text;
+}
+
+.controlPane:focus-visible {
+  box-shadow: inset 0 0 0 2px #111;
+}
+
+.panelStack {
+  display: grid;
+  min-width: 0;
+  align-content: start;
+  gap: 11px;
+}
+
+.desktopPreview {
+  --preview-selection: #151515;
+  position: relative;
+  min-width: 0;
+  height: clamp(136px, 30cqw, 178px);
+  min-height: 136px;
+  overflow: hidden;
+  border: 2px solid;
+  border-color: #77766f #fff #fff #77766f;
+  background-color: #7f8a7d;
+  background-image:
+    linear-gradient(
+      45deg,
+      rgba(255, 255, 255, 0.09) 25%,
+      transparent 25% 75%,
+      rgba(255, 255, 255, 0.09) 75%
+    ),
+    linear-gradient(
+      45deg,
+      rgba(255, 255, 255, 0.09) 25%,
+      transparent 25% 75%,
+      rgba(255, 255, 255, 0.09) 75%
+    );
+  background-position:
+    0 0,
+    2px 2px;
+  background-size: 4px 4px;
+  box-shadow: inset 0 0 0 1px #111;
+}
+
+.desktopPreview[data-pattern="platinum"] {
+  background-color: #b9b9b2;
+  background-image: repeating-conic-gradient(
+    rgba(255, 255, 255, 0.16) 0 25%,
+    rgba(36, 36, 34, 0.08) 0 50%
+  );
+  background-size: 4px 4px;
+}
+
+.desktopPreview[data-pattern="blue"] {
+  background-color: #737f9b;
+  background-image: repeating-linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.12) 0 2px,
+    transparent 2px 4px
+  );
+  background-size: 6px 6px;
+}
+
+.desktopPreview[data-pattern="graphite"] {
+  background-color: #565854;
+  background-image: repeating-conic-gradient(
+    rgba(255, 255, 255, 0.1) 0 25%,
+    rgba(0, 0, 0, 0.1) 0 50%
+  );
+  background-size: 4px 4px;
+}
+
+.desktopPreview[data-highlight="blueberry"] {
+  --preview-selection: #314f91;
+}
+
+.desktopPreview[data-highlight="grape"] {
+  --preview-selection: #68427f;
+}
+
+.desktopPreview[data-highlight="rose"] {
+  --preview-selection: #874657;
+}
+
+.desktopPreview[data-contrast="high"] {
+  filter: contrast(1.18);
+}
+
+.previewMenuBar {
+  display: flex;
+  height: 20px;
+  padding: 0 5px;
+  border-bottom: 1px solid #111;
+  background: #fff;
+  font:
+    8px/1 "KZ Chicago",
+    monospace;
+  align-items: center;
+  gap: 5px;
+}
+
+.previewMenuBar time {
+  margin-left: auto;
+  font-size: 7px;
+}
+
+.previewDesktopIcon {
+  position: absolute;
+  top: 31px;
+  right: 10px;
+  display: grid;
+  width: 42px;
+  color: #111;
+  font:
+    25px/1 "KZ Chicago",
+    monospace;
+  text-align: center;
+  place-items: center;
+}
+
+.previewDesktopIcon small {
+  padding: 1px 2px;
+  background: #fff;
+  font:
+    6px/1.1 "KZ Geneva",
+    Arial,
+    sans-serif;
+}
+
+.previewWindow {
+  position: absolute;
+  top: 36px;
+  left: 9%;
+  display: grid;
+  width: min(58%, 230px);
+  min-height: 72px;
+  border: 1px solid #111;
+  background: #f7f6ef;
+  box-shadow: 2px 2px 0 rgba(17, 17, 17, 0.65);
+  font-size: 7px;
+  align-content: start;
+}
+
+.previewWindow > div {
+  display: grid;
+  height: 16px;
+  padding: 2px;
+  border-bottom: 1px solid #111;
+  background: #d7d6cc;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  gap: 3px;
+}
+
+.previewWindow > div i {
+  height: 8px;
+  background: repeating-linear-gradient(#111 0 1px, transparent 1px 3px);
+}
+
+.previewWindow > div strong {
+  font:
+    7px/1 "KZ Chicago",
+    monospace;
+}
+
+.previewWindow p {
+  margin: 8px 7px 4px;
+}
+
+.previewWindow > span {
+  width: fit-content;
+  margin: 0 7px 7px;
+  padding: 2px 4px;
+  color: #fff;
+  background: var(--preview-selection);
+}
+
+.previewShelf {
+  position: absolute;
+  bottom: 7px;
+  left: 7px;
+  display: flex;
+  padding: 3px 4px;
+  border: 1px solid #111;
+  background: rgba(240, 239, 232, 0.88);
+  box-shadow: 1px 1px 0 rgba(17, 17, 17, 0.38);
+  gap: 3px;
+}
+
+.previewShelf span {
+  display: grid;
+  width: 17px;
+  height: 17px;
+  border: 1px solid #111;
+  background: #fff;
+  font:
+    9px/1 "KZ Chicago",
+    monospace;
+  place-items: center;
+}
+
+.previewHint {
+  position: absolute;
+  right: 7px;
+  bottom: 5px;
+  padding: 2px 4px;
+  background: rgba(255, 255, 255, 0.86);
+  font-size: 6px;
+}
+
+.controlGroup {
+  min-width: 0;
+  margin: 0;
+  padding: 12px 8px 8px;
+  border: 1px solid #77766f;
+  background: rgba(255, 255, 255, 0.64);
+}
+
+.controlGroup legend {
+  padding: 0 5px;
+  background: #fbfbf5;
+  font-family: "KZ Chicago", "Courier New", monospace;
+  font-size: 10px;
 }
 
 .patternGrid {
   display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: 8px;
+  grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+  gap: 7px;
 }
 
-.patternGrid button {
+.patternOption {
+  position: relative;
   display: grid;
   min-width: 0;
+  min-height: 76px;
   padding: 5px;
-  border: 1px solid transparent;
-  background: transparent;
-  font-size: 10px;
-  text-align: center;
+  border: 1px solid #8b8a83;
+  background: #efeee6;
   cursor: pointer;
-  gap: 4px;
+  grid-template-columns: 47px minmax(0, 1fr) 13px;
+  align-items: center;
+  gap: 6px;
 }
 
-.patternGrid button[aria-pressed="true"] {
+.patternOption:hover {
   border-color: #111;
-  outline: 1px solid #fff;
-  background: #111;
-  color: #fff;
+  background: #fff;
 }
 
-.patternGrid span {
+.patternOption:has(input:checked) {
+  border-color: #111;
+  box-shadow: inset 0 0 0 1px #111;
+}
+
+.patternOption input,
+.highlightOption input,
+.alertSoundGrid input,
+.segmentedControl input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+}
+
+.patternOption:has(input:focus-visible),
+.highlightOption:has(input:focus-visible),
+.alertSoundGrid label:has(input:focus-visible),
+.segmentedControl label:has(input:focus-visible) {
+  outline: 2px solid #111;
+  outline-offset: 2px;
+}
+
+.patternOption > span:nth-of-type(2) {
+  display: grid;
+  min-width: 0;
+  gap: 2px;
+}
+
+.patternOption strong {
+  font-family: "KZ Chicago", monospace;
+  font-size: 9px;
+}
+
+.patternOption small {
+  color: #5b5a54;
+  font-size: 7px;
+  line-height: 1.2;
+}
+
+.patternOption i {
+  visibility: hidden;
+  font-style: normal;
+  font-weight: 700;
+}
+
+.patternOption:has(input:checked) i {
+  visibility: visible;
+}
+
+.patternSwatch {
   display: block;
-  width: 100%;
-  aspect-ratio: 1.4;
+  width: 47px;
+  height: 42px;
   border: 1px solid #111;
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.35);
 }
 
-.patternGrid button[data-pattern="sage"] span {
+.patternSwatch[data-pattern="sage"] {
   background-color: #7f8a7d;
   background-image: repeating-linear-gradient(
     45deg,
@@ -539,22 +951,661 @@
   );
 }
 
-.patternGrid button[data-pattern="platinum"] span {
+.patternSwatch[data-pattern="platinum"] {
   background: repeating-conic-gradient(#deded8 0 25%, #aaa 0 50%) 0 / 4px 4px;
 }
 
-.patternGrid button[data-pattern="blue"] span {
+.patternSwatch[data-pattern="blue"] {
   background: repeating-linear-gradient(135deg, #6d7894 0 2px, #98a2b7 2px 4px);
 }
 
-.patternGrid button[data-pattern="graphite"] span {
+.patternSwatch[data-pattern="graphite"] {
   background: repeating-conic-gradient(#454545 0 25%, #777 0 50%) 0 / 4px 4px;
 }
 
-.controlHint {
+.highlightGrid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 6px;
+}
+
+.highlightOption {
+  position: relative;
+  display: grid;
+  min-width: 0;
+  min-height: 42px;
+  padding: 5px;
+  border: 1px solid transparent;
+  font-family: "KZ Chicago", monospace;
+  font-size: 8px;
+  text-align: center;
+  cursor: pointer;
+  place-items: center;
+  gap: 3px;
+}
+
+.highlightOption:hover,
+.highlightOption:has(input:checked) {
+  border-color: #111;
+  background: #fff;
+}
+
+.highlightOption > span {
+  display: block;
+  width: 100%;
+  height: 12px;
+  border: 1px solid #111;
+  background: #151515;
+}
+
+.highlightOption[data-highlight="blueberry"] > span {
+  background: #314f91;
+}
+
+.highlightOption[data-highlight="grape"] > span {
+  background: #68427f;
+}
+
+.highlightOption[data-highlight="rose"] > span {
+  background: #874657;
+}
+
+.settingList {
+  display: grid;
+  min-width: 0;
+  gap: 4px;
+}
+
+.settingSwitch {
+  appearance: none;
+  display: grid;
+  width: 100%;
+  min-width: 0;
+  min-height: 47px;
   padding: 6px;
+  border: 1px solid transparent;
+  border-radius: 0;
+  color: #111;
+  background: transparent;
+  text-align: left;
+  cursor: pointer;
+  grid-template-columns: 18px minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 7px;
+}
+
+.settingSwitch:hover {
+  border-color: #aaa9a1;
+  background: #fff;
+}
+
+.settingSwitch:focus-visible {
+  outline: 2px solid #111;
+  outline-offset: -2px;
+}
+
+.settingSwitch:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+.switchBox {
+  display: grid;
+  width: 17px;
+  height: 17px;
+  border: 1px solid #111;
+  background: #fff;
+  box-shadow:
+    inset 1px 1px #77766f,
+    inset -1px -1px #fff;
+  font:
+    12px/1 "KZ Chicago",
+    monospace;
+  place-items: center;
+}
+
+.settingCopy {
+  display: grid;
+  min-width: 0;
+  gap: 2px;
+}
+
+.settingCopy strong,
+.volumeControl strong {
+  font-family: "KZ Chicago", monospace;
+  font-size: 9px;
+}
+
+.settingCopy small,
+.volumeControl small {
+  color: #55544f;
+  font-size: 8px;
+  line-height: 1.2;
+}
+
+.settingState {
+  min-width: 24px;
+  color: #55544f;
+  font-size: 8px;
+  text-align: right;
+}
+
+.soundPreview {
+  display: grid;
+  min-height: 82px;
+  padding: 10px;
+  border: 2px solid;
+  border-color: #77766f #fff #fff #77766f;
+  background: #e4e2d8;
+  grid-template-columns: 52px minmax(0, 1fr);
+  align-items: center;
+  gap: 12px;
+}
+
+.soundPreview > span {
+  display: grid;
+  width: 48px;
+  height: 48px;
+  border: 1px solid #111;
+  background: #f8f7ef;
+  box-shadow:
+    inset 2px 2px #fff,
+    inset -2px -2px #85847d;
+  font:
+    29px/1 "KZ Chicago",
+    monospace;
+  place-items: center;
+}
+
+.soundPreview > div {
+  display: grid;
+  min-width: 0;
+  gap: 5px;
+}
+
+.soundPreview strong {
+  font-family: "KZ Chicago", monospace;
+  font-size: 11px;
+}
+
+.soundPreview > div > div {
+  display: grid;
+  width: 100%;
+  height: 17px;
+  border: 1px solid #111;
+  background:
+    linear-gradient(
+      90deg,
+      #111 0 var(--sound-level),
+      transparent var(--sound-level) 100%
+    ),
+    #fff;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+}
+
+.soundPreview[data-muted="true"] > div > div {
+  background: #fff;
+}
+
+.soundPreview > div > div i {
+  border-right: 1px solid #fff;
+}
+
+.soundPreview small {
+  color: #55544f;
+  font-size: 8px;
+}
+
+.volumeControl {
+  display: grid;
+  min-width: 0;
+  min-height: 52px;
+  padding: 7px 6px 6px 31px;
+  border: 1px solid transparent;
+  grid-template-columns: minmax(110px, 1fr) minmax(90px, 1.1fr) 35px;
+  align-items: center;
+  gap: 9px;
+}
+
+.volumeControl:focus-within {
+  border-color: #111;
+  background: #fff;
+}
+
+.volumeControl > span {
+  display: grid;
+  min-width: 0;
+  gap: 2px;
+}
+
+.volumeControl input {
+  width: 100%;
+  accent-color: #111;
+}
+
+.volumeControl output {
+  padding: 3px;
+  border: 1px solid #111;
+  background: #fff;
+  font:
+    8px/1 "KZ Monaco",
+    monospace;
+  text-align: right;
+}
+
+.alertSoundGrid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 5px;
+}
+
+.alertSoundGrid label {
+  position: relative;
+  display: grid;
+  min-width: 0;
+  min-height: 47px;
+  padding: 6px;
+  border: 1px solid #aaa9a1;
+  background: #efeee7;
+  cursor: pointer;
+  grid-template-columns: 14px minmax(0, 1fr);
+  align-items: center;
+  gap: 2px 6px;
+}
+
+.alertSoundGrid label:hover,
+.alertSoundGrid label:has(input:checked) {
+  border-color: #111;
+  background: #fff;
+}
+
+.alertSoundGrid label > span {
+  display: block;
+  width: 12px;
+  height: 12px;
+  border: 1px solid #111;
+  border-radius: 50%;
+  background: #fff;
+  grid-row: 1 / 3;
+}
+
+.alertSoundGrid label:has(input:checked) > span {
+  box-shadow: inset 0 0 0 3px #fff;
+  background: #111;
+}
+
+.alertSoundGrid strong {
+  font-family: "KZ Chicago", monospace;
+  font-size: 9px;
+}
+
+.alertSoundGrid small {
+  color: #55544f;
+  font-size: 7px;
+}
+
+.previewButton,
+.controlFooter button {
+  min-height: 25px;
+  padding: 4px 9px;
+  border: 1px solid #111;
+  border-radius: 2px;
+  background: #d7d6cc;
+  box-shadow:
+    inset 1px 1px #fff,
+    inset -1px -1px #77766f;
+  font-family: "KZ Chicago", monospace;
+  font-size: 8px;
+  cursor: pointer;
+}
+
+.previewButton {
+  margin-top: 7px;
+}
+
+.previewButton:active,
+.controlFooter button:active {
+  box-shadow: inset 1px 1px #77766f;
+  transform: translate(1px, 1px);
+}
+
+.previewButton:focus-visible,
+.controlFooter button:focus-visible {
+  outline: 2px solid #111;
+  outline-offset: 2px;
+}
+
+.clockPreview {
+  display: grid;
+  min-height: 120px;
+  padding: 13px;
+  border: 2px solid;
+  border-color: #77766f #fff #fff #77766f;
+  background:
+    radial-gradient(
+      circle at 50% 50%,
+      rgba(255, 255, 255, 0.8),
+      transparent 62%
+    ),
+    repeating-conic-gradient(#deddd5 0 25%, #d4d3ca 0 50%) 0 / 4px 4px;
+  text-align: center;
+  place-content: center;
+  gap: 5px;
+}
+
+.clockPreview output {
+  min-width: 9ch;
+  padding: 8px 14px;
+  border: 2px inset #aaa;
+  background: #fff;
+  font:
+    400 clamp(20px, 7cqw, 38px) / 1 "KZ Chicago",
+    monospace;
+  letter-spacing: 0.03em;
+}
+
+.clockPreview p {
+  margin: 0;
+  font-family: "KZ Chicago", monospace;
+  font-size: 9px;
+}
+
+.clockPreview small {
+  color: #55544f;
+  font-size: 8px;
+}
+
+.segmentedControl {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.segmentedControl label {
+  position: relative;
+  cursor: pointer;
+}
+
+.segmentedControl label + label {
+  margin-left: -1px;
+}
+
+.segmentedControl span {
+  display: grid;
+  min-height: 30px;
+  padding: 5px;
+  border: 1px solid #111;
+  background: #d7d6cc;
+  box-shadow: inset 1px 1px #fff;
+  font-family: "KZ Chicago", monospace;
+  font-size: 8px;
+  text-align: center;
+  place-items: center;
+}
+
+.segmentedControl label:has(input:checked) span {
+  color: #fff;
+  background: #111;
+  box-shadow: none;
+}
+
+.accessibilityPreview {
+  display: grid;
+  min-height: 105px;
+  padding: 12px;
+  border: 2px solid;
+  border-color: #77766f #fff #fff #77766f;
+  background: #e4e2d8;
+  grid-template-columns: 68px minmax(0, 1fr);
+  align-items: center;
+  gap: 13px;
+}
+
+.accessibilityPreview > span {
+  display: grid;
+  width: 66px;
+  height: 66px;
+  border: 2px solid #111;
+  background: #fff;
+  font:
+    22px/1 "KZ Chicago",
+    monospace;
+  place-items: center;
+}
+
+.accessibilityPreview > div {
+  min-width: 0;
+}
+
+.accessibilityPreview strong {
+  font-family: "KZ Chicago", monospace;
+  font-size: 13px;
+}
+
+.accessibilityPreview p {
+  margin: 5px 0 0;
+}
+
+.accessibilityPreview[data-contrast="high"] {
+  border-color: #000;
+  background: #fff;
+  box-shadow: inset 0 0 0 2px #000;
+}
+
+.accessibilityPreview[data-contrast="high"] > span {
+  color: #fff;
+  background: #000;
+}
+
+.controlHint {
+  margin: 0;
+  padding: 7px;
   border: 1px dotted #111;
   background: #fff;
+  font-size: 8px;
+  line-height: 1.35;
+}
+
+.controlFooter {
+  display: flex;
+  min-width: 0;
+  min-height: 39px;
+  padding: 6px 7px;
+  background: #e3e1d7;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.controlFooter > span {
+  overflow: hidden;
+  color: #55544f;
+  font-size: 8px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.controlFooter > div {
+  display: flex;
+  flex: 0 0 auto;
+  gap: 6px;
+}
+
+.controlFooter .defaultButton {
+  outline: 2px solid #111;
+  outline-offset: 1px;
+}
+
+.controlFooter .defaultButton:focus-visible {
+  outline-width: 3px;
+  outline-offset: 2px;
+}
+
+@container control-panel (max-width: 520px) {
+  .controlWorkspace {
+    grid-template-columns: 104px minmax(0, 1fr);
+  }
+
+  .controlTab {
+    min-height: 45px;
+    padding: 4px;
+    grid-template-columns: 26px minmax(0, 1fr);
+    gap: 5px;
+  }
+
+  .controlTabIcon {
+    width: 25px;
+    height: 25px;
+    font-size: 15px;
+  }
+
+  .controlPane {
+    padding: 8px;
+  }
+
+  .patternGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .patternOption {
+    min-height: 63px;
+  }
+
+  .highlightGrid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .volumeControl {
+    padding-left: 6px;
+    grid-template-columns: 1fr 36px;
+  }
+
+  .volumeControl > span {
+    grid-column: 1 / -1;
+  }
+
+  .alertSoundGrid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@container control-panel (max-width: 360px) {
+  .controlPanels {
+    min-height: 420px;
+  }
+
+  .controlHeader {
+    display: grid;
+    min-height: 69px;
+    gap: 3px;
+  }
+
+  .controlHeader > p {
+    max-width: none;
+    text-align: left;
+  }
+
+  .controlWorkspace {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto minmax(0, 1fr);
+  }
+
+  .controlRail {
+    display: grid;
+    padding: 3px;
+    overflow-x: hidden;
+    overflow-y: hidden;
+    border-right: 0;
+    border-bottom: 1px solid #111;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+  }
+
+  .controlTab {
+    min-width: 0;
+    min-height: 49px;
+    padding: 3px;
+    font-size: 7px;
+    text-align: center;
+    grid-template-columns: 1fr;
+    grid-template-rows: 25px auto;
+    place-items: center;
+    gap: 2px;
+  }
+
+  .controlTabIcon {
+    width: 24px;
+    height: 24px;
+    font-size: 14px;
+  }
+
+  .desktopPreview {
+    height: 132px;
+  }
+
+  .previewWindow {
+    width: 67%;
+  }
+
+  .settingSwitch {
+    grid-template-columns: 18px minmax(0, 1fr);
+  }
+
+  .settingState {
+    display: none;
+  }
+
+  .soundPreview {
+    grid-template-columns: 42px minmax(0, 1fr);
+    gap: 8px;
+  }
+
+  .soundPreview > span {
+    width: 40px;
+    height: 40px;
+    font-size: 23px;
+  }
+
+  .accessibilityPreview {
+    grid-template-columns: 48px minmax(0, 1fr);
+    gap: 8px;
+  }
+
+  .accessibilityPreview > span {
+    width: 46px;
+    height: 46px;
+    font-size: 16px;
+  }
+
+  .controlFooter {
+    display: grid;
+  }
+
+  .controlFooter > span {
+    white-space: normal;
+  }
+
+  .controlFooter > div {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (pointer: coarse) {
+  .controlTab,
+  .settingSwitch,
+  .patternOption,
+  .highlightOption,
+  .alertSoundGrid label {
+    min-height: 44px;
+  }
+}
+
+@media (forced-colors: active) {
+  .desktopPreview,
+  .patternSwatch,
+  .highlightOption > span,
+  .soundPreview > div > div {
+    forced-color-adjust: none;
+  }
 }
 
 .keyCaps {
@@ -1043,13 +2094,6 @@
     min-height: 20px;
     font-size: 7px;
   }
-  .patternGrid {
-    gap: 4px;
-  }
-  .patternGrid button {
-    padding: 3px;
-    font-size: 7px;
-  }
   .scrapbook article {
     min-height: 112px;
     padding: 9px;
@@ -1073,9 +2117,6 @@
 }
 
 @container mac-desktop (max-width: 390px) {
-  .patternGrid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
   .chooserColumns {
     grid-template-columns: 1fr;
   }
