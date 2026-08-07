@@ -2,6 +2,7 @@
   "use strict";
 
   const MESSAGE_SOURCE = "krishang-portfolio-doom";
+  const BUNDLE_URL = "./doom-shareware-1.9.jsdos?rev=opl-music-2";
   const launchButton = document.getElementById("launch-doom");
   const launchLabel = document.getElementById("launch-label");
   const retryButton = document.getElementById("retry-doom");
@@ -13,6 +14,22 @@
   let muted = false;
   let windowActive = true;
   let startupTimeout = 0;
+  let runtimeMusicDevice = null;
+
+  function inspectRuntimeConfig(commandInterface) {
+    if (typeof commandInterface.fsReadFile === "function") {
+      void commandInterface
+        .fsReadFile("DEFAULT.CFG")
+        .then((contents) => {
+          const config = new TextDecoder().decode(contents);
+          const match = config.match(/^snd_musicdevice\s+(-?\d+)/m);
+          runtimeMusicDevice = match ? Number.parseInt(match[1], 10) : null;
+        })
+        .catch(() => {
+          runtimeMusicDevice = null;
+        });
+    }
+  }
 
   function report(type, detail = {}) {
     if (window.parent === window) return;
@@ -44,7 +61,11 @@
     player.setPaused(!windowActive);
   }
 
-  function handlePlayerEvent(eventName) {
+  function handlePlayerEvent(eventName, eventDetail) {
+    if (eventName === "ci-ready") {
+      inspectRuntimeConfig(eventDetail);
+    }
+
     if (eventName === "bnd-play" || eventName === "ci-ready") {
       window.clearTimeout(startupTimeout);
       setState(windowActive ? "running" : "paused");
@@ -62,7 +83,7 @@
 
     try {
       player = window.Dos(playerElement, {
-        url: "./doom-shareware-1.9.jsdos",
+        url: BUNDLE_URL,
         pathPrefix: "./js-dos/emulators/",
         backend: "dosbox",
         backendLocked: true,
@@ -159,6 +180,10 @@
       state,
       muted,
       active: windowActive,
+      audio: {
+        renderer: "AdLib OPL2 music + Sound Blaster 16 SFX",
+        configuredDevice: runtimeMusicDevice,
+      },
     });
 
   window.advanceTime = (milliseconds) =>
