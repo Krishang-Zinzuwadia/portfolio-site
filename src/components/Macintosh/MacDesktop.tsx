@@ -36,12 +36,7 @@ const MacAccessories = dynamic(() => import("./MacAccessories"), {
 
 const DoomGame = dynamic(() => import("./DoomGame"), {
   ssr: false,
-  loading: () => (
-    <div className={styles.gameLoading} role="status">
-      <span aria-hidden="true">▦</span>
-      Loading DOOM…
-    </div>
-  ),
+  loading: () => <div className={styles.gameLoading} aria-hidden="true" />,
 });
 
 const RESUME_PATH = "/Krishang-Zinzuwadia-Resume.pdf";
@@ -86,7 +81,7 @@ type WindowDefinition = {
   y: number;
   width: number;
   height: number;
-  status: string;
+  status?: string;
 };
 
 type WindowBounds = {
@@ -533,7 +528,6 @@ const WINDOW_DEFINITIONS: Record<WindowId, WindowDefinition> = {
     y: 32,
     width: 640,
     height: 438,
-    status: "Original DOOM Shareware v1.9 · Episode One",
   },
   aboutMac: {
     title: "About This Macintosh",
@@ -2038,7 +2032,6 @@ export default function MacDesktop({
           <DoomGame
             isActive={activeWindow === "doom"}
             muted={muted}
-            onSound={onSound}
           />
         );
       default:
@@ -2541,32 +2534,35 @@ export default function MacDesktop({
               {renderWindowContent(id)}
             </div>
 
-            <footer className={styles.statusBar}>
-              <span>
-                {id === "trash"
-                  ? trashEmpty
-                    ? "Trash is empty"
-                    : definition.status
-                  : definition.status}
-              </span>
-              <button
-                type="button"
-                className={styles.resizeBox}
-                aria-label={`Resize ${definition.title}. Use arrow keys; hold Shift for larger steps.`}
-                disabled={!active || state.maximized}
-                tabIndex={active && !state.maximized ? 0 : -1}
-                onPointerDown={(event) =>
-                  beginPointerOperation(id, "resize", event, "se")
-                }
-                onKeyDown={(event) => resizeWithKeyboard(id, event)}
-              >
-                <span aria-hidden="true" />
-              </button>
-            </footer>
+            {id !== "doom" ? (
+              <footer className={styles.statusBar}>
+                <span>
+                  {id === "trash"
+                    ? trashEmpty
+                      ? "Trash is empty"
+                      : definition.status
+                    : definition.status}
+                </span>
+                <button
+                  type="button"
+                  className={styles.resizeBox}
+                  aria-label={`Resize ${definition.title}. Use arrow keys; hold Shift for larger steps.`}
+                  disabled={!active || state.maximized}
+                  tabIndex={active && !state.maximized ? 0 : -1}
+                  onPointerDown={(event) =>
+                    beginPointerOperation(id, "resize", event, "se")
+                  }
+                  onKeyDown={(event) => resizeWithKeyboard(id, event)}
+                >
+                  <span aria-hidden="true" />
+                </button>
+              </footer>
+            ) : null}
 
             {active && !state.maximized
-              ? RESIZE_DIRECTIONS.filter((direction) => direction !== "se").map(
-                  (direction) => (
+              ? RESIZE_DIRECTIONS.filter(
+                  (direction) => id === "doom" || direction !== "se"
+                ).map((direction) => (
                     <span
                       key={direction}
                       className={`${styles.resizeEdge} ${styles[`resize${direction.toUpperCase()}` as keyof typeof styles]}`}
@@ -2575,8 +2571,7 @@ export default function MacDesktop({
                         beginPointerOperation(id, "resize", event, direction)
                       }
                     />
-                  )
-                )
+                  ))
               : null}
           </section>
         );

@@ -3,8 +3,6 @@
 
   const MESSAGE_SOURCE = "krishang-portfolio-doom";
   const BUNDLE_URL = "./doom-shareware-1.9.jsdos?rev=opl-music-2";
-  const launchButton = document.getElementById("launch-doom");
-  const launchLabel = document.getElementById("launch-label");
   const retryButton = document.getElementById("retry-doom");
   const errorMessage = document.getElementById("error-message");
   const playerElement = document.getElementById("dos-player");
@@ -66,10 +64,16 @@
       inspectRuntimeConfig(eventDetail);
     }
 
-    if (eventName === "bnd-play" || eventName === "ci-ready") {
+    if (eventName === "ci-ready") {
       window.clearTimeout(startupTimeout);
       setState(windowActive ? "running" : "paused");
       applyPreferences();
+
+      const canvas = playerElement.querySelector("canvas");
+      if (canvas instanceof HTMLCanvasElement) {
+        canvas.tabIndex = 0;
+        canvas.focus({ preventScroll: true });
+      }
     }
 
     report("runtime-event", { event: eventName });
@@ -79,7 +83,6 @@
     if (player || typeof window.Dos !== "function") return;
 
     setState("starting");
-    launchButton.disabled = true;
 
     try {
       player = window.Dos(playerElement, {
@@ -168,7 +171,6 @@
     window.clearTimeout(startupTimeout);
     void stopPlayer();
   });
-  launchButton.addEventListener("click", startDoom);
   retryButton.addEventListener("click", () => window.location.reload());
 
   window.render_game_to_text = () =>
@@ -192,14 +194,7 @@
     });
 
   if (typeof window.Dos === "function") {
-    launchLabel.textContent = "Run DOOM.EXE";
-    launchButton.disabled = false;
-    setState("ready");
-    report("launcher-ready");
-
-    if (new URLSearchParams(window.location.search).get("autostart") === "1") {
-      startDoom();
-    }
+    startDoom();
   } else {
     showError(new Error("The local js-dos runtime is unavailable."));
   }

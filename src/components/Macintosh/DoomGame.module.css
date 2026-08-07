@@ -1,18 +1,17 @@
 .root {
-  display: grid;
+  display: block;
   width: 100%;
   height: 100%;
   min-height: 280px;
-  grid-template-rows: minmax(0, 1fr) auto;
   overflow: hidden;
-  background: #030303;
-  color: #e9e4d8;
-  font-family: Chicago, Monaco, "Courier New", monospace;
+  background: #000;
   user-select: none;
 }
 
 .gameStage {
   position: relative;
+  width: 100%;
+  height: 100%;
   min-width: 0;
   min-height: 0;
   overflow: hidden;
@@ -24,172 +23,13 @@
   width: 100%;
   height: 100%;
   border: 0;
-  background: #050505;
+  background: #000;
 }
 
 .inactiveShield {
   position: absolute;
   z-index: 4;
   inset: 0;
-  display: grid;
   cursor: pointer;
-  place-items: center;
-  background: rgba(0, 0, 0, 0.48);
-  color: #f0e5ce;
-  text-align: center;
-}
-
-.inactiveShield span {
-  border: 1px solid #d4c2a2;
-  background: #17120f;
-  box-shadow: 3px 3px 0 #000;
-  font-size: 11px;
-  font-weight: 700;
-  letter-spacing: 0.04em;
-  padding: 7px 10px;
-  text-transform: uppercase;
-}
-
-.controlStrip {
-  display: grid;
-  min-height: 34px;
-  grid-template-columns: minmax(120px, 1fr) auto minmax(120px, 1fr);
-  align-items: center;
-  gap: 12px;
-  border-top: 1px solid #514a42;
-  background: linear-gradient(#282621, #151512);
-  box-shadow: inset 0 1px #777065;
-  padding: 4px 6px;
-  font-size: 9px;
-}
-
-.runtimeStatus {
-  display: flex;
-  min-width: 0;
-  align-items: center;
-  gap: 6px;
-  color: #c7bfb1;
-}
-
-.runtimeStatus > span:last-child {
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
-.statusLight {
-  width: 7px;
-  height: 7px;
-  flex: 0 0 auto;
-  border: 1px solid #050505;
-  border-radius: 50%;
-  background: #d26631;
-  box-shadow: 0 0 0 1px #54473c;
-}
-
-.statusLight[data-running="true"] {
-  background: #9cc75a;
-  box-shadow:
-    0 0 0 1px #40522a,
-    0 0 5px rgba(156, 199, 90, 0.55);
-}
-
-.keys {
-  display: flex;
-  margin: 0;
-  align-items: center;
-  gap: 4px;
-  color: #a8a195;
-  white-space: nowrap;
-}
-
-.keys kbd {
-  min-width: 18px;
-  border: 1px solid #7c766c;
-  border-bottom-color: #171715;
-  border-radius: 2px;
-  background: #3a3833;
-  box-shadow: inset 0 1px #706b61;
-  color: #f2eadb;
-  font: inherit;
-  line-height: 15px;
-  padding: 0 3px;
-  text-align: center;
-}
-
-.actions {
-  display: flex;
-  justify-content: flex-end;
-  align-items: center;
-  gap: 5px;
-}
-
-.soundState {
-  color: #888176;
-  white-space: nowrap;
-}
-
-.actions button {
-  min-height: 22px;
-  border: 1px solid;
-  border-color: #a7a29a #171715 #171715 #a7a29a;
-  border-radius: 2px;
-  background: #d3d0c7;
-  box-shadow: inset 1px 1px #f5f3ed;
-  color: #111;
-  cursor: pointer;
-  font: inherit;
-  font-weight: 700;
-  padding: 2px 7px;
-  white-space: nowrap;
-}
-
-.actions button:active {
-  border-color: #171715 #a7a29a #a7a29a #171715;
-  box-shadow: inset 1px 1px #77736b;
-}
-
-.actions button:focus-visible {
-  outline: 1px dotted #fff;
-  outline-offset: 1px;
-}
-
-.actions button:disabled {
-  cursor: wait;
-  opacity: 0.55;
-}
-
-@media (max-width: 760px) {
-  .controlStrip {
-    grid-template-columns: minmax(0, 1fr) auto;
-  }
-
-  .keys {
-    display: none;
-  }
-}
-
-@media (max-width: 460px) {
-  .soundState,
-  .runtimeStatus > span:last-child {
-    display: none;
-  }
-
-  .controlStrip {
-    grid-template-columns: auto 1fr;
-  }
-
-  .actions {
-    justify-self: end;
-  }
-}
-
-@media (max-height: 370px) {
-  .root {
-    grid-template-rows: minmax(0, 1fr) 29px;
-  }
-
-  .controlStrip {
-    min-height: 29px;
-  }
+  background: transparent;
 }
