@@ -37,6 +37,11 @@ const DoomGame = dynamic(() => import("./DoomGame"), {
   loading: () => <div className={styles.gameLoading} aria-hidden="true" />,
 });
 
+const HostedGame = dynamic(() => import("./HostedGame"), {
+  ssr: false,
+  loading: () => <div className={styles.gameLoading} aria-hidden="true" />,
+});
+
 const RESUME_PATH = "/Krishang-Zinzuwadia-Resume.pdf";
 
 type WindowId =
@@ -47,6 +52,8 @@ type WindowId =
   | "contact"
   | "resume"
   | "doom"
+  | "minesweeper"
+  | "pacman"
   | AccessoryId;
 
 type DesktopTrayId = AccessoryId | "doom";
@@ -163,13 +170,22 @@ const ACCESSORY_IDS: AccessoryId[] = [
   "keyCaps",
   "notePad",
   "puzzle",
+  "slidingPuzzle",
   "scrapbook",
   "shortcuts",
   "secret",
   "trash",
 ];
 
-const WINDOW_IDS: WindowId[] = [...DESKTOP_ICON_IDS, "doom", ...ACCESSORY_IDS];
+const WINDOW_IDS: WindowId[] = [
+  ...DESKTOP_ICON_IDS,
+  "doom",
+  "minesweeper",
+  "pacman",
+  ...ACCESSORY_IDS,
+];
+
+const FULL_BLEED_GAME_IDS: WindowId[] = ["doom", "minesweeper", "pacman"];
 
 const RESIZE_DIRECTIONS: ResizeDirection[] = [
   "n",
@@ -258,6 +274,22 @@ const WINDOW_PROFILES: Record<WindowId, WindowProfile> = {
     x: 0.035,
     y: 0.025,
   },
+  minesweeper: {
+    width: 0.82,
+    height: 0.84,
+    maxWidth: 1040,
+    maxHeight: 700,
+    x: 0.03,
+    y: 0.025,
+  },
+  pacman: {
+    width: 0.72,
+    height: 0.56,
+    maxWidth: 820,
+    maxHeight: 450,
+    x: 0.08,
+    y: 0.08,
+  },
   aboutMac: {
     width: 0.43,
     height: 0.53,
@@ -323,12 +355,20 @@ const WINDOW_PROFILES: Record<WindowId, WindowProfile> = {
     y: 0.07,
   },
   puzzle: {
+    width: 0.58,
+    height: 0.68,
+    maxWidth: 720,
+    maxHeight: 540,
+    x: 0.08,
+    y: 0.055,
+  },
+  slidingPuzzle: {
     width: 0.48,
     height: 0.58,
     maxWidth: 600,
     maxHeight: 470,
-    x: 0.12,
-    y: 0.08,
+    x: 0.15,
+    y: 0.09,
   },
   scrapbook: {
     width: 0.46,
@@ -531,6 +571,22 @@ const WINDOW_DEFINITIONS: Record<WindowId, WindowDefinition> = {
     width: 640,
     height: 438,
   },
+  minesweeper: {
+    title: "Microsoft Minesweeper",
+    icon: "puzzle",
+    x: 18,
+    y: 28,
+    width: 760,
+    height: 520,
+  },
+  pacman: {
+    title: "PAC-MAN",
+    icon: "puzzle",
+    x: 48,
+    y: 54,
+    width: 700,
+    height: 340,
+  },
   aboutMac: {
     title: "About This Macintosh",
     icon: "computer",
@@ -608,9 +664,18 @@ const WINDOW_DEFINITIONS: Record<WindowId, WindowDefinition> = {
     icon: "puzzle",
     x: 52,
     y: 36,
+    width: 560,
+    height: 410,
+    status: "4 games · all play here",
+  },
+  slidingPuzzle: {
+    title: "Sliding Puzzle",
+    icon: "puzzle",
+    x: 76,
+    y: 48,
     width: 430,
     height: 320,
-    status: "Desk accessory",
+    status: "8 tiles · 1 empty space",
   },
   scrapbook: {
     title: "Scrapbook",
@@ -2282,6 +2347,17 @@ export default function MacDesktop({
         return <ResumeView />;
       case "doom":
         return <DoomGame isActive={activeWindow === "doom"} muted={muted} />;
+      case "minesweeper":
+        return (
+          <HostedGame
+            game="minesweeper"
+            isActive={activeWindow === "minesweeper"}
+          />
+        );
+      case "pacman":
+        return (
+          <HostedGame game="pacman" isActive={activeWindow === "pacman"} />
+        );
       default:
         if (ACCESSORY_IDS.includes(id as AccessoryId)) {
           return (
@@ -2296,6 +2372,7 @@ export default function MacDesktop({
               onVolumeChange={onVolumeChange}
               onResetPreferences={resetControlPanelPreferences}
               onResetWindowLayout={arrangeWindows}
+              onOpenGame={(game) => openWindow(game)}
               trashEmpty={trashEmpty}
               onEmptyTrash={emptyTrash}
               alarmSettings={alarmSettings}
@@ -2740,10 +2817,11 @@ export default function MacDesktop({
         const interacting = activeInteraction?.id === id;
         const closing = Boolean(closingWindows[id]);
         const titleId = `${titlePrefix}-${id}-title`;
+        const fullBleedGame = FULL_BLEED_GAME_IDS.includes(id);
 
         return (
           <section
-            className={`${styles.window}${id === "doom" ? ` ${styles.doomWindow}` : ""}${active ? ` ${styles.activeWindow}` : ""}${state.maximized ? ` ${styles.maximizedWindow}` : ""}`}
+            className={`${styles.window}${fullBleedGame ? ` ${styles.doomWindow}` : ""}${active ? ` ${styles.activeWindow}` : ""}${state.maximized ? ` ${styles.maximizedWindow}` : ""}`}
             key={id}
             ref={(element) => {
               windowRefs.current[id] = element;
@@ -2814,12 +2892,12 @@ export default function MacDesktop({
             </div>
 
             <div
-              className={`${styles.windowBody}${id === "doom" ? ` ${styles.doomWindowBody}` : ""}`}
+              className={`${styles.windowBody}${fullBleedGame ? ` ${styles.doomWindowBody}` : ""}`}
             >
               {renderWindowContent(id)}
             </div>
 
-            {id !== "doom" ? (
+            {!fullBleedGame ? (
               <footer className={styles.statusBar}>
                 <span>
                   {id === "trash"
@@ -2846,7 +2924,7 @@ export default function MacDesktop({
 
             {active && !state.maximized
               ? RESIZE_DIRECTIONS.filter(
-                  (direction) => id === "doom" || direction !== "se"
+                  (direction) => fullBleedGame || direction !== "se"
                 ).map((direction) => (
                   <span
                     key={direction}

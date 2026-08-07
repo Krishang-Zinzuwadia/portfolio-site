@@ -14,6 +14,7 @@
 
 .aboutMac h3,
 .controlPanels h3,
+.gameLibrary h3,
 .puzzle h3,
 .scrapbook h3,
 .trashView h3 {
@@ -1691,6 +1692,226 @@
     monospace;
 }
 
+.gameLibrary {
+  display: grid;
+  min-height: 100%;
+  container-name: game-library;
+  container-type: inline-size;
+  grid-template-rows: auto minmax(0, 1fr);
+  align-content: start;
+  gap: 11px;
+}
+
+.gameLibraryHeader {
+  display: grid;
+  padding: 10px;
+  border: 1px solid #111;
+  background:
+    linear-gradient(rgba(255, 255, 255, 0.68), rgba(255, 255, 255, 0.68)),
+    repeating-conic-gradient(#b9b8b0 0 25%, #d4d3ca 0 50%) 0 / 4px 4px;
+  box-shadow:
+    inset 1px 1px #fff,
+    inset -1px -1px #7d7c75;
+  grid-template-columns: 52px minmax(0, 1fr);
+  align-items: center;
+  gap: 11px;
+}
+
+.gameLibraryHeader > div {
+  min-width: 0;
+}
+
+.gameLibraryHeader h3 {
+  font-size: clamp(15px, 3.2cqw, 20px);
+}
+
+.gameLibraryHeader > div > p:last-child {
+  max-width: 55ch;
+  margin: 4px 0 0;
+  color: #35342f;
+  font-size: 10px;
+  line-height: 1.35;
+}
+
+.gameLibraryIcon {
+  display: grid;
+  width: 50px;
+  height: 50px;
+  padding: 4px;
+  border: 2px solid #111;
+  background: #8d8c85;
+  box-shadow:
+    inset 2px 2px #555,
+    inset -2px -2px #fff;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 3px;
+}
+
+.gameLibraryIcon i {
+  border: 1px solid #111;
+  background: #e4e3d9;
+  box-shadow:
+    inset 1px 1px #fff,
+    inset -1px -1px #85847d;
+}
+
+.gameLibraryIcon i:last-child {
+  border-color: transparent;
+  background: transparent;
+  box-shadow: none;
+}
+
+.gamePickerGrid {
+  display: grid;
+  align-content: start;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.gameCard {
+  appearance: none;
+  display: grid;
+  min-width: 0;
+  min-height: 116px;
+  padding: 9px;
+  border: 1px solid #111;
+  border-radius: 0;
+  background: #e4e3d9;
+  box-shadow:
+    inset 2px 2px #fff,
+    inset -2px -2px #85847d,
+    2px 2px 0 #77766f;
+  color: #111;
+  font: inherit;
+  text-align: left;
+  text-decoration: none;
+  cursor: pointer;
+  grid-template-columns: 48px minmax(0, 1fr);
+  grid-template-rows: minmax(0, 1fr) auto;
+  align-items: start;
+  gap: 8px;
+  transition:
+    transform 110ms steps(2, end),
+    filter 110ms ease;
+}
+
+.gameCard:visited {
+  color: #111;
+}
+
+.gameCard:hover {
+  filter: brightness(1.04);
+  transform: translate(-1px, -1px);
+}
+
+.gameCard:active {
+  box-shadow:
+    inset 2px 2px #77766f,
+    inset -2px -2px #fff;
+  transform: translate(1px, 1px);
+}
+
+.gameCard:focus-visible {
+  outline: 2px solid var(--mac-highlight, #111);
+  outline-offset: 2px;
+}
+
+.gameCardIcon {
+  display: grid;
+  width: 46px;
+  height: 46px;
+  border: 1px solid #111;
+  background: #f8f7ef;
+  box-shadow:
+    inset 2px 2px rgba(255, 255, 255, 0.86),
+    inset -2px -2px rgba(0, 0, 0, 0.34);
+  font-family: "KZ Chicago", "Courier New", monospace;
+  font-size: 25px;
+  place-items: center;
+}
+
+.gameCardIcon[data-game="sliding"] {
+  background:
+    linear-gradient(rgba(255, 255, 255, 0.5), rgba(255, 255, 255, 0.5)),
+    repeating-conic-gradient(#87867e 0 25%, #d4d3ca 0 50%) 0 / 6px 6px;
+}
+
+.gameCardIcon[data-game="minesweeper"] {
+  background: #c9c9c9;
+  color: #a00000;
+  font-family: Georgia, serif;
+  font-size: 31px;
+}
+
+.gameCardIcon[data-game="doom"] {
+  background: #2c0d08;
+  color: #e0a45f;
+  font-family: Impact, "Arial Black", sans-serif;
+  font-size: 31px;
+  text-shadow: 1px 1px #8c1c0d;
+}
+
+.gameCardIcon[data-game="pacman"] {
+  background: #050505;
+}
+
+.gameCardIcon[data-game="pacman"] i {
+  width: 29px;
+  height: 29px;
+  border-radius: 50%;
+  background: conic-gradient(
+    from 34deg,
+    transparent 0deg 76deg,
+    #f3d32a 76deg 360deg
+  );
+}
+
+.gameCardCopy {
+  display: grid;
+  min-width: 0;
+  align-content: start;
+  gap: 2px;
+}
+
+.gameCardCopy strong {
+  overflow: hidden;
+  font-family: "KZ Chicago", "Courier New", monospace;
+  font-size: 12px;
+  font-weight: 400;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.gameCardCopy small {
+  color: #4d4c47;
+  font-size: clamp(9px, 0.8vw, 10px);
+  line-height: 1.25;
+}
+
+.gameCardCopy > span {
+  margin-top: 3px;
+  font-size: clamp(10px, 0.85vw, 11px);
+  line-height: 1.3;
+}
+
+.gameCardAction {
+  display: flex;
+  width: 100%;
+  padding-top: 6px;
+  border-top: 1px dotted #77766f;
+  font-family: "KZ Chicago", "Courier New", monospace;
+  font-size: clamp(9px, 0.78vw, 10px);
+  letter-spacing: 0.02em;
+  grid-column: 1 / -1;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.gameCardAction b {
+  font-family: "Courier New", monospace;
+  font-size: 14px;
+}
+
 .puzzle {
   display: grid;
   height: 100%;
@@ -2022,6 +2243,33 @@
   }
 }
 
+@container game-library (max-width: 420px) {
+  .gameLibraryHeader {
+    grid-template-columns: 44px minmax(0, 1fr);
+    gap: 8px;
+  }
+
+  .gameLibraryIcon {
+    width: 42px;
+    height: 42px;
+  }
+
+  .gamePickerGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .gameCard {
+    min-height: 106px;
+    grid-template-columns: 44px minmax(0, 1fr);
+  }
+
+  .gameCardIcon {
+    width: 42px;
+    height: 42px;
+    font-size: 22px;
+  }
+}
+
 @container mac-desktop (max-width: 720px) {
   .eyebrow {
     font-size: 7px;
@@ -2042,6 +2290,7 @@
   }
   .aboutMac h3,
   .controlPanels h3,
+  .gameLibrary h3,
   .puzzle h3,
   .scrapbook h3,
   .trashView h3 {
@@ -2146,6 +2395,7 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
+  .gameCard,
   .memoryBars i,
   .puzzleBoard button,
   .scrapbook article,
