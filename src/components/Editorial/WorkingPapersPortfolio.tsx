@@ -47,31 +47,29 @@ export default function WorkingPapersPortfolio() {
       <main id="main-content">
         <section className={styles.hero} aria-labelledby="hero-title">
           <div className={styles.heroFrame}>
-            <h1 className={styles.heroStatements} id="hero-title">
-              <span>
-                <strong>Quark</strong> calls me when a coding agent gets stuck.
-              </span>
-              <span>
-                <strong>Scatterfield</strong> keeps my notes available when the
-                Wi-Fi drops.
-              </span>
-              <span>
-                <strong>Hermes</strong> waits until the other device stores a
-                message before calling it sent.
-              </span>
+            <p className={styles.heroLabel}>Opening note</p>
+            <h1 className={styles.heroTitle} id="hero-title">
+              Most of these projects started with one irritating failure.
             </h1>
 
-            <div className={styles.heroBottom}>
-              <p className={styles.heroRemainder}>
-                The other four projects, five small tools, and the upstream
-                patches I can point to are below.
-              </p>
+            <p className={styles.heroOrigin}>
+              I usually end up working on the part a quick demo skips:
+              permissions, offline state, retries, and checking whether an
+              action actually worked.
+            </p>
 
-              <nav className={styles.heroActions} aria-label="Portfolio views">
-                <a href="#projects">See the projects</a>
-                <Link href="/mac">Open the Macintosh version</Link>
-              </nav>
-            </div>
+            <aside className={styles.heroBio} aria-label="About Krishang">
+              <p>
+                I’m Krishang, a CS student at VIT. I mostly write TypeScript,
+                Python, and Rust. Each project page says what I owned, what I
+                measured, and what still needs work.
+              </p>
+            </aside>
+
+            <nav className={styles.heroActions} aria-label="Portfolio views">
+              <Link href="/work/quark">Start with Quark</Link>
+              <Link href="/mac">Open the Macintosh version</Link>
+            </nav>
           </div>
         </section>
 
