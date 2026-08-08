@@ -7,8 +7,6 @@ import {
   useRef,
   useState,
   type CSSProperties,
-  type KeyboardEvent,
-  type PointerEvent,
 } from "react";
 
 import ProjectSketch from "@/components/Editorial/ProjectSketch";
@@ -28,448 +26,333 @@ type ProjectHelixProps = {
   projects: ProjectHelixItem[];
 };
 
-type CustomProperties = CSSProperties & {
+type HelixStyle = CSSProperties & {
   [property: `--${string}`]: string | number;
 };
 
-type PointerGesture = {
-  pointerId: number;
-  startX: number;
-  startY: number;
-  dragging: boolean;
+type CardGeometry = {
+  active: boolean;
+  near: boolean;
+  style: HelixStyle;
+  zIndex: number;
 };
 
-const rungCount = 23;
-const rungStepPercent = 92 / (rungCount - 1);
+const DEFAULT_SCENE = {
+  width: 1280,
+  height: 800,
+};
 
-function getStrandPosition(phase: number, strand: "a" | "b") {
-  const projection = Math.cos(phase);
-  const centerShift = Math.sin(phase) * 0.45;
-  const halfWidth = 0.4 + Math.abs(projection) * 4.2;
-  const strandADirection = projection >= 0 ? 1 : -1;
-  const direction = strand === "a" ? strandADirection : -strandADirection;
-
-  return centerShift + direction * halfWidth;
+function clamp(value: number, minimum: number, maximum: number) {
+  return Math.min(Math.max(value, minimum), maximum);
 }
 
-const helixGeometry = Array.from({ length: rungCount }, (_, index) => {
-  const progress = index / (rungCount - 1);
+function wrapSlot(slot: number, count: number) {
+  if (count < 2) return slot;
 
-  return {
-    phase: progress * Math.PI * 5,
-    top: 4 + progress * 92,
-  };
-});
+  const half = count / 2;
+  let wrapped = slot;
 
-const helixRungs = helixGeometry.map(({ phase, top }, index) => {
-  const projection = Math.cos(phase);
-  const depthA = (Math.sin(phase) + 1) / 2;
-  const strandAIsLeft = projection < 0;
-  const style: CustomProperties = {
-    "--rung-top": `${top.toFixed(3)}%`,
-    "--rung-width": `${(0.8 + Math.abs(projection) * 8.4).toFixed(3)}rem`,
-    "--rung-shift": `${(Math.sin(phase) * 0.45).toFixed(3)}rem`,
-    "--rung-tilt": `${(Math.sin(phase) * 8).toFixed(3)}deg`,
-    "--left-color": strandAIsLeft ? "var(--wp-red)" : "var(--wp-blue)",
-    "--right-color": strandAIsLeft ? "var(--wp-blue)" : "var(--wp-red)",
-    "--left-opacity": strandAIsLeft
-      ? (0.34 + depthA * 0.66).toFixed(2)
-      : (1 - depthA * 0.66).toFixed(2),
-    "--right-opacity": strandAIsLeft
-      ? (1 - depthA * 0.66).toFixed(2)
-      : (0.34 + depthA * 0.66).toFixed(2),
-  };
+  while (wrapped > half) wrapped -= count;
+  while (wrapped < -half) wrapped += count;
 
-  return {
-    key: `rung-${index}`,
-    style,
-  };
-});
-
-const helixSegments = helixGeometry.slice(0, -1).flatMap((point, index) => {
-  const nextPoint = helixGeometry[index + 1];
-  const middlePhase = (point.phase + nextPoint.phase) / 2;
-
-  return (["a", "b"] as const).map((strand) => {
-    const start = getStrandPosition(point.phase, strand);
-    const end = getStrandPosition(nextPoint.phase, strand);
-    const strandADepth = (Math.sin(middlePhase) + 1) / 2;
-    const depth = strand === "a" ? strandADepth : 1 - strandADepth;
-    const width = Math.max(Math.abs(end - start), 0.08);
-    const thickness = 1.1 + depth * 1.8;
-    const cap = Math.min(45, (thickness / (width * 16)) * 100);
-    const style: CustomProperties = {
-      "--segment-top": `${point.top.toFixed(3)}%`,
-      "--segment-height": `${(rungStepPercent + 0.16).toFixed(3)}%`,
-      "--segment-left": `${Math.min(start, end).toFixed(3)}rem`,
-      "--segment-width": `${width.toFixed(3)}rem`,
-      "--segment-cap": `${cap.toFixed(3)}%`,
-      "--segment-color": strand === "a" ? "var(--wp-red)" : "var(--wp-blue)",
-      "--segment-opacity": (0.34 + depth * 0.66).toFixed(3),
-      zIndex: depth >= 0.5 ? 2 : 1,
-    };
-
-    return {
-      key: `segment-${index}-${strand}`,
-      direction: end >= start ? "right" : "left",
-      front: depth >= 0.5,
-      style,
-    };
-  });
-});
-
-function clampIndex(index: number, length: number) {
-  return Math.min(Math.max(index, 0), length - 1);
+  return wrapped;
 }
 
-function getSlot(index: number, activeIndex: number, length: number) {
-  let slot = index - activeIndex;
-  const radius = Math.floor(length / 2);
+function getCardGeometry(
+  index: number,
+  cursor: number,
+  count: number,
+  sceneWidth: number,
+  sceneHeight: number
+): CardGeometry {
+  const compact = sceneWidth < 820;
+  const slot = wrapSlot(index - cursor, count);
+  const angleStep = compact ? 1.06 : 1.16;
+  const angle = slot * angleStep;
+  const sine = Math.sin(angle);
+  const cosine = Math.cos(angle);
+  const depth = (cosine + 1) / 2;
+  const radius = compact
+    ? Math.min(sceneWidth * 0.24, 180)
+    : Math.min(sceneWidth * 0.3, 420);
+  const verticalGap = sceneHeight * (compact ? 0.25 : 0.255);
+  const depthAmplitude = compact ? 100 : Math.min(sceneWidth * 0.16, 220);
+  const yawAmplitude = compact ? 18 : 30;
+  const x = sine * radius;
+  const y = slot * verticalGap;
+  const z = cosine * depthAmplitude;
+  const startFade = sceneHeight * 0.58;
+  const endFade = sceneHeight * 0.86;
+  const edgeFade =
+    1 - clamp((Math.abs(y) - startFade) / (endFade - startFade), 0, 1);
+  const scale = 0.56 + depth * 0.44;
+  const opacity = edgeFade * (0.22 + depth * 0.78);
+  const yaw = -sine * yawAmplitude;
+  const roll = Math.sin(angle * 0.5) * 4;
+  const active = Math.abs(slot) < 0.5;
 
-  if (slot > radius) slot -= length;
-  if (slot < -radius) slot += length;
-
-  return slot;
+  return {
+    active,
+    near: edgeFade > 0.08,
+    style: {
+      "--helix-x": `${x.toFixed(2)}px`,
+      "--helix-y": `${y.toFixed(2)}px`,
+      "--helix-z": `${z.toFixed(2)}px`,
+      "--helix-scale": scale.toFixed(4),
+      "--helix-yaw": `${yaw.toFixed(2)}deg`,
+      "--helix-roll": `${roll.toFixed(2)}deg`,
+      "--helix-opacity": opacity.toFixed(3),
+    },
+    zIndex: Math.round(100 + depth * 100),
+  };
 }
 
 export default function ProjectHelix({ projects }: ProjectHelixProps) {
   const [activeIndex, setActiveIndex] = useState(0);
-  const [previousIndex, setPreviousIndex] = useState(0);
-  const tabRefs = useRef<Array<HTMLButtonElement | null>>([]);
+  const activeIndexRef = useRef(0);
+  const sectionRef = useRef<HTMLElement | null>(null);
   const stageRef = useRef<HTMLDivElement | null>(null);
-  const gestureRef = useRef<PointerGesture | null>(null);
-  const wheelStateRef = useRef({ accumulatedX: 0, lastStepAt: 0 });
-  const suppressClickRef = useRef(false);
+  const cardRefs = useRef<Array<HTMLLIElement | null>>([]);
+  const frameRef = useRef(0);
+  const transitionCount = Math.max(projects.length - 1, 0);
+  const trackHeight = 136 + transitionCount * 72;
 
-  const activeProject = projects[activeIndex];
+  const scrollToProject = useCallback(
+    (index: number, behavior: ScrollBehavior = "smooth") => {
+      const section = sectionRef.current;
 
-  const selectProject = useCallback(
-    (nextIndex: number) => {
-      const next = clampIndex(nextIndex, projects.length);
+      if (!section || projects.length < 2) return;
 
-      if (next === activeIndex) return;
+      const viewportHeight = Math.max(window.innerHeight, 1);
+      const sectionTop = window.scrollY + section.getBoundingClientRect().top;
+      const travel = Math.max(section.offsetHeight - viewportHeight, 1);
+      const hold = viewportHeight * 0.18;
+      const usableTravel = Math.max(travel - hold * 2, 1);
+      const progress = index / (projects.length - 1);
 
-      setPreviousIndex(activeIndex);
-      setActiveIndex(next);
+      window.scrollTo({
+        top: sectionTop + hold + progress * usableTravel,
+        behavior,
+      });
     },
-    [activeIndex, projects.length]
-  );
-
-  const moveProject = useCallback(
-    (amount: number) => {
-      selectProject(activeIndex + amount);
-    },
-    [activeIndex, selectProject]
+    [projects.length]
   );
 
   useEffect(() => {
+    const section = sectionRef.current;
     const stage = stageRef.current;
 
-    if (!stage) return;
+    if (!section || !stage || projects.length === 0) return;
 
-    const handleWheel = (event: WheelEvent) => {
-      if (!window.matchMedia("(min-width: 52.01rem)").matches) return;
+    let nearViewport = true;
+    let sceneWidth = stage.clientWidth || DEFAULT_SCENE.width;
+    let sceneHeight = stage.clientHeight || DEFAULT_SCENE.height;
 
-      const multiplier =
-        event.deltaMode === 1 ? 16 : event.deltaMode === 2 ? 80 : 1;
-      const deltaX = event.deltaX * multiplier;
-      const deltaY = event.deltaY * multiplier;
+    const renderScene = () => {
+      frameRef.current = 0;
+      if (!nearViewport) return;
 
-      const horizontalIntent =
-        Math.abs(deltaX) > Math.abs(deltaY) && Math.abs(deltaX) >= 1;
-      const shiftedWheelIntent = event.shiftKey && Math.abs(deltaY) >= 1;
+      const rect = section.getBoundingClientRect();
+      const travel = Math.max(rect.height - sceneHeight, 1);
+      const hold = sceneHeight * 0.18;
+      const usableTravel = Math.max(travel - hold * 2, 1);
+      const progress = clamp((-rect.top - hold) / usableTravel, 0, 1);
+      const cursor = progress * transitionCount;
 
-      if (!horizontalIntent && !shiftedWheelIntent) {
-        wheelStateRef.current.accumulatedX = 0;
-        return;
+      cardRefs.current.forEach((card, index) => {
+        if (!card) return;
+
+        const geometry = getCardGeometry(
+          index,
+          cursor,
+          projects.length,
+          sceneWidth,
+          sceneHeight
+        );
+
+        Object.entries(geometry.style).forEach(([property, value]) => {
+          card.style.setProperty(property, String(value));
+        });
+        card.style.zIndex = String(geometry.zIndex);
+        card.style.pointerEvents = geometry.near ? "auto" : "none";
+        card.dataset.active = geometry.active ? "true" : "false";
+      });
+
+      stage.style.setProperty(
+        "--scroll-progress",
+        `${(progress * 100).toFixed(3)}%`
+      );
+
+      const nextActive = clamp(
+        Math.round(cursor),
+        0,
+        Math.max(projects.length - 1, 0)
+      );
+
+      if (nextActive !== activeIndexRef.current) {
+        activeIndexRef.current = nextActive;
+        setActiveIndex(nextActive);
       }
 
-      event.preventDefault();
-      wheelStateRef.current.accumulatedX += horizontalIntent ? deltaX : deltaY;
-
-      const now = performance.now();
-      if (
-        Math.abs(wheelStateRef.current.accumulatedX) < 60 ||
-        now - wheelStateRef.current.lastStepAt < 300
-      ) {
-        return;
-      }
-
-      const direction = wheelStateRef.current.accumulatedX > 0 ? 1 : -1;
-      selectProject(activeIndex + direction);
-      wheelStateRef.current.accumulatedX = 0;
-      wheelStateRef.current.lastStepAt = now;
+      section.dataset.ready = "true";
     };
 
-    stage.addEventListener("wheel", handleWheel, { passive: false });
-
-    return () => stage.removeEventListener("wheel", handleWheel);
-  }, [activeIndex, selectProject]);
-
-  const handleTabKeyDown = (event: KeyboardEvent<HTMLButtonElement>) => {
-    let nextIndex: number | undefined;
-
-    switch (event.key) {
-      case "ArrowLeft":
-      case "ArrowUp":
-        nextIndex = clampIndex(activeIndex - 1, projects.length);
-        break;
-      case "ArrowRight":
-      case "ArrowDown":
-        nextIndex = clampIndex(activeIndex + 1, projects.length);
-        break;
-      case "Home":
-        nextIndex = 0;
-        break;
-      case "End":
-        nextIndex = projects.length - 1;
-        break;
-      default:
-        return;
-    }
-
-    event.preventDefault();
-    selectProject(nextIndex);
-    window.requestAnimationFrame(() => tabRefs.current[nextIndex]?.focus());
-  };
-
-  const handlePointerDown = (event: PointerEvent<HTMLDivElement>) => {
-    if (
-      !event.isPrimary ||
-      event.button !== 0 ||
-      !window.matchMedia("(min-width: 52.01rem)").matches
-    ) {
-      return;
-    }
-
-    suppressClickRef.current = false;
-    gestureRef.current = {
-      pointerId: event.pointerId,
-      startX: event.clientX,
-      startY: event.clientY,
-      dragging: false,
+    const scheduleRender = () => {
+      if (frameRef.current) return;
+      frameRef.current = window.requestAnimationFrame(renderScene);
     };
-  };
 
-  const handlePointerMove = (event: PointerEvent<HTMLDivElement>) => {
-    const gesture = gestureRef.current;
+    const resizeObserver = new ResizeObserver(() => {
+      sceneWidth = stage.clientWidth || DEFAULT_SCENE.width;
+      sceneHeight = stage.clientHeight || DEFAULT_SCENE.height;
+      scheduleRender();
+    });
 
-    if (!gesture || gesture.pointerId !== event.pointerId) return;
+    const intersectionObserver = new IntersectionObserver(
+      ([entry]) => {
+        nearViewport = entry.isIntersecting;
+        if (nearViewport) scheduleRender();
+      },
+      { rootMargin: "100% 0%" }
+    );
 
-    const deltaX = event.clientX - gesture.startX;
-    const deltaY = event.clientY - gesture.startY;
+    resizeObserver.observe(stage);
+    intersectionObserver.observe(section);
+    window.addEventListener("scroll", scheduleRender, { passive: true });
+    window.addEventListener("resize", scheduleRender);
+    window.addEventListener("pageshow", scheduleRender);
+    scheduleRender();
 
-    if (!gesture.dragging) {
-      if (Math.max(Math.abs(deltaX), Math.abs(deltaY)) < 10) return;
-
-      if (Math.abs(deltaY) >= Math.abs(deltaX)) {
-        gestureRef.current = null;
-        return;
-      }
-
-      gesture.dragging = true;
-      event.currentTarget.setPointerCapture(event.pointerId);
-    }
-
-    event.preventDefault();
-  };
-
-  const finishPointerGesture = (event: PointerEvent<HTMLDivElement>) => {
-    const gesture = gestureRef.current;
-
-    if (!gesture || gesture.pointerId !== event.pointerId) return;
-
-    const deltaX = event.clientX - gesture.startX;
-
-    if (gesture.dragging) {
-      suppressClickRef.current = true;
-
-      if (Math.abs(deltaX) >= 44) {
-        moveProject(deltaX < 0 ? 1 : -1);
-      }
-    }
-
-    if (event.currentTarget.hasPointerCapture(event.pointerId)) {
-      event.currentTarget.releasePointerCapture(event.pointerId);
-    }
-
-    gestureRef.current = null;
-  };
-
-  const cancelPointerGesture = (event: PointerEvent<HTMLDivElement>) => {
-    if (event.currentTarget.hasPointerCapture(event.pointerId)) {
-      event.currentTarget.releasePointerCapture(event.pointerId);
-    }
-
-    gestureRef.current = null;
-  };
+    return () => {
+      window.removeEventListener("scroll", scheduleRender);
+      window.removeEventListener("resize", scheduleRender);
+      window.removeEventListener("pageshow", scheduleRender);
+      resizeObserver.disconnect();
+      intersectionObserver.disconnect();
+      if (frameRef.current) window.cancelAnimationFrame(frameRef.current);
+    };
+  }, [projects.length, transitionCount]);
 
   return (
     <div className={styles.helixBrowser}>
-      <div className={styles.interactiveHelix}>
-        <header className={styles.toolbar}>
-          <div>
-            <p className={styles.toolbarLabel}>Project index</p>
-            <p className={styles.instructions} id="helix-instructions">
-              Pick a name, use the arrow keys, or swipe across the spiral.
-            </p>
-          </div>
+      <noscript>
+        <style>{`
+          .${styles.scrollSection}, .${styles.skipSpiral} { display: none !important; }
+          .${styles.linearFallback} { display: block !important; }
+        `}</style>
+      </noscript>
 
-          <div className={styles.controls} aria-label="Project controls">
-            <button
-              type="button"
-              onClick={() => moveProject(-1)}
-              disabled={activeIndex === 0}
-              aria-label="Show previous project"
-            >
-              <span aria-hidden="true">←</span>
-              Previous
-            </button>
-            <output className={styles.counter} aria-hidden="true">
+      <a className={styles.skipSpiral} href="#after-project-spiral">
+        Skip project spiral
+      </a>
+
+      <section
+        className={styles.scrollSection}
+        ref={sectionRef}
+        style={{ "--track-height": `${trackHeight}svh` } as HelixStyle}
+        aria-label="Project spiral"
+        aria-describedby="spiral-instructions"
+      >
+        <div className={styles.stickyStage} ref={stageRef}>
+          <header className={styles.stageHeader} aria-hidden="true">
+            <p>Project archive</p>
+            <p className={styles.modeIndicator}>
+              <span>spiral</span>
+              <i />
+              <span>scroll</span>
+            </p>
+            <p className={styles.stageCounter}>
               {String(activeIndex + 1).padStart(2, "0")} /{" "}
               {String(projects.length).padStart(2, "0")}
-            </output>
-            <button
-              type="button"
-              onClick={() => moveProject(1)}
-              disabled={activeIndex === projects.length - 1}
-              aria-label="Show next project"
-            >
-              Next
-              <span aria-hidden="true">→</span>
-            </button>
-          </div>
-        </header>
+            </p>
+          </header>
 
-        <div className={styles.desktopLayout}>
-          <div
-            className={styles.stage}
-            ref={stageRef}
-            onPointerDown={handlePointerDown}
-            onPointerMove={handlePointerMove}
-            onPointerUp={finishPointerGesture}
-            onPointerCancel={cancelPointerGesture}
-            onLostPointerCapture={cancelPointerGesture}
-            onClickCapture={(event) => {
-              if (!suppressClickRef.current) return;
-              event.preventDefault();
-              event.stopPropagation();
-              suppressClickRef.current = false;
-            }}
-          >
-            <div className={styles.spiral} aria-hidden="true">
-              <span className={styles.spineLabel}>01—07</span>
-              {helixSegments.map((segment) => (
-                <span
-                  className={`${styles.railSegment} ${
-                    segment.front ? styles.railFront : ""
-                  }`}
-                  data-direction={segment.direction}
-                  key={segment.key}
-                  style={segment.style}
-                />
-              ))}
-              {helixRungs.map((rung) => (
-                <span
-                  className={styles.helixRung}
-                  key={rung.key}
-                  style={rung.style}
-                />
-              ))}
+          <p className={styles.instructions} id="spiral-instructions">
+            Scroll to move the projects through the spiral.
+          </p>
+
+          <ol className={styles.cardField}>
+            {projects.map((project, index) => {
+              const initialGeometry = getCardGeometry(
+                index,
+                0,
+                projects.length,
+                DEFAULT_SCENE.width,
+                DEFAULT_SCENE.height
+              );
+              const titleId = `spiral-title-${project.slug}`;
+              const summaryId = `spiral-summary-${project.slug}`;
+
+              return (
+                <li
+                  className={styles.helixCard}
+                  data-active={index === activeIndex ? "true" : "false"}
+                  key={project.slug}
+                  ref={(element) => {
+                    cardRefs.current[index] = element;
+                  }}
+                  style={{
+                    ...initialGeometry.style,
+                    zIndex: initialGeometry.zIndex,
+                  }}
+                >
+                  <article>
+                    <Link
+                      className={styles.projectCard}
+                      href={`/work/${project.slug}`}
+                      aria-current={index === activeIndex ? "true" : undefined}
+                      aria-labelledby={titleId}
+                      aria-describedby={summaryId}
+                      onFocus={() => scrollToProject(index, "auto")}
+                    >
+                      <div className={styles.projectArtwork} aria-hidden="true">
+                        <ProjectSketch slug={project.slug} />
+                      </div>
+
+                      <div className={styles.cardCaption}>
+                        <span className={styles.cardNumber}>
+                          {String(index + 1).padStart(2, "0")}
+                        </span>
+                        <div>
+                          <h3 id={titleId}>{project.title}</h3>
+                          <p>{project.subtitle}</p>
+                        </div>
+                        <span className={styles.cardOpen} aria-hidden="true">
+                          ↗
+                        </span>
+                      </div>
+
+                      <span className={styles.srOnly} id={summaryId}>
+                        {project.summary}
+                      </span>
+                    </Link>
+                  </article>
+                </li>
+              );
+            })}
+          </ol>
+
+          <footer className={styles.stageFooter}>
+            <div className={styles.progressTrack} aria-hidden="true">
+              <span />
             </div>
 
-            <div
-              className={styles.helixTabs}
-              role="tablist"
-              aria-label="Projects"
-              aria-describedby="helix-instructions"
-              aria-orientation="vertical"
-            >
-              {projects.map((project, index) => {
-                const slot = getSlot(index, activeIndex, projects.length);
-                const previousSlot = getSlot(
-                  index,
-                  previousIndex,
-                  projects.length
-                );
-                const wrapped = Math.abs(slot - previousSlot) > 3;
-
-                return (
-                  <button
-                    className={styles.helixTab}
-                    data-slot={slot}
-                    data-wrapped={wrapped ? "true" : undefined}
-                    id={`helix-tab-${project.slug}`}
-                    aria-controls={`helix-panel-${project.slug}`}
-                    aria-label={project.title}
-                    aria-selected={index === activeIndex}
-                    key={project.slug}
-                    onClick={() => selectProject(index)}
-                    onKeyDown={handleTabKeyDown}
-                    ref={(element) => {
-                      tabRefs.current[index] = element;
-                    }}
-                    role="tab"
-                    tabIndex={index === activeIndex ? 0 : -1}
-                    type="button"
-                  >
-                    <span className={styles.tabNumber}>
-                      {String(index + 1).padStart(2, "0")}
-                    </span>
-                    <span className={styles.tabTitle} aria-hidden="true">
-                      {project.slug === "ocs" ? "OCS" : project.title}
-                    </span>
-                    <span className={styles.tabNode} aria-hidden="true" />
-                  </button>
-                );
-              })}
-            </div>
-          </div>
-
-          <div className={styles.panelStack}>
-            {projects.map((project, index) => (
-              <section
-                className={styles.projectPanel}
-                data-accent={index % 3}
-                hidden={index !== activeIndex}
-                id={`helix-panel-${project.slug}`}
-                aria-labelledby={`helix-tab-${project.slug}`}
-                key={project.slug}
-                role="tabpanel"
-              >
-                <div className={styles.panelTopline}>
-                  <p>{project.subtitle}</p>
+            <nav className={styles.projectStops} aria-label="Jump to a project">
+              {projects.map((project, index) => (
+                <button
+                  type="button"
+                  aria-current={index === activeIndex ? "step" : undefined}
+                  key={project.slug}
+                  onClick={() => scrollToProject(index)}
+                >
                   <span>{String(index + 1).padStart(2, "0")}</span>
-                </div>
-
-                <div className={styles.panelSketch}>
-                  <ProjectSketch slug={project.slug} />
-                </div>
-
-                <div className={styles.panelCopy}>
-                  <h3>{project.title}</h3>
-                  <p>{project.summary}</p>
-                </div>
-
-                <div className={styles.panelFooter}>
-                  <p>
-                    <span>Where it’s at</span>
-                    {project.recognition}
-                    {project.date ? ` · ${project.date}` : ""}
-                  </p>
-                  <Link href={`/work/${project.slug}`}>
-                    Open {project.title} <span aria-hidden="true">↗</span>
-                  </Link>
-                </div>
-              </section>
-            ))}
-          </div>
+                  <span>{project.slug === "ocs" ? "OCS" : project.title}</span>
+                </button>
+              ))}
+            </nav>
+          </footer>
         </div>
-
-        <p className={styles.liveStatus} aria-live="polite" aria-atomic="true">
-          {activeProject.title}, project {activeIndex + 1} of {projects.length}
-        </p>
-      </div>
+      </section>
 
       <ol className={styles.linearFallback}>
         {projects.map((project, index) => (

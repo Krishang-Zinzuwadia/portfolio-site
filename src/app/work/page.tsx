@@ -91,9 +91,8 @@ export default function WorkPage() {
             <p className={styles.sectionLabel}>Projects</p>
             <h2 id="projects-title">All seven, starting with Helios</h2>
             <p>
-              Helios is where most of my time goes right now. After that: an
-              agent that phones home, an offline canvas, a skill marketplace,
-              desktop automation, recruitment software, and terminal chat.
+              Scroll through the stack. Each project comes forward in turn,
+              starting with Helios and ending with Hermes.
             </p>
           </header>
 
@@ -102,6 +101,8 @@ export default function WorkPage() {
 
         <aside
           className={styles.readingNote}
+          id="after-project-spiral"
+          tabIndex={-1}
           aria-labelledby="reading-note-title"
         >
           <p className={styles.sectionLabel}>Sources</p>

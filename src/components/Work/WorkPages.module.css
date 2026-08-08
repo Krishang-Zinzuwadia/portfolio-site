@@ -357,6 +357,11 @@
   border-bottom: 1px solid var(--wp-rule);
 }
 
+.readingNote:focus-visible {
+  outline: 3px solid var(--wp-red);
+  outline-offset: 0.5rem;
+}
+
 .readingNote h2 {
   font-size: clamp(2rem, 3vw, 3rem);
   line-height: 1.05;
