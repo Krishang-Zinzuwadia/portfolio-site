@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 
 import {
@@ -27,9 +28,13 @@ export default function WorkingPapersPortfolio() {
       </a>
 
       <header className={styles.masthead}>
-        <a className={styles.nameplate} href="#top">
-          <strong>Krishang Zinzuwadia</strong>
-          <span>Computer science student at VIT</span>
+        <a
+          className={styles.nameplate}
+          href="#top"
+          aria-label="Krishang Zinzuwadia, back to top"
+        >
+          <strong>KZ</strong>
+          <span>Vellore / 2026</span>
         </a>
 
         <nav className={styles.primaryNav} aria-label="Primary navigation">
@@ -47,29 +52,38 @@ export default function WorkingPapersPortfolio() {
       <main id="main-content">
         <section className={styles.hero} aria-labelledby="hero-title">
           <div className={styles.heroFrame}>
-            <p className={styles.heroLabel}>Opening note</p>
-            <h1 className={styles.heroTitle} id="hero-title">
-              Most of these projects started with one irritating failure.
-            </h1>
+            <div className={styles.heroCopy}>
+              <p className={styles.heroName}>Krishang Zinzuwadia</p>
 
-            <p className={styles.heroOrigin}>
-              I usually end up working on the part a quick demo skips:
-              permissions, offline state, retries, and checking whether an
-              action actually worked.
-            </p>
+              <h1 className={styles.heroTitle} id="hero-title">
+                I get curious when software stops behaving.
+              </h1>
 
-            <aside className={styles.heroBio} aria-label="About Krishang">
-              <p>
-                I’m Krishang, a CS student at VIT. I mostly write TypeScript,
-                Python, and Rust. Each project page says what I owned, what I
-                measured, and what still needs work.
+              <p className={styles.heroDeck}>
+                I’m a computer science student at VIT building agent tools,
+                local-first software, and small utilities. I care about
+                permissions, offline behavior, and what happens after an action
+                fails.
               </p>
-            </aside>
 
-            <nav className={styles.heroActions} aria-label="Portfolio views">
-              <Link href="/work/quark">Start with Quark</Link>
-              <Link href="/mac">Open the Macintosh version</Link>
-            </nav>
+              <nav className={styles.heroActions} aria-label="Portfolio views">
+                <a href="#projects">See the projects</a>
+                <Link href="/mac">Open the Macintosh portfolio</Link>
+              </nav>
+
+              <p className={styles.heroStack}>TypeScript · Python · Rust</p>
+            </div>
+
+            <div className={styles.heroArtwork}>
+              <Image
+                className={styles.heroImage}
+                src="/assets/editorial/hero-system-orbit.webp"
+                alt=""
+                fill
+                preload
+                sizes="(max-width: 768px) 100vw, 65vw"
+              />
+            </div>
           </div>
         </section>
 
