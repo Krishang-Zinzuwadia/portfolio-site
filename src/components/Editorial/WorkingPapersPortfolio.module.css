@@ -242,7 +242,7 @@
   z-index: 3;
   top: 8%;
   left: -5%;
-  width: 62%;
+  width: 56%;
   height: auto;
   transform: rotate(-3deg);
 }
@@ -894,7 +894,7 @@
   .heroPhone {
     top: 8%;
     left: -7%;
-    width: 64%;
+    width: 58%;
   }
 
   .sectionHeading,
@@ -992,7 +992,7 @@
   .heroPhone {
     top: 10%;
     left: -8%;
-    width: 66%;
+    width: 60%;
   }
 
   .heroSketch {
@@ -1124,7 +1124,7 @@
   .heroPhone {
     top: 9%;
     left: -10%;
-    width: 68%;
+    width: 62%;
   }
 
   .heroSketch {
