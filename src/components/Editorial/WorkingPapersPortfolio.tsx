@@ -17,8 +17,15 @@ import {
 import styles from "./WorkingPapersPortfolio.module.css";
 
 const resumePath = "/Krishang-Zinzuwadia-Resume.pdf";
-const leadProjects = projects.slice(0, 3);
-const additionalProjects = projects.slice(3);
+const editorialProjects = [
+  "helios",
+  "aisle",
+  "scatterfield",
+  "quark",
+  "ocs",
+  "hermes",
+  "atlas",
+].map((slug) => projects.find((project) => project.slug === slug)!);
 
 export default function WorkingPapersPortfolio() {
   return (
@@ -101,85 +108,42 @@ export default function WorkingPapersPortfolio() {
           <header className={styles.sectionHeading}>
             <p className={styles.marginLabel}>Projects</p>
             <div>
-              <h2 id="projects-title">Larger projects</h2>
+              <h2 id="projects-title">Seven projects</h2>
               <p>
-                Seven projects, with notes on what I built, the trade-offs I
-                made, and what still needs work.
+                Start with Helios. It’s the local-model runtime I’m putting the
+                most work into. The other six cover agent tools, an offline
+                canvas, desktop automation, recruitment software, and
+                peer-to-peer messaging.
               </p>
             </div>
           </header>
 
-          <div className={styles.leadProjects}>
-            {leadProjects.map((project) => {
-              const presentation = getProjectPresentation(project.slug);
-
-              return (
-                <article className={styles.leadProject} key={project.slug}>
-                  <div className={styles.projectDrawing}>
-                    <span className={styles.projectInitial}>
-                      {presentation.initial}
-                    </span>
-                    <ProjectSketch slug={project.slug} />
-                    <p>{presentation.hook}</p>
-                  </div>
-
-                  <div className={styles.leadProjectCopy}>
-                    <p className={styles.projectKind}>{project.subtitle}</p>
-                    <h3>
-                      <Link href={`/work/${project.slug}`}>
-                        {project.title}
-                      </Link>
-                    </h3>
-                    <p className={styles.projectSummary}>
-                      {presentation.summary}
-                    </p>
-
-                    <dl className={styles.projectFacts}>
-                      <div>
-                        <dt>My work</dt>
-                        <dd>{project.caseStudy.role[0]}</dd>
-                      </div>
-                      <div>
-                        <dt>Result</dt>
-                        <dd>{project.recognition}</dd>
-                      </div>
-                    </dl>
-
-                    <Link
-                      className={styles.readLink}
-                      href={`/work/${project.slug}`}
-                    >
-                      Open {project.title}
-                    </Link>
-                  </div>
-                </article>
-              );
-            })}
-          </div>
-
-          <div className={styles.moreProjects}>
-            <header className={styles.moreProjectsHeading}>
-              <p>Four more projects</p>
-              <span>
-                Helios and Atlas run agents locally. OCS handles applications
-                and interviews at scale. Hermes is a Rust peer-to-peer
-                messenger.
-              </span>
+          <div className={styles.projectIndex}>
+            <header className={styles.projectIndexHeading}>
+              <p>Project index · 01—07</p>
+              <span>Current focus: Helios</span>
             </header>
 
-            <div className={styles.moreProjectsGrid}>
-              {additionalProjects.map((project) => {
+            <div className={styles.projectGrid}>
+              {editorialProjects.map((project) => {
                 const presentation = getProjectPresentation(project.slug);
 
                 return (
-                  <article className={styles.moreProject} key={project.slug}>
+                  <article className={styles.projectCard} key={project.slug}>
                     <div className={styles.smallDrawing}>
                       <span className={styles.projectInitial}>
                         {presentation.initial}
                       </span>
                       <ProjectSketch slug={project.slug} />
                     </div>
-                    <p className={styles.projectKind}>{project.subtitle}</p>
+                    <p className={styles.projectKind}>
+                      {project.slug === "helios" ? (
+                        <span className={styles.currentFocus}>
+                          Current focus ·{" "}
+                        </span>
+                      ) : null}
+                      {project.subtitle}
+                    </p>
                     <h3>
                       <Link href={`/work/${project.slug}`}>
                         {project.title}
@@ -192,7 +156,7 @@ export default function WorkingPapersPortfolio() {
                         <dd>{project.caseStudy.role[0]}</dd>
                       </div>
                       <div>
-                        <dt>Result</dt>
+                        <dt>Status</dt>
                         <dd>{project.recognition}</dd>
                       </div>
                     </dl>
@@ -205,11 +169,13 @@ export default function WorkingPapersPortfolio() {
                   </article>
                 );
               })}
-            </div>
 
-            <Link className={styles.allWorkLink} href="/work">
-              View all project pages
-            </Link>
+              <Link className={styles.projectEndcap} href="/work">
+                <span>Complete index</span>
+                <strong>View all project pages</strong>
+                <i aria-hidden="true">↗</i>
+              </Link>
+            </div>
           </div>
         </section>
 
@@ -292,30 +258,69 @@ export default function WorkingPapersPortfolio() {
           id="about"
           aria-labelledby="about-title"
         >
-          <p className={styles.marginLabel}>About</p>
+          <header className={styles.aboutLead}>
+            <p className={styles.marginLabel}>About</p>
+            <h2 id="about-title">I care what happens after it works once.</h2>
+          </header>
 
-          <div className={styles.aboutCopy}>
-            <h2 id="about-title">VIT, ACM, and a lot of CTFs</h2>
-            <p>
-              I’m a computer science student at VIT Vellore and a core committee
-              member in ACM-VIT’s tech domain. I’ve judged and helped run
-              Code2Create for 1,500+ participants, built a cryptic hunt played
-              by 400+ people, and taught a MERN workshop. I also compete in
-              CTFs; in April 2026, my team reached first in India and seventh
-              worldwide on CTFTime.
+          <div className={styles.aboutNarrative}>
+            <p className={styles.aboutPrimary}>
+              I’m Krishang, a computer science student at VIT Vellore. Most of
+              my work sits between agent systems, developer tools, and security.
+              The first demo is rarely the interesting part; I keep going until
+              permissions, recovery, offline state, and failure paths make
+              sense.
             </p>
-            <div className={styles.aboutLinks}>
-              <a href={identity.ctftime} target="_blank" rel="noreferrer">
-                CTFTime
-              </a>
-              <a href={resumePath} target="_blank" rel="noreferrer">
-                Résumé
-              </a>
+
+            <div className={styles.aboutSecondary}>
+              <p>
+                At ACM-VIT, I’ve judged and helped run Code2Create for more than
+                1,500 participants, built a cryptic hunt played by 400+ people,
+                and taught a MERN workshop. I also compete in CTFs. In April
+                2026, my team ranked first in India and seventh worldwide on
+                CTFTime.
+              </p>
+              <div className={styles.aboutLinks}>
+                <a href={identity.ctftime} target="_blank" rel="noreferrer">
+                  See CTFTime
+                </a>
+                <a href={resumePath} target="_blank" rel="noreferrer">
+                  Read my résumé
+                </a>
+              </div>
             </div>
           </div>
 
+          <dl className={styles.aboutFacts}>
+            <div>
+              <dt>Study</dt>
+              <dd>
+                <strong>B.Tech CSE</strong>
+                <span>VIT Vellore · 2028</span>
+              </dd>
+            </div>
+            <div>
+              <dt>Community</dt>
+              <dd>
+                <strong>ACM-VIT</strong>
+                <span>Core tech committee</span>
+              </dd>
+            </div>
+            <div>
+              <dt>Events</dt>
+              <dd>
+                <strong>1,500+ / 400+</strong>
+                <span>Code2Create / cryptic hunt</span>
+              </dd>
+            </div>
+          </dl>
+
           <aside className={styles.results} aria-labelledby="results-title">
-            <h3 id="results-title">Competition results</h3>
+            <header className={styles.resultsHeader}>
+              <p>Competition ledger</p>
+              <h3 id="results-title">Recent results</h3>
+              <span>Six finishes · Oct 2025—Apr 2026</span>
+            </header>
             <ul>
               {achievements.map((achievement) => (
                 <li key={`${achievement.title}-${achievement.date}`}>
@@ -330,39 +335,68 @@ export default function WorkingPapersPortfolio() {
             </ul>
           </aside>
         </section>
-
-        <section
-          className={styles.contactSection}
-          id="contact"
-          aria-labelledby="contact-title"
-        >
-          <p className={styles.marginLabel}>Contact</p>
-          <div className={styles.contactCopy}>
-            <h2 id="contact-title">Email me</h2>
-            <p>
-              Send me a note if you want to ask about one of these projects,
-              work on an agent or developer tool together, or point out
-              something I got wrong.
-            </p>
-            <a className={styles.emailLink} href={`mailto:${identity.email}`}>
-              {identity.email}
-            </a>
-          </div>
-        </section>
       </main>
 
-      <footer className={styles.footer}>
-        <p>© {new Date().getFullYear()} Krishang Zinzuwadia</p>
-        <nav aria-label="External links">
-          <a href={identity.github} target="_blank" rel="noreferrer">
-            GitHub
+      <footer
+        className={styles.siteFooter}
+        id="contact"
+        aria-labelledby="contact-title"
+      >
+        <div className={styles.footerFrame}>
+          <p className={styles.footerLabel}>Contact</p>
+
+          <div className={styles.footerPitch}>
+            <h2 id="contact-title">Tell me what you’re building.</h2>
+            <p>
+              If you’re working on agents, developer tools, local-first
+              software, or a bug that makes no sense, email me. I read
+              everything.
+            </p>
+          </div>
+
+          <a className={styles.footerEmail} href={`mailto:${identity.email}`}>
+            {identity.email}
           </a>
-          <a href={identity.linkedin} target="_blank" rel="noreferrer">
-            LinkedIn
-          </a>
-          <Link href="/mac">Macintosh</Link>
-        </nav>
-        <a href="#top">Back to top</a>
+
+          <div className={styles.footerDirectory}>
+            <nav className={styles.footerLinks} aria-label="External links">
+              <a href={identity.github} target="_blank" rel="noreferrer">
+                <span>Code</span>
+                <strong>GitHub</strong>
+                <i aria-hidden="true">↗</i>
+              </a>
+              <a href={identity.linkedin} target="_blank" rel="noreferrer">
+                <span>Work</span>
+                <strong>LinkedIn</strong>
+                <i aria-hidden="true">↗</i>
+              </a>
+              <a href={resumePath} target="_blank" rel="noreferrer">
+                <span>Document</span>
+                <strong>Résumé</strong>
+                <i aria-hidden="true">↗</i>
+              </a>
+              <a href={identity.ctftime} target="_blank" rel="noreferrer">
+                <span>Scores</span>
+                <strong>CTFTime</strong>
+                <i aria-hidden="true">↗</i>
+              </a>
+            </nav>
+
+            <Link className={styles.macintoshCard} href="/mac">
+              <span>After hours</span>
+              <strong>Open the Macintosh desk</strong>
+              <small>A second portfolio built like a System 7 desktop.</small>
+              <i aria-hidden="true">↗</i>
+            </Link>
+          </div>
+
+          <div className={styles.footerMeta}>
+            <p>
+              © {new Date().getFullYear()} Krishang Zinzuwadia · Vellore, India
+            </p>
+            <a href="#top">Back to top ↑</a>
+          </div>
+        </div>
       </footer>
     </div>
   );
