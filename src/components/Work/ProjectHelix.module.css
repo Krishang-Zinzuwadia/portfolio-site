@@ -1,0 +1,788 @@
+.helixBrowser {
+  --working-paper: var(--wp-paper);
+  --working-paper-deep: var(--wp-paper-deep);
+  --working-ink: var(--wp-ink);
+  --working-red: var(--wp-red);
+  --working-olive: var(--wp-olive);
+  --working-blue: var(--wp-blue);
+  width: min(100%, var(--wp-wide));
+  margin: 0 auto;
+  padding: 0 clamp(1.25rem, 4vw, 4.5rem) clamp(5rem, 8vw, 8rem);
+}
+
+.interactiveHelix {
+  border-block: 1px solid var(--wp-rule);
+}
+
+.toolbar {
+  display: flex;
+  min-height: 6rem;
+  padding: 1rem 1.25rem;
+  border-bottom: 1px solid var(--wp-rule);
+  align-items: center;
+  justify-content: space-between;
+  gap: 2rem;
+}
+
+.toolbarLabel {
+  color: var(--wp-red);
+  font-size: 0.78rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.instructions {
+  max-width: 34rem;
+  margin-top: 0.35rem;
+  color: var(--wp-muted);
+  font-family: var(--font-paper-serif), Georgia, serif;
+  font-size: 0.98rem;
+  line-height: 1.45;
+}
+
+.controls {
+  display: flex;
+  border: 1px solid var(--wp-ink);
+  background: var(--wp-paper);
+  align-items: stretch;
+}
+
+.controls button {
+  display: inline-flex;
+  min-height: 3rem;
+  padding: 0.65rem 0.9rem;
+  border: 0;
+  background: transparent;
+  color: var(--wp-ink);
+  font: inherit;
+  font-size: 0.78rem;
+  font-weight: 800;
+  cursor: pointer;
+  align-items: center;
+  gap: 0.45rem;
+}
+
+.controls button:hover:not(:disabled) {
+  background: var(--wp-ink);
+  color: var(--wp-paper);
+}
+
+.controls button:disabled {
+  color: var(--wp-muted);
+  cursor: not-allowed;
+  opacity: 0.46;
+}
+
+.controls button:focus-visible,
+.helixTab:focus-visible {
+  position: relative;
+  z-index: 40;
+  outline: 3px solid var(--wp-red);
+  outline-offset: 4px;
+}
+
+.counter {
+  display: grid;
+  min-width: 5.2rem;
+  padding-inline: 0.65rem;
+  border-inline: 1px solid var(--wp-ink);
+  color: var(--wp-red);
+  font-family: var(--font-paper-serif), Georgia, serif;
+  font-size: 1rem;
+  font-style: italic;
+  place-items: center;
+}
+
+.desktopLayout {
+  display: grid;
+  min-height: clamp(44rem, 55vw, 50rem);
+  grid-template-columns: minmax(26rem, 0.92fr) minmax(27rem, 1.08fr);
+}
+
+.stage {
+  position: relative;
+  min-width: 0;
+  overflow: hidden;
+  border-right: 1px solid var(--wp-rule);
+  background-image:
+    linear-gradient(
+      to right,
+      transparent calc(50% - 0.5px),
+      var(--wp-rule) calc(50% - 0.5px),
+      var(--wp-rule) calc(50% + 0.5px),
+      transparent calc(50% + 0.5px)
+    ),
+    repeating-linear-gradient(
+      to bottom,
+      transparent 0,
+      transparent calc(5rem - 1px),
+      color-mix(in srgb, var(--wp-ink) 8%, transparent) calc(5rem - 1px),
+      color-mix(in srgb, var(--wp-ink) 8%, transparent) 5rem
+    );
+  perspective: 72rem;
+  overscroll-behavior-inline: contain;
+  touch-action: pan-y pinch-zoom;
+}
+
+.stage::before,
+.stage::after {
+  position: absolute;
+  z-index: 1;
+  left: 1rem;
+  color: var(--wp-muted);
+  font-size: 0.65rem;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  writing-mode: vertical-rl;
+}
+
+.stage::before {
+  top: 1rem;
+  content: "TURN THE INDEX";
+}
+
+.stage::after {
+  bottom: 1rem;
+  content: "HELIOS → HERMES";
+}
+
+.spiral,
+.helixTabs {
+  position: absolute;
+  inset: 0;
+}
+
+.spiral {
+  z-index: 2;
+  width: 14rem;
+  margin-inline: auto;
+  pointer-events: none;
+}
+
+.spiral::before {
+  position: absolute;
+  top: 3%;
+  bottom: 3%;
+  left: 50%;
+  width: 1px;
+  background: var(--wp-rule);
+  content: "";
+}
+
+.spineLabel {
+  position: absolute;
+  top: 1.25rem;
+  left: 50%;
+  padding: 0.25rem 0.45rem;
+  border: 1px solid var(--wp-rule);
+  background: var(--wp-paper);
+  color: var(--wp-olive);
+  font-size: 0.65rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  transform: translateX(-50%);
+}
+
+.helixRung {
+  position: absolute;
+  top: var(--rung-top);
+  left: 50%;
+  width: var(--rung-width);
+  height: 1px;
+  background: var(--wp-olive);
+  opacity: 0.72;
+  transform: translateX(calc(-50% + var(--rung-shift))) rotate(var(--rung-tilt));
+  transform-origin: center;
+}
+
+.railSegment {
+  position: absolute;
+  top: var(--segment-top);
+  left: calc(50% + var(--segment-left));
+  width: var(--segment-width);
+  height: var(--segment-height);
+  background: var(--segment-color);
+  opacity: var(--segment-opacity);
+}
+
+.railSegment[data-direction="right"] {
+  clip-path: polygon(
+    0 0,
+    var(--segment-cap) 0,
+    100% 100%,
+    calc(100% - var(--segment-cap)) 100%
+  );
+}
+
+.railSegment[data-direction="left"] {
+  clip-path: polygon(
+    calc(100% - var(--segment-cap)) 0,
+    100% 0,
+    var(--segment-cap) 100%,
+    0 100%
+  );
+}
+
+.railFront {
+  box-shadow: 0 0 0 1px var(--wp-paper);
+}
+
+.helixRung::before,
+.helixRung::after {
+  position: absolute;
+  top: 50%;
+  width: 0.72rem;
+  aspect-ratio: 1;
+  border: 2px solid currentColor;
+  border-radius: 50%;
+  background: var(--wp-paper);
+  content: "";
+  transform: translateY(-50%);
+}
+
+.helixRung::before {
+  left: -0.35rem;
+  color: var(--left-color);
+  opacity: var(--left-opacity);
+}
+
+.helixRung::after {
+  right: -0.35rem;
+  color: var(--right-color);
+  opacity: var(--right-opacity);
+}
+
+.helixTabs {
+  z-index: 3;
+  transform-style: preserve-3d;
+}
+
+.helixTab {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  display: grid;
+  width: clamp(8.8rem, 13vw, 11.5rem);
+  min-height: 4.2rem;
+  padding: 0.75rem 0.8rem;
+  border: 1px solid var(--wp-ink);
+  border-top: 3px solid var(--wp-blue);
+  background: var(--wp-paper);
+  box-shadow: 0.38rem 0.38rem 0 var(--wp-paper-deep);
+  color: var(--wp-ink);
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+  opacity: var(--slot-opacity);
+  transform: translate(-50%, -50%)
+    translate3d(var(--slot-x), var(--slot-y), var(--slot-z))
+    scale(var(--slot-scale));
+  transition:
+    transform 480ms cubic-bezier(0.22, 1, 0.36, 1),
+    opacity 260ms ease,
+    color 180ms ease,
+    background-color 180ms ease,
+    box-shadow 180ms ease;
+  grid-template-columns: auto 1fr auto;
+  gap: 0.55rem;
+  align-items: center;
+}
+
+.helixTab:nth-child(3n + 2) {
+  border-top-color: var(--wp-red);
+}
+
+.helixTab:nth-child(3n) {
+  border-top-color: var(--wp-olive);
+}
+
+.helixTab[data-wrapped="true"] {
+  transition: none;
+}
+
+.helixTab[aria-selected="true"] {
+  z-index: 20;
+  border-color: var(--wp-ink);
+  border-top-color: var(--wp-red);
+  background: var(--wp-ink);
+  box-shadow: 0.5rem 0.5rem 0 var(--wp-red);
+  color: var(--wp-paper);
+}
+
+.helixTab:hover:not([aria-selected="true"]) {
+  border-top-color: var(--wp-red);
+  background: var(--wp-paper-deep);
+}
+
+.tabNumber {
+  color: var(--wp-red);
+  font-family: var(--font-paper-serif), Georgia, serif;
+  font-size: 0.9rem;
+  font-style: italic;
+}
+
+.helixTab[aria-selected="true"] .tabNumber {
+  color: var(--wp-paper-deep);
+}
+
+.tabTitle {
+  font-family: var(--font-paper-serif), Georgia, serif;
+  font-size: clamp(1rem, 1.5vw, 1.25rem);
+  font-weight: 500;
+  line-height: 1;
+  text-wrap: balance;
+}
+
+.tabNode {
+  width: 0.55rem;
+  aspect-ratio: 1;
+  border: 1px solid currentColor;
+  border-radius: 50%;
+  background: var(--wp-paper);
+}
+
+.helixTab[aria-selected="true"] .tabNode {
+  border-color: var(--wp-red);
+  background: var(--wp-red);
+}
+
+.helixTab[data-slot="0"] {
+  --slot-x: 0rem;
+  --slot-y: 0rem;
+  --slot-z: 7rem;
+  --slot-scale: 1;
+  --slot-opacity: 1;
+  z-index: 20;
+}
+
+.helixTab[data-slot="1"] {
+  --slot-x: clamp(7.5rem, 12vw, 11.5rem);
+  --slot-y: 5.3rem;
+  --slot-z: -3rem;
+  --slot-scale: 0.88;
+  --slot-opacity: 0.8;
+  z-index: 12;
+}
+
+.helixTab[data-slot="2"] {
+  --slot-x: clamp(1.5rem, 3vw, 2.5rem);
+  --slot-y: 10.7rem;
+  --slot-z: -11rem;
+  --slot-scale: 0.76;
+  --slot-opacity: 0.62;
+  z-index: 6;
+}
+
+.helixTab[data-slot="3"] {
+  --slot-x: calc(-1 * clamp(7rem, 11vw, 10.5rem));
+  --slot-y: 16rem;
+  --slot-z: -7rem;
+  --slot-scale: 0.69;
+  --slot-opacity: 0.5;
+  z-index: 3;
+}
+
+.helixTab[data-slot="-1"] {
+  --slot-x: calc(-1 * clamp(7.5rem, 12vw, 11.5rem));
+  --slot-y: -5.3rem;
+  --slot-z: -3rem;
+  --slot-scale: 0.88;
+  --slot-opacity: 0.8;
+  z-index: 12;
+}
+
+.helixTab[data-slot="-2"] {
+  --slot-x: calc(-1 * clamp(1.5rem, 3vw, 2.5rem));
+  --slot-y: -10.7rem;
+  --slot-z: -11rem;
+  --slot-scale: 0.76;
+  --slot-opacity: 0.62;
+  z-index: 6;
+}
+
+.helixTab[data-slot="-3"] {
+  --slot-x: clamp(7rem, 11vw, 10.5rem);
+  --slot-y: -16rem;
+  --slot-z: -7rem;
+  --slot-scale: 0.69;
+  --slot-opacity: 0.5;
+  z-index: 3;
+}
+
+.panelStack {
+  min-width: 0;
+  padding: clamp(2rem, 4vw, 4rem);
+  background: var(--wp-paper);
+}
+
+.projectPanel {
+  display: grid;
+  min-height: 100%;
+  animation: panel-arrive 380ms cubic-bezier(0.22, 1, 0.36, 1) both;
+  grid-template-rows: auto minmax(12rem, 1fr) auto auto;
+  align-content: stretch;
+}
+
+.projectPanel[hidden] {
+  display: none;
+}
+
+.panelTopline {
+  display: flex;
+  min-height: 2.5rem;
+  padding-bottom: 0.8rem;
+  border-bottom: 1px solid var(--wp-rule);
+  color: var(--wp-olive);
+  font-size: 0.78rem;
+  font-weight: 800;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1.5rem;
+}
+
+.panelTopline p {
+  max-width: 29rem;
+}
+
+.panelTopline span {
+  color: var(--wp-red);
+  font-family: var(--font-paper-serif), Georgia, serif;
+  font-size: 1.1rem;
+  font-style: italic;
+}
+
+.panelSketch {
+  display: grid;
+  width: min(100%, 22rem);
+  margin: clamp(1.35rem, 3vw, 2.2rem) auto;
+  place-items: center;
+}
+
+.panelCopy {
+  padding-top: 1.3rem;
+  border-top: 2px solid var(--wp-blue);
+}
+
+.projectPanel[data-accent="1"] .panelCopy {
+  border-top-color: var(--wp-red);
+}
+
+.projectPanel[data-accent="2"] .panelCopy {
+  border-top-color: var(--wp-olive);
+}
+
+.panelCopy h3,
+.fallbackCopy h3 {
+  font-family: var(--font-paper-serif), Georgia, serif;
+  font-weight: 500;
+  letter-spacing: -0.045em;
+  text-wrap: balance;
+}
+
+.panelCopy h3 {
+  font-size: clamp(2.8rem, 4.8vw, 4.9rem);
+  line-height: 0.92;
+}
+
+.panelCopy > p {
+  max-width: 42rem;
+  margin-top: 1.15rem;
+  color: var(--wp-ink-soft);
+  font-family: var(--font-paper-serif), Georgia, serif;
+  font-size: clamp(1.04rem, 1.45vw, 1.22rem);
+  line-height: 1.52;
+}
+
+.panelFooter {
+  display: grid;
+  margin-top: 1.5rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--wp-rule);
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 1.5rem;
+  align-items: end;
+}
+
+.panelFooter p {
+  max-width: 32rem;
+  color: var(--wp-muted);
+  font-size: 0.82rem;
+  line-height: 1.5;
+}
+
+.panelFooter p span {
+  display: block;
+  margin-bottom: 0.2rem;
+  color: var(--wp-olive);
+  font-family: var(--font-paper-serif), Georgia, serif;
+  font-size: 0.95rem;
+  font-style: italic;
+}
+
+.panelFooter a {
+  padding-bottom: 0.2rem;
+  border-bottom: 1px solid currentColor;
+  color: var(--wp-red);
+  font-size: 0.82rem;
+  font-weight: 800;
+  white-space: nowrap;
+}
+
+.panelFooter a:hover {
+  color: var(--wp-olive);
+}
+
+.liveStatus {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+  border: 0;
+  white-space: nowrap;
+}
+
+.linearFallback {
+  position: relative;
+  display: none;
+  margin: 0;
+  padding: 0 0 0 clamp(3.25rem, 7vw, 4.5rem);
+  list-style: none;
+}
+
+.linearFallback > li {
+  position: relative;
+  isolation: isolate;
+  border-top: 1px solid var(--wp-rule);
+}
+
+.linearFallback > li::before,
+.linearFallback > li::after {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: calc(-1 * clamp(2.75rem, 5.5vw, 3.6rem));
+  z-index: 0;
+  width: clamp(1.1rem, 2.5vw, 1.55rem);
+  content: "";
+  pointer-events: none;
+}
+
+.linearFallback > li::before {
+  background: var(--wp-red);
+  clip-path: polygon(0 0, 12% 0, 100% 100%, 88% 100%);
+}
+
+.linearFallback > li::after {
+  background: var(--wp-blue);
+  clip-path: polygon(88% 0, 100% 0, 12% 100%, 0 100%);
+}
+
+.linearFallback > li:nth-child(even)::before {
+  clip-path: polygon(88% 0, 100% 0, 12% 100%, 0 100%);
+}
+
+.linearFallback > li:nth-child(even)::after {
+  clip-path: polygon(0 0, 12% 0, 100% 100%, 88% 100%);
+}
+
+.linearFallback > li:last-child {
+  border-bottom: 1px solid var(--wp-rule);
+}
+
+.fallbackCard {
+  position: relative;
+  z-index: 2;
+}
+
+.fallbackCard::before {
+  position: absolute;
+  top: 3.05rem;
+  right: 100%;
+  width: clamp(2.75rem, 5.5vw, 3.6rem);
+  height: 1px;
+  background: var(--wp-olive);
+  content: "";
+  pointer-events: none;
+}
+
+.fallbackCard::after {
+  position: absolute;
+  top: 2.72rem;
+  right: calc(100% + clamp(1.05rem, 2.15vw, 1.45rem));
+  width: 0.7rem;
+  aspect-ratio: 1;
+  border: 2px solid var(--wp-red);
+  border-radius: 50%;
+  background: var(--wp-paper);
+  content: "";
+  pointer-events: none;
+}
+
+.linearFallback > li:nth-child(even) .fallbackCard::after {
+  border-color: var(--wp-blue);
+}
+
+.fallbackCard > a {
+  display: grid;
+  padding: 2.5rem 0;
+  color: inherit;
+  grid-template-columns: minmax(11rem, 0.72fr) minmax(0, 1fr);
+  gap: clamp(1.5rem, 5vw, 4rem);
+  align-items: center;
+}
+
+.fallbackSketch {
+  display: grid;
+  place-items: center;
+}
+
+.fallbackEyebrow {
+  color: var(--wp-olive);
+  font-size: 0.76rem;
+  font-weight: 800;
+}
+
+.fallbackCopy h3 {
+  margin-top: 0.55rem;
+  font-size: clamp(2.35rem, 8vw, 3.8rem);
+  line-height: 0.95;
+}
+
+.fallbackCopy > p:not(.fallbackEyebrow) {
+  max-width: 38rem;
+  margin-top: 1rem;
+  color: var(--wp-ink-soft);
+  font-family: var(--font-paper-serif), Georgia, serif;
+  font-size: 1.08rem;
+  line-height: 1.55;
+}
+
+.fallbackLink {
+  display: inline-block;
+  margin-top: 1.2rem;
+  border-bottom: 1px solid currentColor;
+  color: var(--wp-red);
+  font-size: 0.82rem;
+  font-weight: 800;
+}
+
+@keyframes panel-arrive {
+  from {
+    opacity: 0;
+    transform: translateY(0.55rem);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (max-width: 70rem) {
+  .desktopLayout {
+    min-height: 45rem;
+    grid-template-columns: minmax(23rem, 0.9fr) minmax(24rem, 1.1fr);
+  }
+
+  .panelStack {
+    padding: 2rem;
+  }
+
+  .panelCopy h3 {
+    font-size: clamp(2.7rem, 5vw, 4rem);
+  }
+}
+
+@media (max-width: 52rem) {
+  .interactiveHelix {
+    display: none;
+  }
+
+  .linearFallback {
+    display: block;
+  }
+
+  .helixBrowser {
+    padding-bottom: 5rem;
+  }
+}
+
+@media (max-width: 36rem) {
+  .fallbackCard > a {
+    grid-template-columns: 1fr;
+  }
+
+  .fallbackSketch {
+    width: min(100%, 20rem);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .interactiveHelix {
+    display: none;
+  }
+
+  .linearFallback {
+    display: block;
+  }
+
+  .fallbackCard > a {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) and (max-width: 52rem) {
+  .linearFallback {
+    display: block;
+  }
+}
+
+@media (forced-colors: active) {
+  .controls,
+  .helixTab,
+  .panelCopy,
+  .fallbackCard {
+    forced-color-adjust: auto;
+  }
+
+  .controls button:hover:not(:disabled),
+  .helixTab[aria-selected="true"] {
+    background: Highlight;
+    color: HighlightText;
+  }
+
+  .helixRung::before,
+  .helixRung::after {
+    background: Canvas;
+    color: CanvasText;
+  }
+}
+
+@media print {
+  .interactiveHelix {
+    display: none;
+  }
+
+  .linearFallback {
+    display: block;
+  }
+
+  .fallbackSketch {
+    display: none;
+  }
+
+  .linearFallback {
+    padding-left: 0;
+  }
+
+  .linearFallback > li::before,
+  .linearFallback > li::after,
+  .fallbackCard::before,
+  .fallbackCard::after {
+    display: none;
+  }
+}

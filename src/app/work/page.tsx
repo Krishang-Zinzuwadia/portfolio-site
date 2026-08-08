@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 
-import ProjectContentsEntry from "@/components/Work/ProjectContentsEntry";
+import { getProjectPresentation } from "@/components/Editorial/project-presentation";
+import ProjectHelix from "@/components/Work/ProjectHelix";
 import WorkFooter from "@/components/Work/WorkFooter";
 import WorkHeader from "@/components/Work/WorkHeader";
 import WorkJsonLd from "@/components/Work/WorkJsonLd";
@@ -10,6 +11,15 @@ import { SITE_NAME, WORK_DESCRIPTION } from "@/lib/site";
 
 const title = `Projects | ${SITE_NAME}`;
 const description = WORK_DESCRIPTION;
+
+const helixProjects = projects.map((project) => ({
+  slug: project.slug,
+  title: project.title,
+  subtitle: project.subtitle,
+  summary: getProjectPresentation(project.slug).summary,
+  recognition: project.recognition,
+  date: project.date,
+}));
 
 export const metadata: Metadata = {
   title,
@@ -87,11 +97,7 @@ export default function WorkPage() {
             </p>
           </header>
 
-          <div className={styles.contentsList}>
-            {projects.map((project) => (
-              <ProjectContentsEntry key={project.slug} project={project} />
-            ))}
-          </div>
+          <ProjectHelix projects={helixProjects} />
         </section>
 
         <aside
