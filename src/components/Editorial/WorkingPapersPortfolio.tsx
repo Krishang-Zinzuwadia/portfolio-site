@@ -33,8 +33,8 @@ export default function WorkingPapersPortfolio() {
           href="#top"
           aria-label="Krishang Zinzuwadia, back to top"
         >
-          <strong>KZ</strong>
-          <span>Vellore / 2026</span>
+          <strong>Krishang Zinzuwadia</strong>
+          <span>Computer science student · VIT Vellore</span>
         </a>
 
         <nav className={styles.primaryNav} aria-label="Primary navigation">
@@ -53,37 +53,43 @@ export default function WorkingPapersPortfolio() {
         <section className={styles.hero} aria-labelledby="hero-title">
           <div className={styles.heroFrame}>
             <div className={styles.heroCopy}>
-              <p className={styles.heroName}>Krishang Zinzuwadia</p>
+              <p className={styles.heroRole}>Selected work</p>
 
               <h1 className={styles.heroTitle} id="hero-title">
-                I get curious when software stops behaving.
+                I build the parts a quick demo skips.
               </h1>
 
               <p className={styles.heroDeck}>
-                I’m a computer science student at VIT building agent tools,
-                local-first software, and small utilities. I care about
-                permissions, offline behavior, and what happens after an action
-                fails.
+                Quark calls me when a coding agent gets stuck. Scatterfield
+                keeps its canvas working without Wi-Fi. Aisle checks a skill
+                before it can be installed.
               </p>
 
-              <nav className={styles.heroActions} aria-label="Portfolio views">
-                <a href="#projects">See the projects</a>
-                <Link href="/mac">Open the Macintosh portfolio</Link>
-              </nav>
-
-              <p className={styles.heroStack}>TypeScript · Python · Rust</p>
+              <div className={styles.heroActions}>
+                <a href="#projects">Read the projects</a>
+                <a href="#small-tools">Browse small tools</a>
+              </div>
             </div>
 
-            <div className={styles.heroArtwork}>
+            <figure className={styles.heroArtwork} aria-hidden="true">
               <Image
-                className={styles.heroImage}
-                src="/assets/editorial/hero-system-orbit.webp"
+                className={styles.heroPhone}
+                src="/assets/editorial/hero-phone-cutout.png"
                 alt=""
-                fill
+                width={1084}
+                height={928}
                 preload
-                sizes="(max-width: 768px) 100vw, 65vw"
+                sizes="(max-width: 768px) 70vw, 38vw"
               />
-            </div>
+              <div
+                className={`${styles.heroSketch} ${styles.heroScatterfield}`}
+              >
+                <ProjectSketch slug="scatterfield" />
+              </div>
+              <div className={`${styles.heroSketch} ${styles.heroAisle}`}>
+                <ProjectSketch slug="aisle" />
+              </div>
+            </figure>
           </div>
         </section>
 
@@ -97,9 +103,8 @@ export default function WorkingPapersPortfolio() {
             <div>
               <h2 id="projects-title">Larger projects</h2>
               <p>
-                Quark, Scatterfield, and Aisle are the three I’d open first.
-                They cover agent permissions, offline-first product work, and
-                package provenance. The other four are just below them.
+                Seven projects, with notes on what I built, the trade-offs I
+                made, and what still needs work.
               </p>
             </div>
           </header>
