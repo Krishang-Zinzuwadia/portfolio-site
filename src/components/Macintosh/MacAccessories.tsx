@@ -2,6 +2,7 @@
 
 import {
   useEffect,
+  useId,
   useMemo,
   useRef,
   useState,
@@ -9,6 +10,13 @@ import {
   type KeyboardEvent,
 } from "react";
 import styles from "./MacAccessories.module.css";
+import {
+  type AlertSound,
+  type DesktopPattern,
+  type HighlightColor,
+  type HourCycle,
+  type MacPreferences,
+} from "./macPreferences";
 import type { MacSound } from "./useMacSounds";
 
 export type AccessoryId =
@@ -21,12 +29,11 @@ export type AccessoryId =
   | "keyCaps"
   | "notePad"
   | "puzzle"
+  | "slidingPuzzle"
   | "scrapbook"
   | "shortcuts"
   | "secret"
   | "trash";
-
-export type DesktopPattern = "sage" | "platinum" | "blue" | "graphite";
 
 export type AlarmSettings = {
   enabled: boolean;
@@ -34,22 +41,105 @@ export type AlarmSettings = {
   label: string;
 };
 
+export type MacGameWindowId =
+  | "slidingPuzzle"
+  | "minesweeper"
+  | "doom"
+  | "pacman";
+
 type MacAccessoriesProps = {
   id: AccessoryId;
   onSound?: (sound: MacSound) => void;
-  pattern: DesktopPattern;
-  onPatternChange: (pattern: DesktopPattern) => void;
+  preferences: MacPreferences;
+  onPreferencesChange: (preferences: MacPreferences) => void;
+  muted: boolean;
+  volume: number;
+  onToggleMuted?: () => void;
+  onVolumeChange?: (volume: number) => void;
+  onResetPreferences: () => void;
+  onResetWindowLayout: () => void;
+  onOpenGame: (game: MacGameWindowId) => void;
   trashEmpty: boolean;
   onEmptyTrash: () => void;
   alarmSettings: AlarmSettings;
   onAlarmChange: (settings: AlarmSettings) => void;
 };
 
-const PATTERNS: Array<{ id: DesktopPattern; label: string }> = [
-  { id: "sage", label: "Sage dither" },
-  { id: "platinum", label: "Platinum" },
-  { id: "blue", label: "Blueberry" },
+const PATTERNS: Array<{
+  id: DesktopPattern;
+  label: string;
+  detail: string;
+}> = [
+  { id: "sage", label: "Sage", detail: "Original dither" },
+  { id: "platinum", label: "Platinum", detail: "System 7 neutral" },
+  { id: "blue", label: "Blueberry", detail: "Diagonal weave" },
+  { id: "graphite", label: "Graphite", detail: "Dark checkerboard" },
+];
+
+const HIGHLIGHT_COLORS: Array<{
+  id: HighlightColor;
+  label: string;
+}> = [
   { id: "graphite", label: "Graphite" },
+  { id: "blueberry", label: "Blueberry" },
+  { id: "grape", label: "Grape" },
+  { id: "rose", label: "Rose" },
+];
+
+const ALERT_SOUNDS: Array<{
+  id: AlertSound;
+  label: string;
+  detail: string;
+}> = [
+  { id: "alarm", label: "Bell", detail: "Three bright rings" },
+  { id: "success", label: "Glass", detail: "Warm three-note chord" },
+  { id: "select", label: "Chirp", detail: "Short ascending tick" },
+  { id: "error", label: "Sosumi", detail: "Low two-note alert" },
+];
+
+type ControlPanelId =
+  | "appearance"
+  | "finder"
+  | "sound"
+  | "clock"
+  | "accessibility";
+
+const CONTROL_PANEL_SECTIONS: Array<{
+  id: ControlPanelId;
+  label: string;
+  mark: string;
+  description: string;
+}> = [
+  {
+    id: "appearance",
+    label: "Appearance",
+    mark: "▦",
+    description: "Desktop pattern and Finder highlight color.",
+  },
+  {
+    id: "finder",
+    label: "Finder",
+    mark: "▣",
+    description: "Choose how desktop items and hints behave.",
+  },
+  {
+    id: "sound",
+    label: "Sound",
+    mark: "◖",
+    description: "Macintosh audio, alert volume, and alarm chime.",
+  },
+  {
+    id: "clock",
+    label: "Date & Time",
+    mark: "◷",
+    description: "Format the live clock in the Finder menu bar.",
+  },
+  {
+    id: "accessibility",
+    label: "Easy Access",
+    mark: "◐",
+    description: "Increase contrast and quiet interface motion.",
+  },
 ];
 
 const KEY_ROWS = [
@@ -61,7 +151,6 @@ const KEY_ROWS = [
 
 const SOLVED_PUZZLE = [1, 2, 3, 4, 5, 6, 7, 8, 0];
 const SHUFFLED_PUZZLE = [1, 2, 3, 7, 4, 6, 0, 5, 8];
-
 function AboutMacintosh() {
   return (
     <div className={styles.aboutMac}>
@@ -100,10 +189,10 @@ function AlarmClock({
   onSound,
   alarmSettings,
   onAlarmChange,
-}: Pick<
-  MacAccessoriesProps,
-  "onSound" | "alarmSettings" | "onAlarmChange"
->) {
+  alertSound,
+}: Pick<MacAccessoriesProps, "onSound" | "alarmSettings" | "onAlarmChange"> & {
+  alertSound: AlertSound;
+}) {
   const [now, setNow] = useState(() => new Date());
   const [draftTime, setDraftTime] = useState(alarmSettings.time);
   const [draftLabel, setDraftLabel] = useState(alarmSettings.label);
@@ -196,7 +285,7 @@ function AlarmClock({
           >
             Turn Off
           </button>
-          <button type="button" onClick={() => onSound?.("alarm")}>
+          <button type="button" onClick={() => onSound?.(alertSound)}>
             Test Chime
           </button>
         </div>
@@ -319,7 +408,9 @@ function formatCalculatorValue(value: number) {
   if (!Number.isFinite(value)) return "Error";
   const rounded = Math.round(value * 100_000_000) / 100_000_000;
   const rendered = String(rounded);
-  return rendered.length <= 11 ? rendered : rounded.toExponential(5).slice(0, 11);
+  return rendered.length <= 11
+    ? rendered
+    : rounded.toExponential(5).slice(0, 11);
 }
 
 function Calculator({ onSound }: Pick<MacAccessoriesProps, "onSound">) {
@@ -434,12 +525,16 @@ function Calculator({ onSound }: Pick<MacAccessoriesProps, "onSound">) {
       onSound?.("key");
     } else if (button === "%") {
       const value = Number(display);
-      setDisplay(Number.isFinite(value) ? formatCalculatorValue(value / 100) : "Error");
+      setDisplay(
+        Number.isFinite(value) ? formatCalculatorValue(value / 100) : "Error"
+      );
       setWaitingForOperand(true);
       onSound?.("key");
     } else if (button === "⌫") {
       if (!waitingForOperand && display !== "Error") {
-        setDisplay((current) => (current.length > 1 ? current.slice(0, -1) : "0"));
+        setDisplay((current) =>
+          current.length > 1 ? current.slice(0, -1) : "0"
+        );
       }
       onSound?.("key");
     } else if (button === "=") setOperator(null);
@@ -529,36 +624,585 @@ function Chooser({ onSound }: Pick<MacAccessoriesProps, "onSound">) {
   );
 }
 
-function ControlPanels({
-  pattern,
-  onPatternChange,
-  onSound,
-}: Pick<MacAccessoriesProps, "pattern" | "onPatternChange" | "onSound">) {
+function formatControlClock(date: Date, preferences: MacPreferences) {
+  const options: Intl.DateTimeFormatOptions = {
+    hour: "numeric",
+    minute: "2-digit",
+  };
+
+  if (preferences.showWeekday) options.weekday = "short";
+  if (preferences.showSeconds) options.second = "2-digit";
+  if (preferences.hourCycle !== "system") {
+    options.hour12 = preferences.hourCycle === "12";
+  }
+
+  return new Intl.DateTimeFormat(undefined, options).format(date);
+}
+
+function SettingSwitch({
+  checked,
+  label,
+  description,
+  onChange,
+  disabled = false,
+}: {
+  checked: boolean;
+  label: string;
+  description: string;
+  onChange: () => void;
+  disabled?: boolean;
+}) {
   return (
-    <div className={styles.controlPanels}>
-      <p className={styles.eyebrow}>DESKTOP PATTERN</p>
-      <h3>Choose a classic desktop.</h3>
-      <div className={styles.patternGrid}>
-        {PATTERNS.map((option) => (
+    <button
+      type="button"
+      className={styles.settingSwitch}
+      role="switch"
+      aria-checked={checked}
+      disabled={disabled}
+      onClick={onChange}
+    >
+      <span className={styles.switchBox} aria-hidden="true">
+        {checked ? "✓" : ""}
+      </span>
+      <span className={styles.settingCopy}>
+        <strong>{label}</strong>
+        <small>{description}</small>
+      </span>
+      <span className={styles.settingState}>{checked ? "On" : "Off"}</span>
+    </button>
+  );
+}
+
+function DesktopPreview({
+  preferences,
+  clock,
+}: {
+  preferences: MacPreferences;
+  clock: string;
+}) {
+  return (
+    <div
+      className={styles.desktopPreview}
+      data-pattern={preferences.pattern}
+      data-highlight={preferences.highlightColor}
+      data-contrast={preferences.highContrast ? "high" : "standard"}
+      aria-label="Preview of the current Finder appearance"
+    >
+      <div className={styles.previewMenuBar}>
+        <span aria-hidden="true">◆</span>
+        <strong>Finder</strong>
+        <time>{clock}</time>
+      </div>
+      <span className={styles.previewDesktopIcon} aria-hidden="true">
+        ▣<small>Projects</small>
+      </span>
+      <div className={styles.previewWindow} aria-hidden="true">
+        <div>
+          <i />
+          <strong>Control Panels</strong>
+          <i />
+        </div>
+        <p>Make this Macintosh yours.</p>
+        <span>▦ Appearance</span>
+      </div>
+      {preferences.showAccessoryShelf ? (
+        <div className={styles.previewShelf} aria-hidden="true">
+          <span>◷</span>
+          <span>▦</span>
+          <span>▣</span>
+          <span>◐</span>
+        </div>
+      ) : null}
+      {preferences.showDesktopHints ? (
+        <small className={styles.previewHint} aria-hidden="true">
+          {preferences.singleClickOpen ? "Click" : "Double-click"} an icon to
+          open
+        </small>
+      ) : null}
+    </div>
+  );
+}
+
+function ControlPanels({
+  preferences,
+  onPreferencesChange,
+  muted,
+  volume,
+  onToggleMuted,
+  onVolumeChange,
+  onResetPreferences,
+  onResetWindowLayout,
+  onSound,
+}: Pick<
+  MacAccessoriesProps,
+  | "preferences"
+  | "onPreferencesChange"
+  | "muted"
+  | "volume"
+  | "onToggleMuted"
+  | "onVolumeChange"
+  | "onResetPreferences"
+  | "onResetWindowLayout"
+  | "onSound"
+>) {
+  const [activePanel, setActivePanel] = useState<ControlPanelId>("appearance");
+  const [clockPreview, setClockPreview] = useState("--:--");
+  const [datePreview, setDatePreview] = useState("Local date");
+  const [timeZone, setTimeZone] = useState("Local time");
+  const [tabOrientation, setTabOrientation] = useState<
+    "horizontal" | "vertical"
+  >("vertical");
+  const controlPanelsRef = useRef<HTMLDivElement>(null);
+  const panelPrefix = useId();
+  const activePanelMeta =
+    CONTROL_PANEL_SECTIONS.find((panel) => panel.id === activePanel) ??
+    CONTROL_PANEL_SECTIONS[0];
+  const volumePercent = Math.round(volume * 100);
+
+  useEffect(() => {
+    const controlPanels = controlPanelsRef.current;
+    if (!controlPanels || typeof ResizeObserver === "undefined") {
+      return undefined;
+    }
+
+    const observer = new ResizeObserver(([entry]) => {
+      const nextOrientation =
+        entry.contentRect.width <= 360 ? "horizontal" : "vertical";
+      setTabOrientation((current) =>
+        current === nextOrientation ? current : nextOrientation
+      );
+    });
+    observer.observe(controlPanels);
+
+    return () => observer.disconnect();
+  }, []);
+
+  useEffect(() => {
+    const updateClock = () => {
+      const now = new Date();
+      setClockPreview(formatControlClock(now, preferences));
+      setDatePreview(
+        new Intl.DateTimeFormat(undefined, {
+          weekday: "long",
+          year: "numeric",
+          month: "long",
+          day: "numeric",
+        }).format(now)
+      );
+      setTimeZone(
+        Intl.DateTimeFormat().resolvedOptions().timeZone.replaceAll("_", " ")
+      );
+    };
+
+    const frame = window.requestAnimationFrame(updateClock);
+    const timer = window.setInterval(updateClock, 1_000);
+    return () => {
+      window.cancelAnimationFrame(frame);
+      window.clearInterval(timer);
+    };
+  }, [preferences]);
+
+  function applyPreference<K extends keyof MacPreferences>(
+    key: K,
+    value: MacPreferences[K],
+    feedback: MacSound | null = "select"
+  ) {
+    onPreferencesChange({ ...preferences, [key]: value });
+    if (feedback) onSound?.(feedback);
+  }
+
+  const selectPanel = (panel: ControlPanelId) => {
+    if (panel === activePanel) return;
+    setActivePanel(panel);
+    onSound?.("menu");
+  };
+
+  const handlePanelKeyDown = (
+    event: KeyboardEvent<HTMLButtonElement>,
+    index: number
+  ) => {
+    const lastIndex = CONTROL_PANEL_SECTIONS.length - 1;
+    let nextIndex: number | null = null;
+
+    if (event.key === "ArrowDown" || event.key === "ArrowRight") {
+      nextIndex = index === lastIndex ? 0 : index + 1;
+    } else if (event.key === "ArrowUp" || event.key === "ArrowLeft") {
+      nextIndex = index === 0 ? lastIndex : index - 1;
+    } else if (event.key === "Home") {
+      nextIndex = 0;
+    } else if (event.key === "End") {
+      nextIndex = lastIndex;
+    }
+
+    if (nextIndex === null) return;
+    event.preventDefault();
+    const nextPanel = CONTROL_PANEL_SECTIONS[nextIndex];
+    selectPanel(nextPanel.id);
+    const tabs =
+      event.currentTarget.parentElement?.querySelectorAll<HTMLButtonElement>(
+        '[role="tab"]'
+      );
+    window.requestAnimationFrame(() => tabs?.[nextIndex]?.focus());
+  };
+
+  return (
+    <div ref={controlPanelsRef} className={styles.controlPanels}>
+      <header className={styles.controlHeader}>
+        <div>
+          <p className={styles.eyebrow}>CONTROL PANELS</p>
+          <h3>{activePanelMeta.label}</h3>
+        </div>
+        <p>{activePanelMeta.description}</p>
+      </header>
+
+      <div className={styles.controlWorkspace}>
+        <div
+          className={styles.controlRail}
+          role="tablist"
+          aria-label="Macintosh control panels"
+          aria-orientation={tabOrientation}
+        >
+          {CONTROL_PANEL_SECTIONS.map((panel, index) => (
+            <button
+              key={panel.id}
+              id={`${panelPrefix}-${panel.id}-tab`}
+              type="button"
+              className={styles.controlTab}
+              role="tab"
+              aria-selected={activePanel === panel.id}
+              aria-controls={`${panelPrefix}-${panel.id}-panel`}
+              tabIndex={activePanel === panel.id ? 0 : -1}
+              onClick={() => selectPanel(panel.id)}
+              onKeyDown={(event) => handlePanelKeyDown(event, index)}
+            >
+              <span className={styles.controlTabIcon} aria-hidden="true">
+                {panel.mark}
+              </span>
+              <span>{panel.label}</span>
+            </button>
+          ))}
+        </div>
+
+        <section
+          id={`${panelPrefix}-${activePanel}-panel`}
+          className={styles.controlPane}
+          role="tabpanel"
+          aria-labelledby={`${panelPrefix}-${activePanel}-tab`}
+          tabIndex={0}
+        >
+          {activePanel === "appearance" ? (
+            <div className={styles.panelStack}>
+              <DesktopPreview preferences={preferences} clock={clockPreview} />
+
+              <fieldset className={styles.controlGroup}>
+                <legend>Desktop pattern</legend>
+                <div className={styles.patternGrid}>
+                  {PATTERNS.map((option) => (
+                    <label className={styles.patternOption} key={option.id}>
+                      <input
+                        type="radio"
+                        name={`${panelPrefix}-pattern`}
+                        value={option.id}
+                        checked={preferences.pattern === option.id}
+                        onChange={() => applyPreference("pattern", option.id)}
+                      />
+                      <span
+                        className={styles.patternSwatch}
+                        data-pattern={option.id}
+                        aria-hidden="true"
+                      />
+                      <span>
+                        <strong>{option.label}</strong>
+                        <small>{option.detail}</small>
+                      </span>
+                      <i aria-hidden="true">✓</i>
+                    </label>
+                  ))}
+                </div>
+              </fieldset>
+
+              <fieldset className={styles.controlGroup}>
+                <legend>Highlight color</legend>
+                <div className={styles.highlightGrid}>
+                  {HIGHLIGHT_COLORS.map((option) => (
+                    <label
+                      className={styles.highlightOption}
+                      data-highlight={option.id}
+                      key={option.id}
+                    >
+                      <input
+                        type="radio"
+                        name={`${panelPrefix}-highlight`}
+                        value={option.id}
+                        checked={preferences.highlightColor === option.id}
+                        onChange={() =>
+                          applyPreference("highlightColor", option.id)
+                        }
+                      />
+                      <span aria-hidden="true" />
+                      {option.label}
+                    </label>
+                  ))}
+                </div>
+              </fieldset>
+            </div>
+          ) : null}
+
+          {activePanel === "finder" ? (
+            <div className={styles.panelStack}>
+              <DesktopPreview preferences={preferences} clock={clockPreview} />
+              <fieldset className={styles.controlGroup}>
+                <legend>Desktop behavior</legend>
+                <div className={styles.settingList}>
+                  <SettingSwitch
+                    checked={preferences.showAccessoryShelf}
+                    label="Applications & desk accessories"
+                    description="Keep the accessory shelf visible on the desktop."
+                    onChange={() =>
+                      applyPreference(
+                        "showAccessoryShelf",
+                        !preferences.showAccessoryShelf
+                      )
+                    }
+                  />
+                  <SettingSwitch
+                    checked={preferences.singleClickOpen}
+                    label="Open items with one click"
+                    description="Otherwise, select once and double-click to open."
+                    onChange={() =>
+                      applyPreference(
+                        "singleClickOpen",
+                        !preferences.singleClickOpen
+                      )
+                    }
+                  />
+                  <SettingSwitch
+                    checked={preferences.showDesktopHints}
+                    label="Desktop help strip"
+                    description="Show quick interaction hints along the bottom edge."
+                    onChange={() =>
+                      applyPreference(
+                        "showDesktopHints",
+                        !preferences.showDesktopHints
+                      )
+                    }
+                  />
+                </div>
+              </fieldset>
+              <p className={styles.controlHint}>
+                The Control Panels remain available from the Apple menu and
+                ⌘/Ctrl + K when the accessory shelf is hidden.
+              </p>
+            </div>
+          ) : null}
+
+          {activePanel === "sound" ? (
+            <div className={styles.panelStack}>
+              <div
+                className={styles.soundPreview}
+                data-muted={muted ? "true" : "false"}
+                style={
+                  { "--sound-level": `${volumePercent}%` } as CSSProperties
+                }
+              >
+                <span aria-hidden="true">◖</span>
+                <div>
+                  <strong>
+                    {muted ? "Macintosh sound is off" : "Sound is on"}
+                  </strong>
+                  <div aria-hidden="true">
+                    {Array.from({ length: 12 }, (_, index) => (
+                      <i key={index} />
+                    ))}
+                  </div>
+                  <small>Finder alert volume · {volumePercent}%</small>
+                </div>
+              </div>
+
+              <fieldset className={styles.controlGroup}>
+                <legend>Sound output</legend>
+                <div className={styles.settingList}>
+                  <SettingSwitch
+                    checked={!muted}
+                    label="Macintosh sound"
+                    description="Controls Finder effects and audio inside DOOM."
+                    disabled={!onToggleMuted}
+                    onChange={() => onToggleMuted?.()}
+                  />
+                  <label className={styles.volumeControl}>
+                    <span>
+                      <strong>Finder alert volume</strong>
+                      <small>
+                        Changes clicks, alarms, and interface effects.
+                      </small>
+                    </span>
+                    <input
+                      type="range"
+                      min="0"
+                      max="100"
+                      step="1"
+                      value={volumePercent}
+                      disabled={!onVolumeChange}
+                      onChange={(event) =>
+                        onVolumeChange?.(Number(event.target.value) / 100)
+                      }
+                      aria-label="Finder alert volume"
+                    />
+                    <output>{volumePercent}%</output>
+                  </label>
+                </div>
+              </fieldset>
+
+              <fieldset className={styles.controlGroup}>
+                <legend>Alarm chime</legend>
+                <div className={styles.alertSoundGrid}>
+                  {ALERT_SOUNDS.map((option) => (
+                    <label key={option.id}>
+                      <input
+                        type="radio"
+                        name={`${panelPrefix}-alert`}
+                        value={option.id}
+                        checked={preferences.alertSound === option.id}
+                        onChange={() => {
+                          applyPreference("alertSound", option.id, null);
+                          onSound?.(option.id);
+                        }}
+                      />
+                      <span aria-hidden="true" />
+                      <strong>{option.label}</strong>
+                      <small>{option.detail}</small>
+                    </label>
+                  ))}
+                </div>
+                <button
+                  type="button"
+                  className={styles.previewButton}
+                  onClick={() => onSound?.(preferences.alertSound)}
+                >
+                  Preview Chime
+                </button>
+              </fieldset>
+            </div>
+          ) : null}
+
+          {activePanel === "clock" ? (
+            <div className={styles.panelStack}>
+              <div className={styles.clockPreview}>
+                <output aria-label={`Clock preview ${clockPreview}`}>
+                  {clockPreview}
+                </output>
+                <p>{datePreview}</p>
+                <small>{timeZone}</small>
+              </div>
+
+              <fieldset className={styles.controlGroup}>
+                <legend>Time format</legend>
+                <div className={styles.segmentedControl}>
+                  {(
+                    [
+                      ["system", "System"],
+                      ["12", "12 hour"],
+                      ["24", "24 hour"],
+                    ] as Array<[HourCycle, string]>
+                  ).map(([id, label]) => (
+                    <label key={id}>
+                      <input
+                        type="radio"
+                        name={`${panelPrefix}-hour-cycle`}
+                        value={id}
+                        checked={preferences.hourCycle === id}
+                        onChange={() => applyPreference("hourCycle", id)}
+                      />
+                      <span>{label}</span>
+                    </label>
+                  ))}
+                </div>
+              </fieldset>
+
+              <fieldset className={styles.controlGroup}>
+                <legend>Menu bar clock</legend>
+                <div className={styles.settingList}>
+                  <SettingSwitch
+                    checked={preferences.showWeekday}
+                    label="Show weekday"
+                    description="Adds the short day name before the current time."
+                    onChange={() =>
+                      applyPreference("showWeekday", !preferences.showWeekday)
+                    }
+                  />
+                  <SettingSwitch
+                    checked={preferences.showSeconds}
+                    label="Show seconds"
+                    description="Updates the Finder clock once every second."
+                    onChange={() =>
+                      applyPreference("showSeconds", !preferences.showSeconds)
+                    }
+                  />
+                </div>
+              </fieldset>
+            </div>
+          ) : null}
+
+          {activePanel === "accessibility" ? (
+            <div className={styles.panelStack}>
+              <div
+                className={styles.accessibilityPreview}
+                data-contrast={preferences.highContrast ? "high" : "standard"}
+              >
+                <span aria-hidden="true">Aa</span>
+                <div>
+                  <strong>Readable at a glance.</strong>
+                  <p>Controls keep their shape, labels, and keyboard focus.</p>
+                </div>
+              </div>
+              <fieldset className={styles.controlGroup}>
+                <legend>Visual assistance</legend>
+                <div className={styles.settingList}>
+                  <SettingSwitch
+                    checked={preferences.highContrast}
+                    label="Increase interface contrast"
+                    description="Strengthens windows, menus, focus, and selected items."
+                    onChange={() =>
+                      applyPreference("highContrast", !preferences.highContrast)
+                    }
+                  />
+                  <SettingSwitch
+                    checked={preferences.reduceMotion}
+                    label="Reduce interface motion"
+                    description="Removes desktop, window, toast, and panel animation."
+                    onChange={() =>
+                      applyPreference("reduceMotion", !preferences.reduceMotion)
+                    }
+                  />
+                </div>
+              </fieldset>
+              <p className={styles.controlHint}>
+                Your operating system’s reduced-motion preference is always
+                respected, even when this switch is off.
+              </p>
+            </div>
+          ) : null}
+        </section>
+      </div>
+
+      <footer className={styles.controlFooter}>
+        <span role="status">Settings save automatically on this device.</span>
+        <div>
+          <button type="button" onClick={onResetWindowLayout}>
+            Arrange Windows
+          </button>
           <button
-            key={option.id}
             type="button"
-            data-pattern={option.id}
-            aria-label={option.label}
-            aria-pressed={pattern === option.id}
+            className={styles.defaultButton}
             onClick={() => {
-              onPatternChange(option.id);
-              onSound?.("select");
+              setActivePanel("appearance");
+              onResetPreferences();
             }}
           >
-            <span />
-            {option.label}
+            Restore Defaults
           </button>
-        ))}
-      </div>
-      <p className={styles.controlHint}>
-        Tip: Option-click the rainbow Apple for the secret about box.
-      </p>
+        </div>
+      </footer>
     </div>
   );
 }
@@ -627,7 +1271,120 @@ function NotePad() {
   );
 }
 
-function Puzzle({ onSound }: Pick<MacAccessoriesProps, "onSound">) {
+function GamePicker({ onOpenGame }: Pick<MacAccessoriesProps, "onOpenGame">) {
+  return (
+    <section
+      className={styles.gameLibrary}
+      aria-labelledby="game-library-title"
+    >
+      <header className={styles.gameLibraryHeader}>
+        <span className={styles.gameLibraryIcon} aria-hidden="true">
+          <i />
+          <i />
+          <i />
+          <i />
+        </span>
+        <div>
+          <p className={styles.eyebrow}>PUZZLE · GAME LIBRARY</p>
+          <h3 id="game-library-title">What do you want to play?</h3>
+          <p>Pick a game. Each one opens here.</p>
+        </div>
+      </header>
+
+      <nav className={styles.gamePickerGrid} aria-label="Choose a game">
+        <button
+          type="button"
+          className={styles.gameCard}
+          onClick={() => onOpenGame("slidingPuzzle")}
+        >
+          <span
+            className={styles.gameCardIcon}
+            data-game="sliding"
+            aria-hidden="true"
+          >
+            8
+          </span>
+          <span className={styles.gameCardCopy}>
+            <strong>Sliding Puzzle</strong>
+            <small>Built-in desk accessory</small>
+            <span>Put eight numbered tiles back in order.</span>
+          </span>
+          <span className={styles.gameCardAction}>
+            Play here <b aria-hidden="true">→</b>
+          </span>
+        </button>
+
+        <button
+          type="button"
+          className={styles.gameCard}
+          onClick={() => onOpenGame("minesweeper")}
+        >
+          <span
+            className={styles.gameCardIcon}
+            data-game="minesweeper"
+            aria-hidden="true"
+          >
+            ✱
+          </span>
+          <span className={styles.gameCardCopy}>
+            <strong>Microsoft Minesweeper</strong>
+            <small>Microsoft-hosted web edition</small>
+            <span>Play the official Classic Mode inside this Macintosh.</span>
+          </span>
+          <span className={styles.gameCardAction}>
+            Play here <b aria-hidden="true">→</b>
+          </span>
+        </button>
+
+        <button
+          type="button"
+          className={styles.gameCard}
+          onClick={() => onOpenGame("doom")}
+        >
+          <span
+            className={styles.gameCardIcon}
+            data-game="doom"
+            aria-hidden="true"
+          >
+            D
+          </span>
+          <span className={styles.gameCardCopy}>
+            <strong>DOOM</strong>
+            <small>id Software · Shareware v1.9</small>
+            <span>Run the original Episode One release.</span>
+          </span>
+          <span className={styles.gameCardAction}>
+            Play here <b aria-hidden="true">→</b>
+          </span>
+        </button>
+
+        <button
+          type="button"
+          className={styles.gameCard}
+          onClick={() => onOpenGame("pacman")}
+        >
+          <span
+            className={styles.gameCardIcon}
+            data-game="pacman"
+            aria-hidden="true"
+          >
+            <i />
+          </span>
+          <span className={styles.gameCardCopy}>
+            <strong>PAC-MAN</strong>
+            <small>Google Doodle · original 2010 release</small>
+            <span>Original logic, graphics, sounds, and ghosts.</span>
+          </span>
+          <span className={styles.gameCardAction}>
+            Play here <b aria-hidden="true">→</b>
+          </span>
+        </button>
+      </nav>
+    </section>
+  );
+}
+
+function SlidingPuzzle({ onSound }: Pick<MacAccessoriesProps, "onSound">) {
   const [tiles, setTiles] = useState(SHUFFLED_PUZZLE);
   const solved = tiles.every((tile, index) => tile === SOLVED_PUZZLE[index]);
 
@@ -865,6 +1622,7 @@ export default function MacAccessories(props: MacAccessoriesProps) {
           onSound={props.onSound}
           alarmSettings={props.alarmSettings}
           onAlarmChange={props.onAlarmChange}
+          alertSound={props.preferences.alertSound}
         />
       );
     case "stopwatch":
@@ -876,8 +1634,14 @@ export default function MacAccessories(props: MacAccessoriesProps) {
     case "controlPanels":
       return (
         <ControlPanels
-          pattern={props.pattern}
-          onPatternChange={props.onPatternChange}
+          preferences={props.preferences}
+          onPreferencesChange={props.onPreferencesChange}
+          muted={props.muted}
+          volume={props.volume}
+          onToggleMuted={props.onToggleMuted}
+          onVolumeChange={props.onVolumeChange}
+          onResetPreferences={props.onResetPreferences}
+          onResetWindowLayout={props.onResetWindowLayout}
           onSound={props.onSound}
         />
       );
@@ -886,7 +1650,9 @@ export default function MacAccessories(props: MacAccessoriesProps) {
     case "notePad":
       return <NotePad />;
     case "puzzle":
-      return <Puzzle onSound={props.onSound} />;
+      return <GamePicker onOpenGame={props.onOpenGame} />;
+    case "slidingPuzzle":
+      return <SlidingPuzzle onSound={props.onSound} />;
     case "scrapbook":
       return <Scrapbook onSound={props.onSound} />;
     case "shortcuts":

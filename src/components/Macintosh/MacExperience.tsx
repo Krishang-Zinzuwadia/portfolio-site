@@ -114,7 +114,7 @@ export default function MacExperience() {
   const introFrameRef = useRef<number | null>(null);
   const introTimerRef = useRef<number | null>(null);
   const screenRef = useRef<HTMLDivElement>(null);
-  const { muted, playSound, toggleMuted } = useMacSounds();
+  const { muted, volume, playSound, toggleMuted, setVolume } = useMacSounds();
   const introActive = introPhase !== "complete";
 
   const finishIntro = useCallback(() => {
@@ -385,9 +385,12 @@ export default function MacExperience() {
             {bootPhase === "ready" ? (
               <MacDesktop
                 muted={muted}
+                volume={volume}
                 onRestart={restartMac}
                 onShutdown={shutdownMac}
                 onSound={playSound}
+                onToggleMuted={toggleMuted}
+                onVolumeChange={setVolume}
               />
             ) : (
               <div className={styles.startup} data-phase={bootPhase}>

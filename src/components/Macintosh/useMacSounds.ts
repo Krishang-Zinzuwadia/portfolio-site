@@ -16,7 +16,13 @@ export type MacSound =
 
 const MUTE_STORAGE_KEY = "krishang-mac-sound-muted";
 const MUTE_CHANGE_EVENT = "krishang-mac-sound-change";
+const VOLUME_STORAGE_KEY = "krishang-mac-sound-volume";
+const VOLUME_CHANGE_EVENT = "krishang-mac-sound-volume-change";
+const DEFAULT_VOLUME = 0.82;
 let fallbackMuted = false;
+let fallbackVolume = DEFAULT_VOLUME;
+let volatileMuted: boolean | null = null;
+let volatileVolume: number | null = null;
 
 type AudioWindow = Window &
   typeof globalThis & {
@@ -24,6 +30,8 @@ type AudioWindow = Window &
   };
 
 function readMuted() {
+  if (volatileMuted !== null) return volatileMuted;
+
   try {
     return window.localStorage.getItem(MUTE_STORAGE_KEY) === "true";
   } catch {
@@ -46,11 +54,56 @@ function setStoredMuted(muted: boolean) {
 
   try {
     window.localStorage.setItem(MUTE_STORAGE_KEY, String(muted));
+    volatileMuted = null;
   } catch {
-    // The in-memory preference still works when storage is unavailable.
+    volatileMuted = muted;
   }
 
   window.dispatchEvent(new Event(MUTE_CHANGE_EVENT));
+}
+
+function clampVolume(volume: number, fallback: number) {
+  if (!Number.isFinite(volume)) return fallback;
+  return Math.min(1, Math.max(0, volume));
+}
+
+function readVolume() {
+  if (volatileVolume !== null) return volatileVolume;
+
+  try {
+    const storedVolume = window.localStorage.getItem(VOLUME_STORAGE_KEY);
+    if (storedVolume === null || storedVolume.trim() === "") {
+      return fallbackVolume;
+    }
+
+    return clampVolume(Number(storedVolume), fallbackVolume);
+  } catch {
+    return fallbackVolume;
+  }
+}
+
+function subscribeToVolume(listener: () => void) {
+  window.addEventListener("storage", listener);
+  window.addEventListener(VOLUME_CHANGE_EVENT, listener);
+
+  return () => {
+    window.removeEventListener("storage", listener);
+    window.removeEventListener(VOLUME_CHANGE_EVENT, listener);
+  };
+}
+
+function setStoredVolume(volume: number) {
+  const nextVolume = clampVolume(volume, fallbackVolume);
+  fallbackVolume = nextVolume;
+
+  try {
+    window.localStorage.setItem(VOLUME_STORAGE_KEY, String(nextVolume));
+    volatileVolume = null;
+  } catch {
+    volatileVolume = nextVolume;
+  }
+
+  window.dispatchEvent(new Event(VOLUME_CHANGE_EVENT));
 }
 
 function addTone(
@@ -164,13 +217,13 @@ function disposeAudioContext(context: AudioContext) {
   }
 }
 
-function scheduleSound(context: AudioContext, sound: MacSound) {
+function scheduleSound(context: AudioContext, sound: MacSound, volume: number) {
   const now = context.currentTime + 0.012;
   const filter = context.createBiquadFilter();
   const master = context.createGain();
   filter.type = "lowpass";
   filter.frequency.setValueAtTime(sound === "startup" ? 3100 : 2600, now);
-  master.gain.value = 0.82;
+  master.gain.value = volume;
   filter.connect(master);
   master.connect(context.destination);
 
@@ -297,9 +350,9 @@ function scheduleSound(context: AudioContext, sound: MacSound) {
         ? 550
         : sound === "alarm"
           ? 950
-        : sound === "error"
-          ? 450
-          : 350;
+          : sound === "error"
+            ? 450
+            : 350;
   window.setTimeout(() => {
     filter.disconnect();
     master.disconnect();
@@ -308,6 +361,11 @@ function scheduleSound(context: AudioContext, sound: MacSound) {
 
 export function useMacSounds() {
   const muted = useSyncExternalStore(subscribeToMuted, readMuted, () => false);
+  const volume = useSyncExternalStore(
+    subscribeToVolume,
+    readVolume,
+    () => DEFAULT_VOLUME
+  );
   const contextRef = useRef<AudioContext | null>(null);
 
   const closeContext = useCallback(() => {
@@ -342,11 +400,14 @@ export function useMacSounds() {
   const startSound = useCallback(
     (sound: MacSound) => {
       try {
+        const soundVolume = readVolume();
+        if (soundVolume === 0) return;
+
         const context = getContext();
         if (!context) return;
 
         if (context.state === "running") {
-          scheduleSound(context, sound);
+          scheduleSound(context, sound, soundVolume);
           return;
         }
 
@@ -361,7 +422,10 @@ export function useMacSounds() {
               context.state === "running" &&
               !readMuted()
             ) {
-              scheduleSound(context, sound);
+              const resumedVolume = readVolume();
+              if (resumedVolume > 0) {
+                scheduleSound(context, sound, resumedVolume);
+              }
             }
           })
           .catch(() => {
@@ -377,11 +441,17 @@ export function useMacSounds() {
 
   const playSound = useCallback(
     (sound: MacSound) => {
-      if (typeof window === "undefined" || readMuted()) return;
+      if (typeof window === "undefined" || readMuted() || readVolume() === 0) {
+        return;
+      }
       startSound(sound);
     },
     [startSound]
   );
+
+  const setVolume = useCallback((nextVolume: number) => {
+    setStoredVolume(nextVolume);
+  }, []);
 
   const toggleMuted = useCallback(() => {
     const nextMuted = !readMuted();
@@ -397,5 +467,5 @@ export function useMacSounds() {
     startSound("menu");
   }, [closeContext, startSound]);
 
-  return { muted, playSound, toggleMuted };
+  return { muted, volume, playSound, toggleMuted, setVolume };
 }
