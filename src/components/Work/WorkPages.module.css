@@ -27,6 +27,14 @@
   outline-offset: 5px;
 }
 
+.workRoot:has(.spiralOnlyPage) > .skipLink {
+  display: none;
+}
+
+.spiralOnlyPage {
+  min-height: 100svh;
+}
+
 .page {
   min-height: 100svh;
   background: var(--wp-paper);

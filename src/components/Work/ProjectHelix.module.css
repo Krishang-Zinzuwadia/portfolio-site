@@ -9,37 +9,50 @@
   width: 100%;
 }
 
-.skipSpiral {
-  position: absolute;
+.homeNav {
+  position: fixed;
   z-index: 500;
-  top: 1rem;
-  left: clamp(1.25rem, 4vw, 4.5rem);
-  padding: 0.75rem 0.9rem;
+  top: max(1rem, env(safe-area-inset-top));
+  left: max(1rem, env(safe-area-inset-left));
+}
+
+.backHome {
+  display: inline-flex;
+  min-width: 2.75rem;
+  min-height: 2.75rem;
+  padding: 0.65rem 0.85rem;
   border: 2px solid var(--wp-ink);
   background: var(--wp-paper);
   color: var(--wp-ink);
   font-size: 0.82rem;
   font-weight: 800;
-  transform: translateY(-250%);
+  text-decoration: none;
+  align-items: center;
+  gap: 0.55rem;
 }
 
-.skipSpiral:focus {
-  transform: translateY(0);
+.backHome:hover {
+  border-color: var(--wp-red);
+  color: var(--wp-red);
+}
+
+.backHome:focus-visible {
+  outline: 3px solid var(--wp-red);
+  outline-offset: 0.3rem;
 }
 
 .scrollSection {
   position: relative;
-  height: var(--track-height);
-  border-block: 1px solid var(--wp-rule);
+  height: calc(100vh + var(--track-travel));
+  height: calc(100dvh + var(--track-travel));
   background: var(--wp-paper);
 }
 
 .stickyStage {
-  --scroll-progress: 0%;
   position: sticky;
   top: 0;
   height: 100vh;
-  height: 100svh;
+  height: 100dvh;
   overflow: clip;
   isolation: isolate;
   background-color: var(--wp-paper);
@@ -86,64 +99,6 @@
   width: 1px;
   background: var(--wp-rule);
   content: "";
-}
-
-.stageHeader {
-  position: absolute;
-  z-index: 300;
-  top: max(1.1rem, env(safe-area-inset-top));
-  right: clamp(1.25rem, 4vw, 4.5rem);
-  left: clamp(1.25rem, 4vw, 4.5rem);
-  display: grid;
-  padding-bottom: 0.75rem;
-  border-bottom: 1px solid var(--wp-rule);
-  color: var(--wp-muted);
-  font-size: 0.7rem;
-  font-weight: 800;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  grid-template-columns: 1fr auto 1fr;
-  align-items: center;
-}
-
-.modeIndicator {
-  display: flex;
-  color: var(--wp-ink);
-  align-items: center;
-  gap: 0.65rem;
-}
-
-.modeIndicator i {
-  width: 0.48rem;
-  aspect-ratio: 1;
-  border-radius: 50%;
-  background: var(--wp-red);
-}
-
-.modeIndicator span:last-child {
-  color: var(--wp-muted);
-}
-
-.stageCounter {
-  color: var(--wp-red);
-  font-family: var(--font-paper-serif), Georgia, serif;
-  font-size: 1rem;
-  font-style: italic;
-  letter-spacing: normal;
-  text-align: right;
-}
-
-.instructions {
-  position: absolute;
-  z-index: 300;
-  top: clamp(4rem, 9vh, 5.75rem);
-  left: 50%;
-  color: var(--wp-olive);
-  font-family: var(--font-paper-serif), Georgia, serif;
-  font-size: clamp(0.8rem, 1.3vw, 1rem);
-  font-style: italic;
-  transform: translateX(-50%);
-  white-space: nowrap;
 }
 
 .cardField {
@@ -252,7 +207,7 @@
   font-style: italic;
 }
 
-.cardCaption h3 {
+.cardCaption h2 {
   font-family: var(--font-paper-serif), Georgia, serif;
   font-size: clamp(1.65rem, 2.7vw, 2.75rem);
   font-weight: 500;
@@ -284,79 +239,6 @@
   opacity: 0.35;
 }
 
-.stageFooter {
-  position: absolute;
-  z-index: 300;
-  right: clamp(1.25rem, 4vw, 4.5rem);
-  bottom: max(1rem, env(safe-area-inset-bottom));
-  left: clamp(1.25rem, 4vw, 4.5rem);
-}
-
-.progressTrack {
-  height: 1px;
-  overflow: hidden;
-  background: var(--wp-rule);
-}
-
-.progressTrack span {
-  display: block;
-  width: var(--scroll-progress);
-  height: 100%;
-  background: var(--wp-red);
-}
-
-.projectStops {
-  display: flex;
-  padding-top: 0.65rem;
-  justify-content: center;
-  gap: 0.45rem;
-}
-
-.projectStops button {
-  display: grid;
-  width: 2.65rem;
-  min-height: 2.35rem;
-  padding: 0.4rem;
-  border: 1px solid var(--wp-rule);
-  background: color-mix(in srgb, var(--wp-paper) 84%, transparent);
-  color: var(--wp-muted);
-  font: inherit;
-  font-size: 0.68rem;
-  text-align: left;
-  cursor: pointer;
-  place-items: center;
-}
-
-.projectStops button span:first-child {
-  color: var(--wp-red);
-  font-family: var(--font-paper-serif), Georgia, serif;
-  font-style: italic;
-}
-
-.projectStops button span:last-child {
-  position: absolute;
-  width: 1px;
-  height: 1px;
-  margin: -1px;
-  overflow: hidden;
-  clip: rect(0 0 0 0);
-  clip-path: inset(50%);
-  white-space: nowrap;
-}
-
-.projectStops button:hover,
-.projectStops button[aria-current="step"] {
-  background: var(--wp-paper-deep);
-  color: var(--wp-ink);
-}
-
-.projectStops button:focus-visible {
-  position: relative;
-  z-index: 2;
-  outline: 3px solid var(--wp-red);
-  outline-offset: -3px;
-}
-
 .srOnly {
   position: absolute;
   width: 1px;
@@ -374,7 +256,8 @@
   display: none;
   width: min(100%, var(--wp-wide));
   margin: 0 auto;
-  padding: 0 clamp(1.25rem, 4vw, 4.5rem) clamp(5rem, 8vw, 8rem);
+  padding: clamp(6rem, 10vw, 8rem) clamp(1.25rem, 4vw, 4.5rem)
+    clamp(5rem, 8vw, 8rem);
   list-style: none;
 }
 
@@ -406,7 +289,7 @@
   font-weight: 800;
 }
 
-.fallbackCopy h3 {
+.fallbackCopy h2 {
   margin-top: 0.55rem;
   font-family: var(--font-paper-serif), Georgia, serif;
   font-size: clamp(2.35rem, 8vw, 3.8rem);
@@ -445,8 +328,7 @@
 }
 
 @media (max-width: 36rem), (max-height: 40rem) {
-  .scrollSection,
-  .skipSpiral {
+  .scrollSection {
     display: none;
   }
 
@@ -466,8 +348,7 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .scrollSection,
-  .skipSpiral {
+  .scrollSection {
     display: none;
   }
 
@@ -477,8 +358,7 @@
 }
 
 @media (forced-colors: active) {
-  .scrollSection,
-  .skipSpiral {
+  .scrollSection {
     display: none;
   }
 
@@ -489,7 +369,7 @@
 
 @media print {
   .scrollSection,
-  .skipSpiral {
+  .homeNav {
     display: none;
   }
 

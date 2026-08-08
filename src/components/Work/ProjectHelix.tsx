@@ -139,7 +139,7 @@ export default function ProjectHelix({ projects }: ProjectHelixProps) {
   const cardRefs = useRef<Array<HTMLLIElement | null>>([]);
   const frameRef = useRef(0);
   const transitionCount = Math.max(projects.length - 1, 0);
-  const trackHeight = 136 + transitionCount * 72;
+  const trackTravel = 36 + transitionCount * 72;
 
   const scrollToProject = useCallback(
     (index: number, behavior: ScrollBehavior = "smooth") => {
@@ -202,11 +202,6 @@ export default function ProjectHelix({ projects }: ProjectHelixProps) {
         card.dataset.active = geometry.active ? "true" : "false";
       });
 
-      stage.style.setProperty(
-        "--scroll-progress",
-        `${(progress * 100).toFixed(3)}%`
-      );
-
       const nextActive = clamp(
         Math.round(cursor),
         0,
@@ -261,38 +256,31 @@ export default function ProjectHelix({ projects }: ProjectHelixProps) {
     <div className={styles.helixBrowser}>
       <noscript>
         <style>{`
-          .${styles.scrollSection}, .${styles.skipSpiral} { display: none !important; }
+          .${styles.scrollSection} { display: none !important; }
           .${styles.linearFallback} { display: block !important; }
         `}</style>
       </noscript>
 
-      <a className={styles.skipSpiral} href="#after-project-spiral">
-        Skip project spiral
-      </a>
+      <nav className={styles.homeNav} aria-label="Site navigation">
+        <Link className={styles.backHome} href="/">
+          <span aria-hidden="true">←</span>
+          Home
+        </Link>
+      </nav>
+
+      <h1 className={styles.srOnly}>Projects by Krishang Zinzuwadia</h1>
 
       <section
         className={styles.scrollSection}
         ref={sectionRef}
-        style={{ "--track-height": `${trackHeight}svh` } as HelixStyle}
+        style={{ "--track-travel": `${trackTravel}svh` } as HelixStyle}
         aria-label="Project spiral"
         aria-describedby="spiral-instructions"
       >
         <div className={styles.stickyStage} ref={stageRef}>
-          <header className={styles.stageHeader} aria-hidden="true">
-            <p>Project archive</p>
-            <p className={styles.modeIndicator}>
-              <span>spiral</span>
-              <i />
-              <span>scroll</span>
-            </p>
-            <p className={styles.stageCounter}>
-              {String(activeIndex + 1).padStart(2, "0")} /{" "}
-              {String(projects.length).padStart(2, "0")}
-            </p>
-          </header>
-
-          <p className={styles.instructions} id="spiral-instructions">
-            Scroll to move the projects through the spiral.
+          <p className={styles.srOnly} id="spiral-instructions">
+            Scroll to move through the projects. Tab moves between project
+            links.
           </p>
 
           <ol className={styles.cardField}>
@@ -338,7 +326,7 @@ export default function ProjectHelix({ projects }: ProjectHelixProps) {
                           {String(index + 1).padStart(2, "0")}
                         </span>
                         <div>
-                          <h3 id={titleId}>{project.title}</h3>
+                          <h2 id={titleId}>{project.title}</h2>
                           <p>{project.subtitle}</p>
                         </div>
                         <span className={styles.cardOpen} aria-hidden="true">
@@ -355,26 +343,6 @@ export default function ProjectHelix({ projects }: ProjectHelixProps) {
               );
             })}
           </ol>
-
-          <footer className={styles.stageFooter}>
-            <div className={styles.progressTrack} aria-hidden="true">
-              <span />
-            </div>
-
-            <nav className={styles.projectStops} aria-label="Jump to a project">
-              {projects.map((project, index) => (
-                <button
-                  type="button"
-                  aria-current={index === activeIndex ? "step" : undefined}
-                  key={project.slug}
-                  onClick={() => scrollToProject(index)}
-                >
-                  <span>{String(index + 1).padStart(2, "0")}</span>
-                  <span>{project.slug === "ocs" ? "OCS" : project.title}</span>
-                </button>
-              ))}
-            </nav>
-          </footer>
         </div>
       </section>
 
@@ -394,7 +362,7 @@ export default function ProjectHelix({ projects }: ProjectHelixProps) {
                   <p className={styles.fallbackEyebrow}>
                     {String(index + 1).padStart(2, "0")} · {project.subtitle}
                   </p>
-                  <h3 id={`fallback-title-${project.slug}`}>{project.title}</h3>
+                  <h2 id={`fallback-title-${project.slug}`}>{project.title}</h2>
                   <p id={`fallback-summary-${project.slug}`}>
                     {project.summary}
                   </p>
