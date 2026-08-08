@@ -7,6 +7,7 @@
   --working-blue: var(--wp-blue);
   position: relative;
   width: 100%;
+  overflow-anchor: none;
 }
 
 .homeNav {
@@ -43,9 +44,19 @@
 
 .scrollSection {
   position: relative;
-  height: calc(100vh + var(--track-travel));
-  height: calc(100dvh + var(--track-travel));
+  height: calc(100vh + var(--loop-travel));
+  height: calc(100dvh + var(--loop-travel));
   background: var(--wp-paper);
+  overflow-anchor: none;
+}
+
+.stepProbe {
+  position: absolute;
+  width: 1px;
+  height: 72vh;
+  height: 72svh;
+  visibility: hidden;
+  pointer-events: none;
 }
 
 .stickyStage {
@@ -54,6 +65,7 @@
   height: 100vh;
   height: 100dvh;
   overflow: clip;
+  overflow-anchor: none;
   isolation: isolate;
   background-color: var(--wp-paper);
   background-image:
@@ -323,6 +335,16 @@
   }
 
   .cardCaption p {
+    display: none;
+  }
+}
+
+@media (min-width: 36.01rem) and (min-height: 40.01rem) and (prefers-reduced-motion: no-preference) and (forced-colors: none) {
+  :global(html):has(.scrollSection[data-ready="true"]) {
+    scrollbar-width: none;
+  }
+
+  :global(html):has(.scrollSection[data-ready="true"])::-webkit-scrollbar {
     display: none;
   }
 }

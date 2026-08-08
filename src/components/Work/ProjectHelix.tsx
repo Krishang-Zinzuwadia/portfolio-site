@@ -3,7 +3,7 @@
 import Link from "next/link";
 import {
   useCallback,
-  useEffect,
+  useLayoutEffect,
   useRef,
   useState,
   type CSSProperties,
@@ -37,19 +37,54 @@ type CardGeometry = {
   zIndex: number;
 };
 
+type LoopMetrics = {
+  center: number;
+  cycle: number;
+  safeMaximum: number;
+  safeMinimum: number;
+  sectionTop: number;
+  step: number;
+  totalTravel: number;
+};
+
 const DEFAULT_SCENE = {
   width: 1280,
   height: 800,
 };
 
 const HELIX_PERSPECTIVE = 940;
+const PROJECT_STEP_SVH = 72;
+const IDEAL_LOOP_CYCLES = 256;
+const MINIMUM_LOOP_CYCLES = 8;
+const MAXIMUM_LOOP_TRAVEL = 4_000_000;
+
+const fallbackMediaQueries = [
+  "(max-width: 36rem)",
+  "(max-height: 40rem)",
+  "(prefers-reduced-motion: reduce)",
+  "(forced-colors: active)",
+  "print",
+] as const;
 
 function clamp(value: number, minimum: number, maximum: number) {
   return Math.min(Math.max(value, minimum), maximum);
 }
 
+function positiveModulo(value: number, divisor: number) {
+  return ((value % divisor) + divisor) % divisor;
+}
+
 function degrees(radians: number) {
   return (radians * 180) / Math.PI;
+}
+
+function scrollWindowInstantly(top: number) {
+  const root = document.documentElement;
+  const previousBehavior = root.style.scrollBehavior;
+
+  root.style.scrollBehavior = "auto";
+  window.scrollTo({ top, left: window.scrollX, behavior: "instant" });
+  root.style.scrollBehavior = previousBehavior;
 }
 
 function wrapSlot(slot: number, count: number) {
@@ -136,52 +171,183 @@ export default function ProjectHelix({ projects }: ProjectHelixProps) {
   const activeIndexRef = useRef(0);
   const sectionRef = useRef<HTMLElement | null>(null);
   const stageRef = useRef<HTMLDivElement | null>(null);
+  const stepProbeRef = useRef<HTMLSpanElement | null>(null);
   const cardRefs = useRef<Array<HTMLLIElement | null>>([]);
+  const fallbackLinkRefs = useRef<Array<HTMLAnchorElement | null>>([]);
+  const metricsRef = useRef<LoopMetrics | null>(null);
   const frameRef = useRef(0);
-  const transitionCount = Math.max(projects.length - 1, 0);
-  const trackTravel = 36 + transitionCount * 72;
+  const initialLoopTravel =
+    PROJECT_STEP_SVH * projects.length * IDEAL_LOOP_CYCLES;
 
   const scrollToProject = useCallback(
-    (index: number, behavior: ScrollBehavior = "smooth") => {
-      const section = sectionRef.current;
+    (index: number) => {
+      const metrics = metricsRef.current;
 
-      if (!section || projects.length < 2) return;
+      if (!metrics || projects.length < 2) return;
 
-      const viewportHeight = Math.max(window.innerHeight, 1);
-      const sectionTop = window.scrollY + section.getBoundingClientRect().top;
-      const travel = Math.max(section.offsetHeight - viewportHeight, 1);
-      const hold = viewportHeight * 0.18;
-      const usableTravel = Math.max(travel - hold * 2, 1);
-      const progress = index / (projects.length - 1);
+      const localPosition = window.scrollY - metrics.sectionTop;
+      const cursor = positiveModulo(
+        localPosition / metrics.step,
+        projects.length
+      );
+      const nearestOffset = wrapSlot(index - cursor, projects.length);
+      let targetPosition = localPosition + nearestOffset * metrics.step;
 
-      window.scrollTo({
-        top: sectionTop + hold + progress * usableTravel,
-        behavior,
-      });
+      if (
+        targetPosition < metrics.safeMinimum ||
+        targetPosition > metrics.safeMaximum
+      ) {
+        targetPosition =
+          metrics.center + positiveModulo(targetPosition, metrics.cycle);
+      }
+
+      scrollWindowInstantly(metrics.sectionTop + targetPosition);
     },
     [projects.length]
   );
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     const section = sectionRef.current;
     const stage = stageRef.current;
+    const stepProbe = stepProbeRef.current;
 
-    if (!section || !stage || projects.length === 0) return;
+    if (!section || !stage || !stepProbe || projects.length === 0) return;
 
-    let nearViewport = true;
+    const mediaQueries = fallbackMediaQueries.map((query) =>
+      window.matchMedia(query)
+    );
+    let loopEnabled = mediaQueries.every((query) => !query.matches);
     let sceneWidth = stage.clientWidth || DEFAULT_SCENE.width;
     let sceneHeight = stage.clientHeight || DEFAULT_SCENE.height;
+    let lastCursor = 0;
+    let initialized = false;
+    let measurementFrame = 0;
+    let transitionFrame = 0;
+
+    const measureLoop = () => {
+      if (!loopEnabled) {
+        metricsRef.current = null;
+        delete section.dataset.ready;
+        return;
+      }
+
+      const previousMetrics = metricsRef.current;
+      let phaseCursor = lastCursor;
+
+      if (previousMetrics) {
+        phaseCursor = positiveModulo(
+          (window.scrollY - previousMetrics.sectionTop) / previousMetrics.step,
+          projects.length
+        );
+      } else if (!initialized) {
+        const initialSectionTop =
+          window.scrollY + section.getBoundingClientRect().top;
+        const initialStep = Math.max(
+          1,
+          Math.round(stepProbe.getBoundingClientRect().height)
+        );
+
+        phaseCursor = positiveModulo(
+          (window.scrollY - initialSectionTop) / initialStep,
+          projects.length
+        );
+      }
+
+      sceneWidth = stage.clientWidth || DEFAULT_SCENE.width;
+      sceneHeight = stage.clientHeight || DEFAULT_SCENE.height;
+
+      const step = Math.max(
+        1,
+        Math.round(stepProbe.getBoundingClientRect().height)
+      );
+      const cycle = step * projects.length;
+      let totalCycles = Math.min(
+        IDEAL_LOOP_CYCLES,
+        Math.floor(MAXIMUM_LOOP_TRAVEL / cycle)
+      );
+
+      totalCycles = Math.max(MINIMUM_LOOP_CYCLES, totalCycles);
+      if (totalCycles % 2 !== 0) totalCycles -= 1;
+
+      section.style.setProperty("--loop-travel", `${totalCycles * cycle}px`);
+
+      const realizedTravel = Math.max(
+        section.offsetHeight - stage.offsetHeight,
+        0
+      );
+      const realizedCycles = Math.floor(realizedTravel / cycle);
+
+      if (
+        realizedCycles < totalCycles &&
+        realizedCycles >= MINIMUM_LOOP_CYCLES
+      ) {
+        totalCycles =
+          realizedCycles % 2 === 0 ? realizedCycles : realizedCycles - 1;
+        section.style.setProperty("--loop-travel", `${totalCycles * cycle}px`);
+      }
+
+      const totalTravel = totalCycles * cycle;
+      const guardCycles = Math.min(
+        Math.max(2, Math.floor(totalCycles / 4)),
+        Math.floor(totalCycles / 2) - 1
+      );
+      const sectionTop = window.scrollY + section.getBoundingClientRect().top;
+      const metrics: LoopMetrics = {
+        center: (totalCycles / 2) * cycle,
+        cycle,
+        safeMaximum: (totalCycles - guardCycles) * cycle,
+        safeMinimum: guardCycles * cycle,
+        sectionTop,
+        step,
+        totalTravel,
+      };
+
+      metricsRef.current = metrics;
+      lastCursor = phaseCursor;
+      initialized = true;
+
+      const localPosition = window.scrollY - sectionTop;
+      const metricsChanged =
+        !previousMetrics ||
+        previousMetrics.step !== metrics.step ||
+        previousMetrics.totalTravel !== metrics.totalTravel ||
+        Math.abs(previousMetrics.sectionTop - metrics.sectionTop) > 0.5;
+
+      if (
+        metricsChanged ||
+        localPosition < metrics.safeMinimum ||
+        localPosition > metrics.safeMaximum
+      ) {
+        scrollWindowInstantly(
+          sectionTop + metrics.center + phaseCursor * metrics.step
+        );
+      }
+
+      section.dataset.ready = "true";
+    };
 
     const renderScene = () => {
       frameRef.current = 0;
-      if (!nearViewport) return;
+      const metrics = metricsRef.current;
 
-      const rect = section.getBoundingClientRect();
-      const travel = Math.max(rect.height - sceneHeight, 1);
-      const hold = sceneHeight * 0.18;
-      const usableTravel = Math.max(travel - hold * 2, 1);
-      const progress = clamp((-rect.top - hold) / usableTravel, 0, 1);
-      const cursor = progress * transitionCount;
+      if (!loopEnabled || !metrics) return;
+
+      let localPosition = window.scrollY - metrics.sectionTop;
+
+      if (
+        localPosition < metrics.safeMinimum ||
+        localPosition > metrics.safeMaximum
+      ) {
+        const phasePosition = positiveModulo(localPosition, metrics.cycle);
+
+        localPosition = metrics.center + phasePosition;
+        scrollWindowInstantly(metrics.sectionTop + localPosition);
+      }
+
+      const cursor = positiveModulo(
+        localPosition / metrics.step,
+        projects.length
+      );
 
       cardRefs.current.forEach((card, index) => {
         if (!card) return;
@@ -202,18 +368,14 @@ export default function ProjectHelix({ projects }: ProjectHelixProps) {
         card.dataset.active = geometry.active ? "true" : "false";
       });
 
-      const nextActive = clamp(
-        Math.round(cursor),
-        0,
-        Math.max(projects.length - 1, 0)
-      );
+      const nextActive = positiveModulo(Math.round(cursor), projects.length);
 
       if (nextActive !== activeIndexRef.current) {
         activeIndexRef.current = nextActive;
         setActiveIndex(nextActive);
       }
 
-      section.dataset.ready = "true";
+      lastCursor = cursor;
     };
 
     const scheduleRender = () => {
@@ -221,36 +383,107 @@ export default function ProjectHelix({ projects }: ProjectHelixProps) {
       frameRef.current = window.requestAnimationFrame(renderScene);
     };
 
-    const resizeObserver = new ResizeObserver(() => {
-      sceneWidth = stage.clientWidth || DEFAULT_SCENE.width;
-      sceneHeight = stage.clientHeight || DEFAULT_SCENE.height;
-      scheduleRender();
-    });
+    const scheduleMeasurement = () => {
+      if (measurementFrame) return;
 
-    const intersectionObserver = new IntersectionObserver(
-      ([entry]) => {
-        nearViewport = entry.isIntersecting;
-        if (nearViewport) scheduleRender();
-      },
-      { rootMargin: "100% 0%" }
-    );
+      measurementFrame = window.requestAnimationFrame(() => {
+        measurementFrame = 0;
+        measureLoop();
+        renderScene();
+      });
+    };
+
+    const handleMediaChange = () => {
+      const nextLoopEnabled = mediaQueries.every((query) => !query.matches);
+
+      if (nextLoopEnabled === loopEnabled) return;
+
+      const activeElement = document.activeElement;
+      const focusedHelixIndex = cardRefs.current.findIndex((card) =>
+        card?.contains(activeElement)
+      );
+      const focusedFallbackIndex = fallbackLinkRefs.current.findIndex(
+        (link) => link === activeElement
+      );
+
+      loopEnabled = nextLoopEnabled;
+      if (!loopEnabled) {
+        const previousMetrics = metricsRef.current;
+
+        if (previousMetrics) {
+          lastCursor = positiveModulo(
+            (window.scrollY - previousMetrics.sectionTop) /
+              previousMetrics.step,
+            projects.length
+          );
+        }
+
+        metricsRef.current = null;
+        delete section.dataset.ready;
+
+        if (transitionFrame) window.cancelAnimationFrame(transitionFrame);
+        transitionFrame = window.requestAnimationFrame(() => {
+          transitionFrame = 0;
+          const targetIndex =
+            focusedHelixIndex >= 0 ? focusedHelixIndex : activeIndexRef.current;
+          const target = fallbackLinkRefs.current[targetIndex];
+
+          if (focusedHelixIndex >= 0) target?.focus({ preventScroll: true });
+          target?.scrollIntoView({ block: "center", behavior: "instant" });
+        });
+        return;
+      }
+
+      if (focusedFallbackIndex >= 0) lastCursor = focusedFallbackIndex;
+      scheduleMeasurement();
+
+      if (focusedFallbackIndex >= 0) {
+        if (transitionFrame) window.cancelAnimationFrame(transitionFrame);
+        transitionFrame = window.requestAnimationFrame(() => {
+          transitionFrame = 0;
+          cardRefs.current[focusedFallbackIndex]
+            ?.querySelector<HTMLAnchorElement>("a")
+            ?.focus({ preventScroll: true });
+        });
+      }
+    };
+
+    const handleVisibilityChange = () => {
+      if (document.visibilityState === "visible") scheduleMeasurement();
+    };
+
+    const resizeObserver = new ResizeObserver(scheduleMeasurement);
 
     resizeObserver.observe(stage);
-    intersectionObserver.observe(section);
+    resizeObserver.observe(stepProbe);
+    mediaQueries.forEach((query) =>
+      query.addEventListener("change", handleMediaChange)
+    );
     window.addEventListener("scroll", scheduleRender, { passive: true });
-    window.addEventListener("resize", scheduleRender);
-    window.addEventListener("pageshow", scheduleRender);
-    scheduleRender();
+    window.addEventListener("resize", scheduleMeasurement);
+    window.addEventListener("pageshow", scheduleMeasurement);
+    window.visualViewport?.addEventListener("resize", scheduleMeasurement);
+    document.addEventListener("visibilitychange", handleVisibilityChange);
+
+    measureLoop();
+    renderScene();
 
     return () => {
       window.removeEventListener("scroll", scheduleRender);
-      window.removeEventListener("resize", scheduleRender);
-      window.removeEventListener("pageshow", scheduleRender);
+      window.removeEventListener("resize", scheduleMeasurement);
+      window.removeEventListener("pageshow", scheduleMeasurement);
+      window.visualViewport?.removeEventListener("resize", scheduleMeasurement);
+      document.removeEventListener("visibilitychange", handleVisibilityChange);
+      mediaQueries.forEach((query) =>
+        query.removeEventListener("change", handleMediaChange)
+      );
       resizeObserver.disconnect();
-      intersectionObserver.disconnect();
       if (frameRef.current) window.cancelAnimationFrame(frameRef.current);
+      if (measurementFrame) window.cancelAnimationFrame(measurementFrame);
+      if (transitionFrame) window.cancelAnimationFrame(transitionFrame);
+      metricsRef.current = null;
     };
-  }, [projects.length, transitionCount]);
+  }, [projects.length]);
 
   return (
     <div className={styles.helixBrowser}>
@@ -273,14 +506,20 @@ export default function ProjectHelix({ projects }: ProjectHelixProps) {
       <section
         className={styles.scrollSection}
         ref={sectionRef}
-        style={{ "--track-travel": `${trackTravel}svh` } as HelixStyle}
-        aria-label="Project spiral"
+        style={{ "--loop-travel": `${initialLoopTravel}svh` } as HelixStyle}
+        aria-label="Infinite project spiral"
         aria-describedby="spiral-instructions"
       >
+        <span
+          className={styles.stepProbe}
+          ref={stepProbeRef}
+          aria-hidden="true"
+        />
+
         <div className={styles.stickyStage} ref={stageRef}>
           <p className={styles.srOnly} id="spiral-instructions">
-            Scroll to move through the projects. Tab moves between project
-            links.
+            Scroll to move through the repeating project spiral. All seven
+            project links are listed once; Tab moves between them.
           </p>
 
           <ol className={styles.cardField}>
@@ -315,7 +554,7 @@ export default function ProjectHelix({ projects }: ProjectHelixProps) {
                       aria-current={index === activeIndex ? "true" : undefined}
                       aria-labelledby={titleId}
                       aria-describedby={summaryId}
-                      onFocus={() => scrollToProject(index, "instant")}
+                      onFocus={() => scrollToProject(index)}
                     >
                       <div className={styles.projectArtwork} aria-hidden="true">
                         <ProjectSketch slug={project.slug} />
@@ -351,6 +590,9 @@ export default function ProjectHelix({ projects }: ProjectHelixProps) {
           <li key={project.slug}>
             <article className={styles.fallbackCard}>
               <Link
+                ref={(element) => {
+                  fallbackLinkRefs.current[index] = element;
+                }}
                 href={`/work/${project.slug}`}
                 aria-labelledby={`fallback-title-${project.slug}`}
                 aria-describedby={`fallback-summary-${project.slug}`}
