@@ -18,26 +18,6 @@ import styles from "./WorkingPapersPortfolio.module.css";
 const resumePath = "/Krishang-Zinzuwadia-Resume.pdf";
 const leadProjects = projects.slice(0, 3);
 const additionalProjects = projects.slice(3);
-const heroProjects = [
-  {
-    number: "01",
-    slug: "quark",
-    title: "Quark",
-    note: "A coding agent phones me instead of guessing.",
-  },
-  {
-    number: "02",
-    slug: "scatterfield",
-    title: "Scatterfield",
-    note: "My canvas is useful before sign-in or Wi-Fi.",
-  },
-  {
-    number: "03",
-    slug: "aisle",
-    title: "Aisle",
-    note: "An install stays locked until its source checks pass.",
-  },
-] as const;
 
 export default function WorkingPapersPortfolio() {
   return (
@@ -66,94 +46,33 @@ export default function WorkingPapersPortfolio() {
 
       <main id="main-content">
         <section className={styles.hero} aria-labelledby="hero-title">
-          <div className={styles.heroTopline}>
-            <strong>Krishang Zinzuwadia</strong>
-            <span>Computer science · VIT Vellore</span>
-            <span>TypeScript · Python · Rust</span>
-          </div>
+          <div className={styles.heroFrame}>
+            <h1 className={styles.heroStatements} id="hero-title">
+              <span>
+                <strong>Quark</strong> calls me when a coding agent gets stuck.
+              </span>
+              <span>
+                <strong>Scatterfield</strong> keeps my notes available when the
+                Wi-Fi drops.
+              </span>
+              <span>
+                <strong>Hermes</strong> waits until the other device stores a
+                message before calling it sent.
+              </span>
+            </h1>
 
-          <div className={styles.heroStatement}>
-            <div className={styles.heroCopy}>
-              <p className={styles.heroKicker}>
-                If something keeps annoying me, I tend to build around it.
+            <div className={styles.heroBottom}>
+              <p className={styles.heroRemainder}>
+                The other four projects, five small tools, and the upstream
+                patches I can point to are below.
               </p>
-              <h1 id="hero-title">
-                <span>I build agents</span> <span>that know when to</span>{" "}
-                <em>stop and ask.</em>
-              </h1>
-              <p className={styles.heroLead}>
-                Quark calls me when an agent reaches a decision it cannot make.
-                Scatterfield keeps my notes available without a network. Aisle
-                refuses to install a public skill until its source and revision
-                check out.
-              </p>
-              <p className={styles.heroAside}>
-                I study computer science at VIT and mostly write TypeScript,
-                Python, and Rust. I care a lot about permissions, offline
-                behavior, and what happens after a failure.
-              </p>
-              <div className={styles.heroActions}>
-                <a href="#projects">See all seven projects</a>
-                <p>
-                  Also available as a{" "}
-                  <Link href="/mac">Macintosh interface</Link>.
-                </p>
-              </div>
+
+              <nav className={styles.heroActions} aria-label="Portfolio views">
+                <a href="#projects">See the projects</a>
+                <Link href="/mac">Open the Macintosh version</Link>
+              </nav>
             </div>
-
-            <aside
-              className={styles.questionLedger}
-              aria-labelledby="question-ledger-title"
-            >
-              <header>
-                <p id="question-ledger-title">The questions behind the work</p>
-                <span>01—03</span>
-              </header>
-              <ol>
-                <li>
-                  <span>01</span>
-                  <div>
-                    <strong>Should the agent ask before acting?</strong>
-                    <small>Quark · human checkpoints</small>
-                  </div>
-                </li>
-                <li>
-                  <span>02</span>
-                  <div>
-                    <strong>Can I still use it offline?</strong>
-                    <small>Scatterfield · local first</small>
-                  </div>
-                </li>
-                <li>
-                  <span>03</span>
-                  <div>
-                    <strong>What exactly am I installing?</strong>
-                    <small>Aisle · pinned sources</small>
-                  </div>
-                </li>
-              </ol>
-              <p className={styles.ledgerFootnote}>
-                Most of my projects start with one of these questions.
-              </p>
-            </aside>
           </div>
-
-          <nav
-            className={styles.heroProjectIndex}
-            aria-label="Featured projects"
-          >
-            <ol>
-              {heroProjects.map((project) => (
-                <li key={project.slug}>
-                  <Link href={`/work/${project.slug}`}>
-                    <span>{project.number}</span>
-                    <strong>{project.title}</strong>
-                    <small>{project.note}</small>
-                  </Link>
-                </li>
-              ))}
-            </ol>
-          </nav>
         </section>
 
         <section
