@@ -11,11 +11,11 @@ export default function NotFound() {
           I couldn’t find that page.
         </h1>
         <p className={styles.message}>
-          Check the address, or go back to the portfolio.
+          The link may be old, or there may be a typo in the address.
         </p>
         <div className={styles.actions}>
           <Link className={styles.action} href="/">
-            Go to the homepage
+            Back to the portfolio
           </Link>
         </div>
       </section>

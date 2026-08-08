@@ -57,18 +57,17 @@ export default function WorkPage() {
         <section className={styles.workHero} aria-labelledby="work-title">
           <aside className={styles.heroMargin} aria-label="About these pages">
             <p>Seven projects</p>
-            <p>Built with TypeScript, Python, and Rust.</p>
+            <p>TypeScript, Python, Rust, and a lot of debugging.</p>
           </aside>
 
           <div className={styles.heroCopy}>
-            <h1 id="work-title">The parts that don’t fit in a résumé.</h1>
+            <h1 id="work-title">The longer version of the project cards.</h1>
             <p>
-              Each page covers what I worked on, how the pieces connect, the
-              trade-offs I made, what exists now, and any source code I can
-              share.
+              This is where I explain what I actually did, how the pieces fit,
+              why I made a few awkward choices, and what is still unfinished.
             </p>
             <a className={styles.textLink} href="#projects">
-              Choose a project
+              Pick a project
             </a>
           </div>
         </section>
@@ -80,10 +79,11 @@ export default function WorkPage() {
         >
           <header className={styles.contentsIntro}>
             <p className={styles.sectionLabel}>Projects</p>
-            <h2 id="projects-title">All seven</h2>
+            <h2 id="projects-title">All seven, starting with Helios</h2>
             <p>
-              I’d start with Quark, Scatterfield, or Aisle. The other four cover
-              local agents, application review, and peer-to-peer messaging.
+              Helios is where most of my time goes right now. After that: an
+              agent that phones home, an offline canvas, a skill marketplace,
+              desktop automation, recruitment software, and terminal chat.
             </p>
           </header>
 
@@ -98,12 +98,12 @@ export default function WorkPage() {
           className={styles.readingNote}
           aria-labelledby="reading-note-title"
         >
-          <p className={styles.sectionLabel}>About the links</p>
-          <h2 id="reading-note-title">Public code is linked on each page.</h2>
+          <p className={styles.sectionLabel}>Sources</p>
+          <h2 id="reading-note-title">I link whatever I can show.</h2>
           <p>
-            Each project page ends with the repository, merged pull requests, or
-            event records I have. If the repository is private, the page says
-            so.
+            Each page ends with the repositories, merged pull requests,
+            previews, or event records I have. Private work and unfinished
+            branches are labelled plainly.
           </p>
         </aside>
       </main>

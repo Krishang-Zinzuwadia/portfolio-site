@@ -17,7 +17,7 @@ export default function WorkError({
           This project page failed to load.
         </h1>
         <p className={styles.message}>
-          Try it again, or return to the project list.
+          Give it another try, or head back to the project list.
         </p>
         <div className={styles.actions}>
           <button
@@ -28,7 +28,7 @@ export default function WorkError({
             Reload page
           </button>
           <Link className={styles.action} href="/work">
-            Go to all projects
+            Back to all projects
           </Link>
         </div>
       </section>

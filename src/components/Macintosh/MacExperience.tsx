@@ -518,13 +518,13 @@ export default function MacExperience() {
             onClick={beginIntro}
           >
             <span className={styles.enterEyebrow}>
-              Krishang Zinzuwadia · Interactive portfolio
+              Krishang Zinzuwadia · Macintosh portfolio
             </span>
             <span className={styles.enterAction}>
               <strong>{introImageReady ? "Enter" : "Loading"}</strong>
               <span aria-hidden="true">→</span>
             </span>
-            <small>Macintosh boot · Sound {muted ? "off" : "on"}</small>
+            <small>Boot the desktop · Sound {muted ? "off" : "on"}</small>
           </button>
         </section>
       ) : null}

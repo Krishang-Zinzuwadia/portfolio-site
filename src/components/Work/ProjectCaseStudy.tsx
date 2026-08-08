@@ -67,7 +67,7 @@ export default function ProjectCaseStudy({
 
         <div className={styles.readingLayout}>
           <aside className={styles.caseMargin} aria-label="Project summary">
-            <p className={styles.marginHeading}>Project facts</p>
+            <p className={styles.marginHeading}>At a glance</p>
             <p>{metricSentence}</p>
             <p>{project.stack.join(", ")}</p>
           </aside>
@@ -77,7 +77,7 @@ export default function ProjectCaseStudy({
               className={styles.essaySection}
               aria-labelledby="problem-title"
             >
-              <p className={styles.sectionLabel}>Why I made it</p>
+              <p className={styles.sectionLabel}>The problem</p>
               <h2 id="problem-title">{presentation.problemHeading}</h2>
               <p className={styles.bodyCopy}>{caseStudy.challenge}</p>
             </section>
@@ -86,8 +86,8 @@ export default function ProjectCaseStudy({
               className={styles.essaySection}
               aria-labelledby="part-title"
             >
-              <p className={styles.sectionLabel}>What I worked on</p>
-              <h2 id="part-title">The parts I owned</h2>
+              <p className={styles.sectionLabel}>My part</p>
+              <h2 id="part-title">What I built</h2>
               <ul className={styles.proseList}>
                 {caseStudy.role.map((item) => (
                   <li key={item}>{item}</li>
@@ -99,8 +99,8 @@ export default function ProjectCaseStudy({
               className={styles.essaySection}
               aria-labelledby="works-title"
             >
-              <p className={styles.sectionLabel}>How it is put together</p>
-              <h2 id="works-title">The pieces and what each one does</h2>
+              <p className={styles.sectionLabel}>How it works</p>
+              <h2 id="works-title">How the pieces fit together</h2>
               <div className={styles.explanationList}>
                 {caseStudy.architecture.map((stage) => (
                   <article key={stage.title}>
@@ -115,8 +115,8 @@ export default function ProjectCaseStudy({
               className={styles.essaySection}
               aria-labelledby="calls-title"
             >
-              <p className={styles.sectionLabel}>Trade-offs</p>
-              <h2 id="calls-title">Choices I made while building it</h2>
+              <p className={styles.sectionLabel}>Decisions</p>
+              <h2 id="calls-title">Why I built it this way</h2>
               <div className={styles.decisionList}>
                 {caseStudy.decisions.map((decision) => (
                   <article key={decision.title}>
@@ -131,8 +131,8 @@ export default function ProjectCaseStudy({
               className={styles.essaySection}
               aria-labelledby="landed-title"
             >
-              <p className={styles.sectionLabel}>What worked</p>
-              <h2 id="landed-title">What exists now</h2>
+              <p className={styles.sectionLabel}>Current state</p>
+              <h2 id="landed-title">What works, and what doesn’t yet</h2>
               <ul className={styles.outcomeList}>
                 {caseStudy.outcomes.map((outcome) => (
                   <li key={outcome}>{outcome}</li>
@@ -147,8 +147,8 @@ export default function ProjectCaseStudy({
               className={styles.essaySection}
               aria-labelledby="source-title"
             >
-              <p className={styles.sectionLabel}>Links and limitations</p>
-              <h2 id="source-title">Code, docs, and known limits</h2>
+              <p className={styles.sectionLabel}>Sources and loose ends</p>
+              <h2 id="source-title">What I can show you</h2>
               <p className={styles.bodyCopy}>{caseStudy.evidenceNote}</p>
 
               {caseStudy.evidence.length > 0 ? (
@@ -158,14 +158,14 @@ export default function ProjectCaseStudy({
                       <a href={item.href} target="_blank" rel="noreferrer">
                         <strong>{item.label}</strong>
                         <span>{item.description}</span>
-                        <small>Open link</small>
+                        <small>Visit source</small>
                       </a>
                     </li>
                   ))}
                 </ul>
               ) : (
                 <p className={styles.noSource}>
-                  There isn’t a public link for this project.
+                  There isn’t a public source link for this one.
                 </p>
               )}
             </section>

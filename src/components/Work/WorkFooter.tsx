@@ -8,11 +8,11 @@ export default function WorkFooter() {
   return (
     <footer className={styles.footer}>
       <div className={styles.footerInvitation}>
-        <p className={styles.sectionLabel}>Contact</p>
-        <h2>Have a question about a project?</h2>
+        <p className={styles.sectionLabel}>Ask me something</p>
+        <h2>Want to know more about one of these?</h2>
         <p>
-          If something here is unclear, email me. I can explain the code, a
-          decision, or what I’d change now.
+          Email me if a decision is unclear, you want to talk through the code,
+          or you are curious what I would change now.
         </p>
         <a className={styles.footerEmail} href={`mailto:${identity.email}`}>
           {identity.email}
@@ -32,7 +32,7 @@ export default function WorkFooter() {
           <Link href="/mac">Macintosh</Link>
         </nav>
         <small>
-          Built by {identity.name} · {new Date().getFullYear()}
+          Made by {identity.name} · {new Date().getFullYear()}
         </small>
       </div>
     </footer>

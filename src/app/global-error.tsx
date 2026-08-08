@@ -21,8 +21,8 @@ export default function GlobalError({
               The site crashed.
             </h1>
             <p className={styles.message}>
-              Try loading it again. If the problem keeps happening, send me the
-              error reference below.
+              Try loading it again. If it keeps failing, the reference below may
+              help explain what went wrong.
             </p>
             <div className={styles.actions}>
               <button

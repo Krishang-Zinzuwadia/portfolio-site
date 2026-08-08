@@ -494,7 +494,7 @@ const WINDOW_DEFINITIONS: Record<WindowId, WindowDefinition> = {
     y: 30,
     width: 432,
     height: 304,
-    status: `${projects.length} selected builds`,
+    status: `${projects.length} projects`,
   },
   achievements: {
     title: "Achievements",
@@ -1096,15 +1096,16 @@ function WelcomeView({ openWindow }: { openWindow: (id: WindowId) => void }) {
           <MacIcon kind="computer" />
         </span>
         <div>
-          <p className={styles.kicker}>WELCOME TO THE DESKTOP</p>
+          <p className={styles.kicker}>HI, I’M KRISHANG</p>
           <h3>{identity.name}</h3>
           <p>{identity.role}</p>
         </div>
       </header>
 
       <p className={styles.lede}>
-        Building autonomous AI systems, full-stack products, and security work
-        that moves from ambitious ideas to real-world execution.
+        I study computer science at VIT Vellore. Most of the folders here are
+        agent tools, desktop software, security work, and small things I wanted
+        badly enough to build.
       </p>
 
       <div className={styles.statGrid} aria-label="Selected portfolio metrics">
@@ -1266,10 +1267,10 @@ function ProjectsView() {
       <section className={styles.projectCollection}>
         <header className={styles.collectionHeader}>
           <div>
-            <p className={styles.kicker}>THE LAB</p>
-            <h3>Small tools, real use.</h3>
+            <p className={styles.kicker}>SMALL TOOLS</p>
+            <h3>Things I actually use.</h3>
           </div>
-          <span>{labProjects.length} experiments</span>
+          <span>{labProjects.length} tools</span>
         </header>
 
         <div className={styles.compactProjectGrid}>
@@ -1296,9 +1297,9 @@ function ProjectsView() {
         <header className={styles.collectionHeader}>
           <div>
             <p className={styles.kicker}>OPEN SOURCE</p>
-            <h3>Merged contributions.</h3>
+            <h3>Work I sent upstream.</h3>
           </div>
-          <span>{openSourceContributions.length} records</span>
+          <span>{openSourceContributions.length} contributions</span>
         </header>
 
         <ol className={styles.openSourceList}>
@@ -1329,9 +1330,9 @@ function AchievementsView() {
           <MacIcon kind="trophy" />
         </span>
         <div>
-          <p className={styles.kicker}>COMPETITIVE PROOF</p>
-          <h3>Measured under pressure.</h3>
-          <p>Cybersecurity, AI systems, logic, and product engineering.</p>
+          <p className={styles.kicker}>CTFs + HACKATHONS</p>
+          <h3>A few times things went well.</h3>
+          <p>Security, local AI, logic puzzles, and product builds.</p>
         </div>
       </header>
 
@@ -1379,9 +1380,9 @@ function ContactView() {
           <MacIcon kind="mail" />
         </span>
         <div>
-          <p className={styles.kicker}>OPEN CHANNEL</p>
-          <h3>Contact {identity.name}</h3>
-          <p>{identity.role}</p>
+          <p className={styles.kicker}>SAY HELLO</p>
+          <h3>Send me a note.</h3>
+          <p>Email is the easiest way to reach me.</p>
         </div>
       </header>
 
@@ -1414,9 +1415,9 @@ function ResumeView() {
           <MacIcon kind="document" />
         </span>
         <div>
-          <p className={styles.kicker}>PORTABLE DOCUMENT FORMAT</p>
+          <p className={styles.kicker}>THE SHORT VERSION</p>
           <h3>{identity.name} — Résumé</h3>
-          <p>{identity.role}</p>
+          <p>One page, for when the folders are a bit much.</p>
         </div>
 
         <dl>
@@ -1433,7 +1434,7 @@ function ResumeView() {
             <dd>{identity.graduation}</dd>
           </div>
           <div>
-            <dt>Selected builds</dt>
+            <dt>Projects</dt>
             <dd>{projects.map((project) => project.title).join(" · ")}</dd>
           </div>
         </dl>

@@ -41,7 +41,7 @@ function buildIndexJsonLd() {
         {
           "@type": "ListItem",
           position: 2,
-          name: "Work",
+          name: "Projects",
           item: url,
         },
       ],
@@ -73,7 +73,7 @@ function buildProjectJsonLd(project: Project) {
           {
             "@type": "ListItem",
             position: 2,
-            name: "Work",
+            name: "Projects",
             item: workUrl,
           },
           {

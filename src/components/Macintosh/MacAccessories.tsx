@@ -71,7 +71,7 @@ function AboutMacintosh() {
       <div>
         <p className={styles.eyebrow}>ABOUT THIS MACINTOSH</p>
         <h3>System Software 7.5</h3>
-        <p>Portfolio Finder · July 2026</p>
+        <p>Portfolio Finder · August 2026</p>
       </div>
       <dl className={styles.memoryPanel}>
         <div>
@@ -691,18 +691,18 @@ function Scrapbook({ onSound }: Pick<MacAccessoriesProps, "onSound">) {
     () => [
       {
         mark: "⌘",
-        title: "Build systems, not demos.",
-        copy: "A portfolio clipping from Krishang’s AI and agent work.",
+        title: "Most projects start with an annoyance.",
+        copy: "That is how the phone call, offline canvas, and local-model runtime happened.",
       },
       {
         mark: "01",
-        title: "1st in India · CTFTime",
-        copy: "Proof saved from competitive security work, April 2026.",
+        title: "Our CTF team finished first in India.",
+        copy: "We were seventh worldwide on CTFTime in April 2026.",
       },
       {
-        mark: "7",
-        title: "Quark",
-        copy: "Seven typed tools keep human decisions inside a bounded agent checkpoint.",
+        mark: "He",
+        title: "Helios is the one I’m deep in now.",
+        copy: "I built the Python runtime that plans repository jobs for small local models.",
       },
     ],
     []

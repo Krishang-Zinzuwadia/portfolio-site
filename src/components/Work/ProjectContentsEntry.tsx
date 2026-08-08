@@ -36,11 +36,11 @@ export default function ProjectContentsEntry({
             {presentation.summary}
           </p>
           <p className={styles.entryOutcome}>
-            <span>Result</span>
+            <span>Where it’s at</span>
             {project.recognition}
             {project.date ? `, ${project.date}` : ""}
           </p>
-          <span className={styles.readCase}>Read about {project.title}</span>
+          <span className={styles.readCase}>Open {project.title}</span>
         </div>
       </Link>
     </article>

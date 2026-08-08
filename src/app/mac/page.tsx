@@ -5,9 +5,9 @@ import MacExperience from "@/components/Macintosh/MacExperience";
 import PortfolioViewSwitcher from "@/components/Portfolio/PortfolioViewSwitcher";
 import { SITE_NAME } from "@/lib/site";
 
-const title = `${SITE_NAME} — Interactive Macintosh Portfolio`;
+const title = `${SITE_NAME} — Macintosh Portfolio`;
 const description =
-  "Launch Krishang Zinzuwadia's interactive System 7-inspired portfolio inside a 3D Macintosh Classic.";
+  "Explore Krishang Zinzuwadia’s projects inside an interactive System 7-style Macintosh desktop.";
 
 export const metadata: Metadata = {
   title,
@@ -56,11 +56,11 @@ export default function MacPage() {
         >
           <div style={{ maxWidth: "34rem", textAlign: "center" }}>
             <p style={{ fontSize: "1.5rem", fontWeight: 700 }}>
-              The interactive Macintosh needs JavaScript.
+              The Macintosh version needs JavaScript.
             </p>
             <p style={{ marginTop: "1rem" }}>
-              The complete portfolio, projects, experience, and contact details
-              are available in the standard view.
+              You can still read every project, result, and contact detail in
+              the regular portfolio.
             </p>
             <Link
               href="/"
@@ -74,7 +74,7 @@ export default function MacPage() {
                 fontWeight: 700,
               }}
             >
-              View Krishang&apos;s portfolio
+              Open the regular portfolio
             </Link>
           </div>
         </section>

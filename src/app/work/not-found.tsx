@@ -11,11 +11,11 @@ export default function WorkNotFound() {
           I couldn’t find that project.
         </h1>
         <p className={styles.message}>
-          It may have been renamed, or the address may be wrong.
+          It may have moved, or there may be a typo in the address.
         </p>
         <div className={styles.actions}>
           <Link className={styles.action} href="/work">
-            Go to all projects
+            Back to all projects
           </Link>
         </div>
       </section>

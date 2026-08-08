@@ -10,12 +10,12 @@ export default function WorkHeader() {
       <div className={styles.mastheadInner}>
         <Link className={styles.wordmark} href="/">
           <strong>{identity.name}</strong>
-          <span>Computer science student at VIT Vellore</span>
+          <span>CS at VIT Vellore · usually building tools</span>
         </Link>
 
         <nav className={styles.primaryNav} aria-label="Portfolio navigation">
           <Link href="/work">Projects</Link>
-          <Link href="/mac">Macintosh version</Link>
+          <Link href="/mac">Macintosh</Link>
           <a href={`mailto:${identity.email}`}>Email me</a>
         </nav>
       </div>
