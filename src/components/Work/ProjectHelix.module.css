@@ -73,8 +73,8 @@
     2rem 2rem,
     2rem 2rem,
     100% 100%;
-  perspective: 1050px;
-  perspective-origin: 50% 50%;
+  perspective: 940px;
+  perspective-origin: 50% 48%;
 }
 
 .stickyStage::before {
@@ -170,12 +170,11 @@
 
 .helixCard:focus-within {
   z-index: 400 !important;
-  opacity: 1 !important;
 }
 
 .helixCard article {
-  transform: rotateY(var(--helix-yaw)) rotateZ(var(--helix-roll))
-    scale(var(--helix-scale));
+  transform: rotateY(var(--helix-yaw)) rotateX(var(--helix-pitch))
+    rotateZ(var(--helix-roll)) scale(var(--helix-scale));
   transform-style: preserve-3d;
   transform-origin: center;
   backface-visibility: hidden;

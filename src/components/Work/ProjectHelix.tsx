@@ -42,8 +42,14 @@ const DEFAULT_SCENE = {
   height: 800,
 };
 
+const HELIX_PERSPECTIVE = 940;
+
 function clamp(value: number, minimum: number, maximum: number) {
   return Math.min(Math.max(value, minimum), maximum);
+}
+
+function degrees(radians: number) {
+  return (radians * 180) / Math.PI;
 }
 
 function wrapSlot(slot: number, count: number) {
@@ -67,28 +73,45 @@ function getCardGeometry(
 ): CardGeometry {
   const compact = sceneWidth < 820;
   const slot = wrapSlot(index - cursor, count);
-  const angleStep = compact ? 1.06 : 1.16;
-  const angle = slot * angleStep;
-  const sine = Math.sin(angle);
-  const cosine = Math.cos(angle);
+  const phaseStep = compact ? 1.08 : 1.22;
+  const phase = slot * phaseStep;
+  const sine = Math.sin(phase);
+  const cosine = Math.cos(phase);
   const depth = (cosine + 1) / 2;
   const radius = compact
-    ? Math.min(sceneWidth * 0.24, 180)
-    : Math.min(sceneWidth * 0.3, 420);
-  const verticalGap = sceneHeight * (compact ? 0.25 : 0.255);
-  const depthAmplitude = compact ? 100 : Math.min(sceneWidth * 0.16, 220);
-  const yawAmplitude = compact ? 18 : 30;
+    ? Math.min(sceneWidth * 0.21, 155)
+    : Math.min(sceneWidth * 0.27, 380);
+  const verticalGap = sceneHeight * (compact ? 0.215 : 0.225);
+  const depthAmplitude = compact ? 90 : Math.min(sceneWidth * 0.14, 180);
   const x = sine * radius;
   const y = slot * verticalGap;
   const z = cosine * depthAmplitude;
-  const startFade = sceneHeight * 0.58;
-  const endFade = sceneHeight * 0.86;
+  const startFade = sceneHeight * 0.5;
+  const endFade = sceneHeight * 0.74;
   const edgeFade =
     1 - clamp((Math.abs(y) - startFade) / (endFade - startFade), 0, 1);
   const scale = 0.56 + depth * 0.44;
   const opacity = edgeFade * (0.22 + depth * 0.78);
-  const yaw = -sine * yawAmplitude;
-  const roll = Math.sin(angle * 0.5) * 4;
+  const cameraZ = HELIX_PERSPECTIVE - z;
+  const yawLimit = compact ? 18 : 28;
+  const pitchLimit = compact ? 4 : 7;
+  const rollLimit = compact ? 2.5 : 4.5;
+  const yaw = clamp(
+    degrees(Math.atan2(-x, cameraZ)) * 1.15,
+    -yawLimit,
+    yawLimit
+  );
+  const pitch =
+    clamp(
+      degrees(Math.atan2(y, Math.hypot(x, cameraZ))) * 0.35,
+      -pitchLimit,
+      pitchLimit
+    ) * edgeFade;
+  const tangentX = radius * phaseStep * cosine;
+  const pathTangent = degrees(Math.atan2(tangentX, verticalGap));
+  const roll =
+    clamp(-pathTangent * 0.08 * (1 - depth), -rollLimit, rollLimit) * edgeFade;
+  const centerBias = 1 - clamp(Math.abs(slot) / 0.75, 0, 1);
   const active = Math.abs(slot) < 0.5;
 
   return {
@@ -100,10 +123,11 @@ function getCardGeometry(
       "--helix-z": `${z.toFixed(2)}px`,
       "--helix-scale": scale.toFixed(4),
       "--helix-yaw": `${yaw.toFixed(2)}deg`,
+      "--helix-pitch": `${pitch.toFixed(2)}deg`,
       "--helix-roll": `${roll.toFixed(2)}deg`,
       "--helix-opacity": opacity.toFixed(3),
     },
-    zIndex: Math.round(100 + depth * 100),
+    zIndex: Math.round(100 + depth * 110 + centerBias * 35 - Math.abs(slot)),
   };
 }
 
@@ -303,7 +327,7 @@ export default function ProjectHelix({ projects }: ProjectHelixProps) {
                       aria-current={index === activeIndex ? "true" : undefined}
                       aria-labelledby={titleId}
                       aria-describedby={summaryId}
-                      onFocus={() => scrollToProject(index, "auto")}
+                      onFocus={() => scrollToProject(index, "instant")}
                     >
                       <div className={styles.projectArtwork} aria-hidden="true">
                         <ProjectSketch slug={project.slug} />
