@@ -881,14 +881,20 @@
 }
 
 .siteFooter {
+  display: flex;
+  min-height: 100svh;
   background: var(--working-ink);
   color: var(--working-paper);
 }
 
 .footerFrame {
+  display: flex;
   width: min(100%, 92rem);
+  min-height: 100svh;
   margin-inline: auto;
-  padding: clamp(4.5rem, 9vw, 8rem) clamp(1.25rem, 4vw, 4rem) 2rem;
+  padding: clamp(2rem, 4svh, 3rem) clamp(1.25rem, 4vw, 4rem)
+    clamp(1rem, 2svh, 1.5rem);
+  flex-direction: column;
 }
 
 .footerLabel {
@@ -900,16 +906,16 @@
 
 .footerPitch {
   display: grid;
-  margin-top: 2rem;
-  grid-template-columns: minmax(0, 1.35fr) minmax(18rem, 0.65fr);
-  gap: clamp(2rem, 6vw, 7rem);
+  margin-top: clamp(0.75rem, 2svh, 1.5rem);
+  grid-template-columns: minmax(0, 1.25fr) minmax(17rem, 0.75fr);
+  gap: clamp(1.5rem, 4vw, 5rem);
   align-items: end;
 }
 
 .footerPitch h2 {
   max-width: 10ch;
   font-family: var(--font-paper-serif), Georgia, serif;
-  font-size: clamp(4.4rem, 8vw, 7.7rem);
+  font-size: clamp(3.6rem, 6.4vw, 6rem);
   font-weight: 500;
   letter-spacing: -0.055em;
   line-height: 0.88;
@@ -917,19 +923,19 @@
 
 .footerPitch > p {
   color: rgba(242, 234, 214, 0.86);
-  font-size: clamp(1.05rem, 1.6vw, 1.25rem);
-  line-height: 1.58;
+  font-size: clamp(0.95rem, 1.25vw, 1.12rem);
+  line-height: 1.45;
 }
 
 .footerEmail {
   display: inline-block;
   max-width: 100%;
-  margin-top: clamp(3rem, 7vw, 6rem);
+  margin-top: clamp(1.25rem, 3svh, 2.25rem);
   padding-bottom: 0.35rem;
   border-bottom: 2px solid var(--working-red);
   color: var(--working-paper-deep) !important;
   font-family: var(--font-paper-serif), Georgia, serif;
-  font-size: clamp(1.85rem, 4.7vw, 4.8rem);
+  font-size: clamp(1.65rem, 3.8vw, 3.8rem);
   font-style: italic;
   letter-spacing: -0.035em;
   line-height: 1.08;
@@ -938,10 +944,12 @@
 
 .footerDirectory {
   display: grid;
-  margin-top: clamp(4rem, 8vw, 7rem);
-  grid-template-columns: minmax(0, 1.35fr) minmax(19rem, 0.65fr);
-  gap: clamp(2rem, 6vw, 7rem);
+  margin-top: clamp(1.5rem, 4svh, 2.75rem);
+  grid-template-columns: minmax(0, 1.2fr) minmax(17rem, 0.8fr);
+  gap: clamp(1.5rem, 4vw, 5rem);
   align-items: start;
+  align-content: center;
+  flex: 1;
 }
 
 .footerLinks {
@@ -952,11 +960,11 @@
 
 .footerLinks a {
   display: grid;
-  min-height: 5.25rem;
-  padding: 1rem 0;
+  min-height: 4rem;
+  padding: 0.7rem 0;
   border-top: 1px solid rgba(242, 234, 214, 0.34);
-  grid-template-columns: 5.3rem 1fr auto;
-  gap: 1rem;
+  grid-template-columns: 4.6rem 1fr auto;
+  gap: 0.8rem;
   align-items: center;
 }
 
@@ -967,7 +975,7 @@
 
 .footerLinks strong {
   font-family: var(--font-paper-serif), Georgia, serif;
-  font-size: 1.55rem;
+  font-size: 1.4rem;
   font-weight: 600;
 }
 
@@ -984,12 +992,12 @@
 .macintoshCard {
   position: relative;
   display: flex;
-  min-height: 15rem;
-  padding: clamp(1.5rem, 3vw, 2.4rem);
+  min-height: 10.75rem;
+  padding: clamp(1.25rem, 2vw, 1.75rem);
   background: var(--working-red);
   color: var(--working-paper) !important;
   flex-direction: column;
-  transform: rotate(-1deg);
+  transform: rotate(-0.5deg);
 }
 
 .macintoshCard > span {
@@ -1000,9 +1008,9 @@
 
 .macintoshCard > strong {
   max-width: 9ch;
-  margin-top: 1.2rem;
+  margin-top: 0.75rem;
   font-family: var(--font-paper-serif), Georgia, serif;
-  font-size: clamp(2.2rem, 4vw, 3.4rem);
+  font-size: clamp(1.9rem, 3vw, 2.8rem);
   font-weight: 500;
   letter-spacing: -0.04em;
   line-height: 0.95;
@@ -1011,7 +1019,7 @@
 .macintoshCard > small {
   max-width: 18rem;
   margin-top: auto;
-  padding-top: 2rem;
+  padding-top: 1rem;
   color: rgba(242, 234, 214, 0.78);
   font-size: 0.82rem;
   line-height: 1.45;
@@ -1019,15 +1027,15 @@
 
 .macintoshCard > i {
   position: absolute;
-  top: 1.5rem;
-  right: 1.5rem;
+  top: 1.25rem;
+  right: 1.25rem;
   font-size: 1.25rem;
 }
 
 .footerMeta {
   display: flex;
-  margin-top: clamp(4rem, 8vw, 7rem);
-  padding-top: 1.25rem;
+  margin-top: 0;
+  padding-top: 0.8rem;
   border-top: 1px solid rgba(242, 234, 214, 0.34);
   color: rgba(242, 234, 214, 0.64);
   font-size: 0.84rem;
@@ -1106,17 +1114,22 @@
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
-  .footerPitch,
+  .footerPitch {
+    grid-template-columns: minmax(0, 1.15fr) minmax(15rem, 0.85fr);
+    gap: clamp(1.5rem, 4vw, 3rem);
+  }
+
   .footerDirectory {
-    grid-template-columns: minmax(0, 1fr);
+    grid-template-columns: minmax(0, 1.1fr) minmax(16rem, 0.9fr);
+    gap: clamp(1.5rem, 4vw, 3rem);
   }
 
   .footerPitch > p {
-    max-width: 39rem;
+    max-width: 32rem;
   }
 
   .macintoshCard {
-    width: min(100%, 36rem);
+    width: 100%;
   }
 
   .contribution {
@@ -1263,7 +1276,33 @@
   }
 
   .footerPitch h2 {
-    max-width: 11ch;
+    max-width: 10ch;
+    font-size: clamp(3.6rem, 8vw, 4.3rem);
+  }
+
+  .footerPitch,
+  .footerDirectory {
+    gap: 2rem;
+  }
+
+  .footerPitch {
+    grid-template-columns: minmax(0, 1fr) minmax(14rem, 0.85fr);
+  }
+
+  .footerDirectory {
+    grid-template-columns: minmax(0, 1fr) minmax(14rem, 0.75fr);
+  }
+
+  .footerLinks a {
+    grid-template-columns: 4rem 1fr auto;
+  }
+
+  .footerLinks strong {
+    font-size: 1.25rem;
+  }
+
+  .macintoshCard {
+    min-height: 9.5rem;
   }
 }
 
@@ -1357,8 +1396,7 @@
 
   .aboutFacts,
   .resultsHeader,
-  .results ul,
-  .footerLinks {
+  .results ul {
     grid-template-columns: 1fr;
   }
 
@@ -1380,25 +1418,148 @@
   }
 
   .footerFrame {
-    padding-top: 4rem;
+    padding: 1.5rem 1.25rem 1rem;
+  }
+
+  .footerPitch {
+    margin-top: 0.65rem;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 0.75rem;
+    align-items: start;
   }
 
   .footerPitch h2 {
-    font-size: clamp(3.4rem, 15vw, 4.8rem);
+    max-width: 100%;
+    font-size: clamp(2.9rem, 12.5vw, 3.4rem);
+    line-height: 0.9;
+  }
+
+  .footerPitch > p {
+    font-size: 0.86rem;
+    line-height: 1.4;
+  }
+
+  .footerEmail {
+    margin-top: 1rem;
+    font-size: clamp(1.5rem, 7vw, 1.8rem);
   }
 
   .footerDirectory {
-    gap: 3rem;
+    margin-top: 1.1rem;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 0.85rem;
+  }
+
+  .footerLinks {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    column-gap: 1rem;
+  }
+
+  .footerLinks a {
+    min-height: 4rem;
+    padding: 0.45rem 0;
+    grid-template-columns: minmax(0, 1fr) auto;
+    grid-template-rows: auto auto;
+    gap: 0.1rem 0.5rem;
+    align-content: center;
+  }
+
+  .footerLinks span {
+    grid-column: 1;
+    grid-row: 1;
+  }
+
+  .footerLinks strong {
+    font-size: 1.15rem;
+    grid-column: 1;
+    grid-row: 2;
+  }
+
+  .footerLinks i {
+    grid-column: 2;
+    grid-row: 1 / 3;
   }
 
   .macintoshCard {
-    min-height: 13rem;
+    min-height: 7.75rem;
+    padding: 1.15rem;
     transform: none;
   }
 
+  .macintoshCard > strong {
+    max-width: 100%;
+    margin-top: 0.5rem;
+    font-size: 1.9rem;
+  }
+
+  .macintoshCard > small {
+    padding-top: 0.6rem;
+    font-size: 0.74rem;
+  }
+
   .footerMeta {
-    flex-direction: column;
-    align-items: flex-start;
+    padding-top: 0.65rem;
+    font-size: 0.72rem;
+    align-items: center;
+    gap: 0.75rem;
+  }
+}
+
+@media (max-width: 34rem) and (max-height: 40rem) {
+  .footerFrame {
+    padding: 1rem 1.25rem 0.75rem;
+  }
+
+  .footerPitch {
+    margin-top: 0.35rem;
+    gap: 0.5rem;
+  }
+
+  .footerPitch h2 {
+    font-size: clamp(2.55rem, 12vw, 3rem);
+  }
+
+  .footerPitch > p {
+    font-size: 0.8rem;
+    line-height: 1.3;
+  }
+
+  .footerEmail {
+    margin-top: 0.65rem;
+    font-size: 1.4rem;
+  }
+
+  .footerDirectory {
+    margin-top: 0.65rem;
+    gap: 0.55rem;
+  }
+
+  .footerLinks a {
+    min-height: 3.25rem;
+  }
+
+  .macintoshCard {
+    min-height: 6.5rem;
+    padding: 0.9rem;
+  }
+
+  .macintoshCard > span {
+    font-size: 0.68rem;
+  }
+
+  .macintoshCard > strong {
+    margin-top: 0.35rem;
+    font-size: 1.65rem;
+  }
+
+  .macintoshCard > small {
+    padding-top: 0.35rem;
+    font-size: 0.68rem;
+  }
+
+  .footerMeta {
+    padding-top: 0.45rem;
+    font-size: 0.68rem;
   }
 }
 
