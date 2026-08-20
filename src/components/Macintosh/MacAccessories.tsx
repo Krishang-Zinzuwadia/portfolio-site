@@ -1457,9 +1457,9 @@ function Scrapbook({ onSound }: Pick<MacAccessoriesProps, "onSound">) {
         copy: "Proof saved from competitive security work, April 2026.",
       },
       {
-        mark: "27",
-        title: "Labyrinth",
-        copy: "Twenty-seven agents coordinated through one designed system.",
+        mark: "7",
+        title: "Quark",
+        copy: "Seven typed tools keep human decisions inside a bounded agent checkpoint.",
       },
     ],
     []

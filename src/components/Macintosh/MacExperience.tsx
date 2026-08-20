@@ -39,7 +39,7 @@ let hasBootedInThisPage = false;
 
 const INTRO_IMAGE_WIDTH = 1672;
 const INTRO_IMAGE_HEIGHT = 941;
-const INTRO_DURATION = 1900;
+const INTRO_DURATION = 1450;
 const PHOTO_SCREEN = {
   x: 892,
   y: 176,
@@ -302,14 +302,6 @@ export default function MacExperience() {
       "--intro-photo-shift-x": `${targetCenterX - sourceCenterX}px`,
       "--intro-photo-shift-y": `${targetCenterY - sourceCenterY}px`,
       "--intro-photo-scale": photoScale,
-      "--intro-flight-left": `${sourceLeft}px`,
-      "--intro-flight-top": `${sourceTop}px`,
-      "--intro-flight-width": `${sourceWidth}px`,
-      "--intro-flight-height": `${sourceHeight}px`,
-      "--intro-flight-shift-x": `${targetLeft - sourceLeft}px`,
-      "--intro-flight-shift-y": `${targetTop - sourceTop}px`,
-      "--intro-flight-scale-x": targetRect.width / sourceWidth,
-      "--intro-flight-scale-y": targetRect.height / sourceHeight,
       "--intro-target-left": `${targetLeft}px`,
       "--intro-target-top": `${targetTop}px`,
       "--intro-target-width": `${targetRect.width}px`,
@@ -318,10 +310,6 @@ export default function MacExperience() {
         6,
         Math.min(targetRect.width, targetRect.height) * 0.026
       )}px`,
-      "--intro-flight-image-left": `${imageLeft - sourceLeft}px`,
-      "--intro-flight-image-top": `${imageTop - sourceTop}px`,
-      "--intro-flight-image-width": `${imageWidth}px`,
-      "--intro-flight-image-height": `${imageHeight}px`,
     });
     setIntroPhase("priming");
 
@@ -486,23 +474,8 @@ export default function MacExperience() {
             />
           </div>
 
-          <div className={styles.screenFlight} aria-hidden="true">
-            <Image
-              src={introImage}
-              alt=""
-              width={INTRO_IMAGE_WIDTH}
-              height={INTRO_IMAGE_HEIGHT}
-              unoptimized
-              loading="eager"
-              fetchPriority="low"
-              className={styles.screenFlightImage}
-            />
-          </div>
-
           {introStyle ? (
-            <>
-              <div className={styles.screenHandoff} aria-hidden="true" />
-            </>
+            <div className={styles.screenHandoff} aria-hidden="true" />
           ) : null}
 
           <div className={styles.introVignette} aria-hidden="true" />

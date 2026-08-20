@@ -20,8 +20,8 @@ export default function WorkHeader() {
         <Link href="/work" aria-current="page">
           Case studies
         </Link>
-        <Link href="/#experience">Experience</Link>
-        <Link href="/#recognition">Recognition</Link>
+        <Link href="/work#lab">Lab</Link>
+        <Link href="/work#open-source">Open source</Link>
       </nav>
 
       <a className="work-header-contact" href={`mailto:${identity.email}`}>

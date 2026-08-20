@@ -14,6 +14,23 @@
   let startupTimeout = 0;
   let runtimeMusicDevice = null;
 
+  function guardEmbeddedKeyboardLock() {
+    if (window.parent === window) return;
+
+    const keyboard = navigator.keyboard;
+    if (!keyboard || typeof keyboard.lock !== "function") return;
+
+    const nativeLock = keyboard.lock.bind(keyboard);
+    try {
+      Object.defineProperty(keyboard, "lock", {
+        configurable: true,
+        value: (codes) => nativeLock(codes).catch(() => undefined),
+      });
+    } catch {
+      // Normal keyboard events still work when the browser prevents a shim.
+    }
+  }
+
   function inspectRuntimeConfig(commandInterface) {
     if (typeof commandInterface.fsReadFile === "function") {
       void commandInterface
@@ -85,6 +102,7 @@
     setState("starting");
 
     try {
+      guardEmbeddedKeyboardLock();
       player = window.Dos(playerElement, {
         url: BUNDLE_URL,
         pathPrefix: "./js-dos/emulators/",

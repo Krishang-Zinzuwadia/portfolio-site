@@ -1,8 +1,12 @@
-const agentNodes = Array.from({ length: 27 }, (_, index) => ({
-  x: 8 + (index % 9) * 13,
-  y: 8 + Math.floor(index / 9) * 15,
-  highlighted: index === 4 || index === 13 || index === 22,
-}));
+const decisionNodes = [
+  { x: 8, y: 10, highlighted: false },
+  { x: 25, y: 10, highlighted: false },
+  { x: 42, y: 10, highlighted: true },
+  { x: 59, y: 25, highlighted: false },
+  { x: 76, y: 25, highlighted: true },
+  { x: 93, y: 40, highlighted: false },
+  { x: 110, y: 40, highlighted: true },
+];
 
 export default function EditorialHeroArtwork() {
   return (
@@ -57,19 +61,19 @@ export default function EditorialHeroArtwork() {
 
       <section className="hero-specimen hero-specimen-labyrinth">
         <header className="specimen-header">
-          <span>02 / LABYRINTH</span>
-          <span>ORCHESTRATION</span>
+          <span>02 / QUARK</span>
+          <span>HUMAN-IN-THE-LOOP</span>
         </header>
 
         <div className="labyrinth-specimen-body">
           <div className="specimen-metric">
-            <strong>27</strong>
-            <span>agents</span>
+            <strong>7</strong>
+            <span>tools</span>
           </div>
 
           <svg className="agent-grid" viewBox="0 0 126 53" aria-hidden="true">
-            <path className="agent-route" d="M7 15H59V30H111V45" />
-            {agentNodes.map((node, index) => (
+            <path className="agent-route" d="M7 14H45L61 29H79L95 44H114" />
+            {decisionNodes.map((node, index) => (
               <rect
                 className={
                   node.highlighted ? "agent-node is-active" : "agent-node"
@@ -86,11 +90,11 @@ export default function EditorialHeroArtwork() {
         </div>
 
         <footer className="specimen-footer">
-          <span>Brief</span>
+          <span>Ask</span>
           <i />
-          <span>Build</span>
+          <span>Confirm</span>
           <i />
-          <span>Deploy</span>
+          <span>Resume</span>
         </footer>
       </section>
 

@@ -6,7 +6,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint --ignore-pattern dist --ignore-pattern .next"
+    "lint": "eslint --ignore-pattern dist --ignore-pattern .next",
+    "seo:check": "node scripts/seo-smoke.mjs"
   },
   "dependencies": {
     "@react-three/drei": "^10.7.7",

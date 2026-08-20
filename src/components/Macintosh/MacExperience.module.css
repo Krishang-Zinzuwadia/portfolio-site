@@ -1,6 +1,6 @@
 .experience {
   --viewport-height: 100svh;
-  --intro-duration: 1900ms;
+  --intro-duration: 1450ms;
   --intro-ease: cubic-bezier(0.68, 0, 0.16, 1);
   position: relative;
   display: grid;
@@ -35,7 +35,7 @@
 .displayBehindIntro {
   opacity: 0;
   pointer-events: none;
-  transform: translate3d(0, 1.4%, 0) scale(0.978);
+  transform: translate3d(0, 0.9%, 0) scale(0.986);
 }
 
 .experience[data-entry-phase="zooming"] .displayBehindIntro {
@@ -92,77 +92,23 @@
   transform: scale(1);
 }
 
-.screenFlight {
-  position: absolute;
-  z-index: 3;
-  top: var(--intro-flight-top, 0px);
-  left: var(--intro-flight-left, 0px);
-  width: var(--intro-flight-width, 1px);
-  height: var(--intro-flight-height, 1px);
-  overflow: hidden;
-  opacity: 0;
-  border-radius: 2px;
-  backface-visibility: hidden;
-  box-shadow: 0 0 0 1px rgba(233, 238, 223, 0.3);
-  clip-path: polygon(0 0, 100% 3%, 98.3% 100%, 1.2% 93.5%);
-  contain: strict;
-  transform-origin: 0 0;
-  pointer-events: none;
-}
-
-.intro[data-phase="zooming"] .screenFlight {
-  animation: intro-screen-flight var(--intro-duration) var(--intro-ease) both;
-  will-change: opacity, transform, clip-path;
-}
-
-.screenFlight::after {
-  position: absolute;
-  z-index: 2;
-  inset: 0;
-  background:
-    linear-gradient(112deg, rgba(255, 255, 255, 0.12), transparent 28%),
-    repeating-linear-gradient(
-      0deg,
-      rgba(255, 255, 255, 0.025) 0 1px,
-      transparent 1px 3px
-    );
-  content: "";
-  pointer-events: none;
-}
-
-.screenFlightImage {
-  position: absolute;
-  top: var(--intro-flight-image-top, 0px);
-  left: var(--intro-flight-image-left, 0px);
-  display: block;
-  width: var(--intro-flight-image-width, 1px);
-  max-width: none;
-  height: var(--intro-flight-image-height, 1px);
-  user-select: none;
-  -webkit-user-drag: none;
-}
-
 .screenHandoff {
   position: absolute;
-  z-index: 4;
+  z-index: 3;
   top: var(--intro-target-top);
   left: var(--intro-target-left);
   width: var(--intro-target-width);
   height: var(--intro-target-height);
-  border: 1px solid rgba(244, 247, 233, 0.72);
   border-radius: var(--intro-target-radius);
+  overflow: hidden;
   opacity: 0;
-  background: radial-gradient(
-    ellipse at 50% 50%,
-    rgba(250, 252, 242, 0.92),
-    rgba(215, 222, 209, 0.38) 58%,
-    transparent 78%
-  );
+  background: #edf1e8;
   box-shadow:
-    0 0 2px rgba(255, 255, 255, 0.9) inset,
-    0 0 34px rgba(227, 236, 220, 0.18);
+    0 0 2px rgba(255, 255, 255, 0.94) inset,
+    0 0 28px rgba(227, 236, 220, 0.34);
   pointer-events: none;
-  transform: scale(0.96);
+  transform: scaleY(0.006);
+  transform-origin: center;
 }
 
 .intro[data-phase="zooming"] .screenHandoff {
@@ -753,14 +699,11 @@
     opacity: 1;
     transform: translate3d(0, 0, 0) scale(1);
   }
-  58% {
+  66% {
     opacity: 1;
   }
-  80% {
-    opacity: 0.92;
-  }
-  93% {
-    opacity: 0.18;
+  78% {
+    opacity: 0;
   }
   100% {
     opacity: 0;
@@ -773,61 +716,17 @@
   }
 }
 
-@keyframes intro-screen-flight {
-  0% {
-    opacity: 0;
-    clip-path: polygon(0 0, 100% 3%, 98.3% 100%, 1.2% 93.5%);
-    transform: translate3d(0, 0, 0) scale(1, 1);
-  }
-  6% {
-    opacity: 1;
-  }
-  72% {
-    opacity: 1;
-  }
-  89% {
-    opacity: 0.96;
-    clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
-    transform: translate3d(
-        var(--intro-flight-shift-x),
-        var(--intro-flight-shift-y),
-        0
-      )
-      scale(var(--intro-flight-scale-x), var(--intro-flight-scale-y));
-  }
-  95% {
-    opacity: 0.28;
-    clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
-    transform: translate3d(
-        var(--intro-flight-shift-x),
-        var(--intro-flight-shift-y),
-        0
-      )
-      scale(var(--intro-flight-scale-x), var(--intro-flight-scale-y));
-  }
-  100% {
-    opacity: 0;
-    clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
-    transform: translate3d(
-        var(--intro-flight-shift-x),
-        var(--intro-flight-shift-y),
-        0
-      )
-      scale(var(--intro-flight-scale-x), var(--intro-flight-scale-y));
-  }
-}
-
 @keyframes macintosh-entry-reveal {
   0%,
-  62% {
+  80% {
     opacity: 0;
-    transform: translate3d(0, 1.4%, 0) scale(0.978);
+    transform: translate3d(0, 0.9%, 0) scale(0.986);
   }
-  76% {
-    opacity: 0.16;
-    transform: translate3d(0, 0.5%, 0) scale(0.992);
+  90% {
+    opacity: 0.68;
+    transform: translate3d(0, 0.25%, 0) scale(0.996);
   }
-  91%,
+  97%,
   100% {
     opacity: 1;
     transform: translate3d(0, 0, 0) scale(1);
@@ -836,13 +735,13 @@
 
 @keyframes intro-stage-release {
   0%,
-  64% {
+  80% {
     background-color: #020302;
   }
-  80% {
-    background-color: rgba(2, 3, 2, 0.88);
+  88% {
+    background-color: rgba(2, 3, 2, 0.76);
   }
-  94%,
+  97%,
   100% {
     background-color: transparent;
   }
@@ -850,25 +749,25 @@
 
 @keyframes intro-screen-handoff {
   0%,
-  68% {
+  76% {
     opacity: 0;
-    transform: scale(0.96);
+    transform: scaleY(0.006);
   }
-  82% {
-    opacity: 0.12;
-    transform: scale(0.985);
+  80% {
+    opacity: 0.96;
+    transform: scaleY(0.006);
   }
-  90% {
-    opacity: 0.72;
-    transform: scale(1);
+  87% {
+    opacity: 0.68;
+    transform: scaleY(1);
   }
-  96% {
-    opacity: 0.1;
-    transform: scale(1);
+  94% {
+    opacity: 0;
+    transform: scaleY(1);
   }
   100% {
     opacity: 0;
-    transform: scale(1);
+    transform: scaleY(1);
   }
 }
 
@@ -1111,7 +1010,6 @@
 
   .intro,
   .introPhotoLayer,
-  .screenFlight,
   .screenHandoff,
   .displayBehindIntro,
   .introVignette,

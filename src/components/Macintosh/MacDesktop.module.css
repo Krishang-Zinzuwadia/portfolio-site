@@ -1289,6 +1289,142 @@
   font-size: 11px;
 }
 
+.projectCollection {
+  padding: 11px;
+  border: 1px solid var(--black);
+  background: #deddd4;
+  box-shadow:
+    inset 1px 1px #fff,
+    2px 2px 0 #b7b6ae;
+}
+
+.collectionHeader {
+  display: flex;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--black);
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.collectionHeader h3 {
+  margin: 2px 0 0;
+  font:
+    400 14px/1.1 "KZ Chicago",
+    "KZ Geneva",
+    Arial,
+    sans-serif;
+}
+
+.collectionHeader > span {
+  font:
+    9px/1 "KZ Monaco",
+    Monaco,
+    monospace;
+  white-space: nowrap;
+}
+
+.compactProjectGrid {
+  display: grid;
+  margin-top: 8px;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 5px;
+}
+
+.compactProjectCard {
+  display: grid;
+  min-width: 0;
+  padding: 7px;
+  border: 1px solid var(--black);
+  background: #fff;
+  grid-template-columns: 22px minmax(0, 1fr) auto;
+  align-items: start;
+  gap: 7px;
+}
+
+.compactProjectCard:hover,
+.compactProjectCard:focus-visible {
+  background: var(--selection);
+  color: #fff;
+  outline: 0;
+}
+
+.compactProjectCard > span {
+  display: grid;
+  width: 20px;
+  height: 20px;
+  border: 1px solid currentColor;
+  font:
+    8px/1 "KZ Monaco",
+    Monaco,
+    monospace;
+  place-items: center;
+}
+
+.compactProjectCard h4,
+.openSourceList h4 {
+  margin: 0 0 2px;
+  font:
+    400 11px/1.1 "KZ Chicago",
+    "KZ Geneva",
+    Arial,
+    sans-serif;
+}
+
+.compactProjectCard p,
+.openSourceList p {
+  margin: 0;
+  font-size: 9px;
+  line-height: 1.3;
+}
+
+.compactProjectCard > strong {
+  font-size: 10px;
+}
+
+.openSourceList {
+  display: grid;
+  margin: 8px 0 0;
+  padding: 0;
+  border-top: 1px solid var(--black);
+  list-style: none;
+}
+
+.openSourceList > li {
+  display: grid;
+  padding: 7px 0;
+  border-bottom: 1px solid #77766f;
+  grid-template-columns: 22px minmax(0, 1fr) auto;
+  align-items: start;
+  gap: 7px;
+}
+
+.openSourceList > li > span {
+  font:
+    8px/1 "KZ Monaco",
+    Monaco,
+    monospace;
+}
+
+.openSourceList li > div > p:first-child {
+  margin-bottom: 2px;
+  font:
+    7px/1 "KZ Monaco",
+    Monaco,
+    monospace;
+  text-transform: uppercase;
+}
+
+.openSourceList a {
+  padding-bottom: 2px;
+  border-bottom: 1px solid var(--black);
+  font:
+    8px/1.2 "KZ Monaco",
+    Monaco,
+    monospace;
+  white-space: nowrap;
+}
+
 .listIntro {
   padding-bottom: 11px;
   border-bottom: 1px solid var(--black);
@@ -1865,6 +2001,63 @@
     margin: 5px 0;
   }
 
+  .projectCollection {
+    padding: 7px;
+  }
+
+  .collectionHeader {
+    padding-bottom: 5px;
+  }
+
+  .collectionHeader h3 {
+    font-size: 10px;
+  }
+
+  .collectionHeader > span {
+    font-size: 7px;
+  }
+
+  .compactProjectGrid {
+    margin-top: 5px;
+    gap: 3px;
+  }
+
+  .compactProjectCard {
+    padding: 5px;
+    grid-template-columns: 18px minmax(0, 1fr) auto;
+    gap: 5px;
+  }
+
+  .compactProjectCard > span {
+    width: 16px;
+    height: 16px;
+    font-size: 6px;
+  }
+
+  .compactProjectCard h4,
+  .openSourceList h4 {
+    font-size: 9px;
+  }
+
+  .compactProjectCard p,
+  .openSourceList p {
+    font-size: 7px;
+  }
+
+  .openSourceList {
+    margin-top: 5px;
+  }
+
+  .openSourceList > li {
+    padding: 5px 0;
+    grid-template-columns: 18px minmax(0, 1fr) auto;
+    gap: 5px;
+  }
+
+  .openSourceList a {
+    font-size: 6px;
+  }
+
   .projectFooter {
     margin-top: 5px;
   }
@@ -1974,6 +2167,18 @@
   .projectMeta,
   .projectMetrics {
     text-align: left;
+    grid-column: 2;
+  }
+
+  .compactProjectGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .openSourceList > li {
+    grid-template-columns: 18px minmax(0, 1fr);
+  }
+
+  .openSourceList a {
     grid-column: 2;
   }
 }
